@@ -1,0 +1,41 @@
+{
+  "name": "cloths-shop",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.6.0",
+    "@fortawesome/fontawesome-free": "^7.3.1",
+    "@headlessui/react": "^2.2.10",
+    "@heroicons/react": "^2.2.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.26.0",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-countup": "^6.5.3",
+    "react-dom": "19.2.4",
+    "react-icons": "^5.7.0",
+    "react-intersection-observer": "^10.1.0",
+    "react-range": "^1.10.0",
+    "shadcn": "^4.13.0",
+    "swiper": "^14.0.2",
+    "tailwind-merge": "^3.6.0",
+    "tw-animate-css": "^1.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
