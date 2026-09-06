@@ -1,50 +1,62 @@
 'use client'
 
-import Link from 'next/link'
-import { Mail } from 'lucide-react'
+import { useState } from 'react'
+import { apiFetch } from '@/lib/client/api'
 
-export const ForgotPasswordPage=()=> {
+export const ForgotPasswordForm = () => {
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [resetUrl, setResetUrl] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      const data = await apiFetch<{ message: string; resetUrl?: string }>('/api/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      })
+      setMessage(data.message)
+      setResetUrl(data.resetUrl || '')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to start a reset.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <section className="min-h-screen bg-[#F2F0F1] flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md bg-white rounded-[32px] shadow-[0_0_35px_rgba(0,0,0,0.12)] p-8 md:p-10">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-5">
-            <Mail className="text-white w-7 h-7" />
-          </div>
-
-          <h1 className="text-3xl font-bold">Forgot Password?</h1>
-
-          <p className="text-gray-500 mt-3 leading-7">
-            Don&apos;t worry! Enter your email address below and we&apos;ll send you a link to reset
-            your password.
-          </p>
-        </div>
-
-        <form className="mt-8 space-y-6">
-          <div>
-            <label className="block mb-2 font-medium">Email Address</label>
-
-            <input
-              type="email"
-              placeholder="example@email.com"
-              className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none focus:ring-2 focus:ring-black"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition"
-          >
-            Send Reset Link
-          </button>
-        </form>
-
-        <div className="mt-8 text-center">
-          <Link href="/login" className="text-sm font-medium text-black hover:underline">
-            ← Back to Login
-          </Link>
-        </div>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <label htmlFor="forgot-email" className="mb-2 block font-medium">
+          Email Address
+        </label>
+        <input
+          id="forgot-email"
+          type="email"
+          required
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+        />
       </div>
-    </section>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      {message && <p className="text-sm text-gray-600">{message}</p>}
+      {resetUrl && (
+        <a href={resetUrl} className="block break-all text-sm font-semibold underline">
+          Continue to reset password
+        </a>
+      )}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-full bg-black py-4 font-semibold text-white disabled:opacity-70"
+      >
+        {loading ? 'Sending...' : 'Send Reset Link'}
+      </button>
+    </form>
   )
 }

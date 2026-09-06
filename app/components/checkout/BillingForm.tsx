@@ -4,6 +4,7 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { User, Mail, Phone, MapPin, Building2, Globe, Hash, LucideIcon } from 'lucide-react'
 
 import { PaymentMethod } from './PaymentMethod'
+import type { PaymentMethodId } from '@/types/product'
 
 type CheckoutFormData = {
   firstName: string
@@ -21,9 +22,18 @@ type BillingFormProps = {
   setFormData: Dispatch<SetStateAction<CheckoutFormData>>
   errors: Record<string, string>
   setErrors: Dispatch<SetStateAction<Record<string, string>>>
+  paymentMethod: PaymentMethodId
+  setPaymentMethod: Dispatch<SetStateAction<PaymentMethodId>>
 }
 
-export const BillingForm = ({ formData, setFormData, errors, setErrors }: BillingFormProps) => {
+export const BillingForm = ({
+  formData,
+  setFormData,
+  errors,
+  setErrors,
+  paymentMethod,
+  setPaymentMethod,
+}: BillingFormProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
@@ -124,7 +134,7 @@ export const BillingForm = ({ formData, setFormData, errors, setErrors }: Billin
           icon={Phone}
           label="Phone Number"
           name="phone"
-          type="number"
+          type="tel"
           value={formData.phone}
           placeholder="+92 300 1234567"
           error={errors.phone}
@@ -185,7 +195,7 @@ export const BillingForm = ({ formData, setFormData, errors, setErrors }: Billin
         sm:pt-8
         "
       >
-        <PaymentMethod />
+        <PaymentMethod value={paymentMethod} onChange={setPaymentMethod} />
       </div>
     </div>
   )

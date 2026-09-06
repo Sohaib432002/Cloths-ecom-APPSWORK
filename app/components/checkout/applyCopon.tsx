@@ -2,79 +2,58 @@
 
 import { useState } from 'react'
 import { Tag } from 'lucide-react'
+import { useCart } from '@/hooks/usecart'
+import { apiFetch } from '@/lib/client/api'
+import type { AppliedCoupon } from '@/types/product'
 
-export const ApplyCoupon = () => {
-  const [coupon, setCoupon] = useState('')
+export const ApplyCoupon = ({ subtotal }: { subtotal: number }) => {
+  const { coupon, setCoupon } = useCart()
+  const [code, setCode] = useState(coupon?.code || '')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleApplyCoupon = () => {
-    if (!coupon.trim()) {
-      alert('Please enter a coupon code.')
-      return
+  const apply = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const data = await apiFetch<{ coupon: AppliedCoupon }>('/api/coupons', {
+        method: 'POST',
+        body: JSON.stringify({ code, subtotal }),
+      })
+      setCoupon(data.coupon)
+    } catch (err) {
+      setCoupon(null)
+      setError(err instanceof Error ? err.message : 'Coupon could not be applied.')
+    } finally {
+      setLoading(false)
     }
-
-    console.log('Coupon Applied:', coupon)
   }
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
-        <Tag size={20} className="text-gray-700" />
-        <h3 className="text-lg font-bold text-gray-900">Apply Coupon</h3>
+        <Tag size={20} />
+        <h3 className="text-lg font-bold">Apply Coupon</h3>
       </div>
-
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        {/* Input */}
-        <div className="sm:flex-[4]">
-          <input
-            type="text"
-            placeholder="Enter coupon code"
-            value={coupon}
-            onChange={(e) => setCoupon(e.target.value)}
-            className="
-              h-12
-              w-full
-              rounded-xl
-              border
-              border-gray-300
-              bg-gray-50
-              px-4
-              text-sm
-              outline-none
-              transition-all
-              duration-200
-              placeholder:text-gray-400
-              focus:border-black
-              focus:bg-white
-              focus:ring-4
-              focus:ring-black/10
-            "
-          />
-        </div>
-
-        {/* Button */}
-        <div className="sm:flex-1 sm:max-w-[140px]">
-          <button
-            onClick={handleApplyCoupon}
-            className="
-              h-12
-              w-full
-              rounded-xl
-              bg-black
-              px-6
-              text-sm
-              font-semibold
-              text-white
-              transition-all
-              duration-200
-              hover:scale-[1.02]
-              hover:bg-gray-800
-              active:scale-95
-            "
-          >
-            Apply
-          </button>
-        </div>
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <input
+          value={code}
+          onChange={(event) => setCode(event.target.value.toUpperCase())}
+          placeholder="WELCOME20"
+          className="h-12 w-full rounded-xl border bg-gray-50 px-4 outline-none focus:border-black"
+        />
+        <button
+          type="button"
+          onClick={() => void apply()}
+          disabled={loading}
+          className="h-12 rounded-xl bg-black px-6 text-sm font-semibold text-white disabled:opacity-70"
+        >
+          {loading ? 'Checking...' : 'Apply'}
+        </button>
       </div>
+      <p className="mt-3 text-xs text-gray-500">Try WELCOME20, SHOP10, STYLE25, or FREESHIP.</p>
+      {coupon && <p className="mt-2 text-sm text-emerald-700">{coupon.label}</p>}
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   )
 }

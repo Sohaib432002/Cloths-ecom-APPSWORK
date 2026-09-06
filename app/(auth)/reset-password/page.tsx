@@ -1,8 +1,6 @@
-'use client'
-
+import { Suspense } from 'react'
 import Link from 'next/link'
-
-import {ResetPasswordForm} from '../Components/auth'
+import { ResetPasswordForm } from '../Components/auth'
 
 export default function ResetPasswordPage() {
   return (
@@ -47,7 +45,9 @@ export default function ResetPasswordPage() {
             Enter your new password below. Make sure it&apos;s strong and easy for you to remember.
           </p>
 
-          <ResetPasswordForm />
+          <Suspense fallback={<p>Loading reset form...</p>}>
+            <ResetPasswordForm />
+          </Suspense>
 
           <div className="mt-8 text-center">
             <Link

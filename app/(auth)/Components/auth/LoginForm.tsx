@@ -1,82 +1,96 @@
 'use client'
-import React, { useState } from 'react'
 
+import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { apiFetch } from '@/lib/client/api'
+import { useAuth } from '@/context/AuthContext'
+import { demoCredentials } from '@/lib/auth/public'
+import type { SessionUser } from '@/types/product'
 
-import { useRouter } from 'next/navigation'
 export const LoginForm = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState(demoCredentials.email)
+  const [password, setPassword] = useState(demoCredentials.password)
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (email && password) {
-      localStorage.setItem(
-        'Login Details',
-        JSON.stringify({
-          email,
-          password,
-        })
-      )
-      router.push('/')
+  const searchParams = useSearchParams()
+  const { refresh } = useAuth()
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setLoading(true)
+    setError('')
+    try {
+      await apiFetch<{ user: SessionUser }>('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      })
+      await refresh()
+      router.push(searchParams.get('next') || '/')
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to sign in.')
+    } finally {
+      setLoading(false)
     }
   }
+
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="space-y-6 mt-10">
-        <div>
-          <label className="block text-sm font-semibold mb-2">Email Address</label>
-
+    <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+      <p className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-gray-600">
+        Demo account: <strong>{demoCredentials.email}</strong> / <strong>{demoCredentials.password}</strong>
+      </p>
+      <div>
+        <label htmlFor="login-email" className="mb-2 block text-sm font-semibold">
+          Email Address
+        </label>
+        <input
+          id="login-email"
+          type="email"
+          required
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          className="w-full rounded-full bg-[#F5F5F5] px-6 py-4 outline-none ring-black focus:ring-2"
+        />
+      </div>
+      <div>
+        <label htmlFor="login-password" className="mb-2 block text-sm font-semibold">
+          Password
+        </label>
+        <div className="relative">
           <input
-            type="email"
-            placeholder="john@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-full bg-[#F5F5F5] border border-transparent px-6 py-4 outline-none focus:border-black transition"
+            id="login-password"
+            type={showPassword ? 'text' : 'password'}
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="w-full rounded-full bg-[#F5F5F5] px-6 py-4 pr-14 outline-none ring-black focus:ring-2"
           />
+          <button
+            type="button"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-5 top-1/2 -translate-y-1/2 text-sm text-gray-500"
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </button>
         </div>
-
-        <div>
-          <label className="block text-sm font-semibold mb-2">Password</label>
-
-          <div className="relative">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-full bg-[#F5F5F5] border border-transparent px-6 py-4 pr-14 outline-none focus:border-black transition"
-            />
-
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500"
-            >
-              <i className={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-            </button>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" />
-            Remember me
-          </label>
-
-          <Link href="/forgot-password" className="font-semibold hover:underline">
-            Forgot Password?
-          </Link>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-black text-white rounded-full py-4 font-semibold hover:bg-gray-800 transition"
-        >
-          Sign In
-        </button>
-      </form>
-    </div>
+      </div>
+      <div className="flex justify-end text-sm">
+        <Link href="/forgot-password" className="font-semibold hover:underline">
+          Forgot Password?
+        </Link>
+      </div>
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-full bg-black py-4 font-semibold text-white hover:bg-gray-800 disabled:opacity-70"
+      >
+        {loading ? 'Signing in...' : 'Sign In'}
+      </button>
+    </form>
   )
 }

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChevronDown, ChevronRight, Check } from 'lucide-react'
 
+import { CATALOG_FACETS } from '@/lib/catalog/facets'
 import { PriceSlider } from '../storeDetails/storefilterslider'
 
 // ================= TYPES =================
@@ -183,15 +184,11 @@ export const DeskTopFilter = ({ product }: Props) => {
 
   const [selectedSize, setSelectedSize] = useState(sizeParam ?? '')
   const [selectminprice, setselectminprice] = useState(minPrice ?? 0)
-  const [selectmaxprice, setselectmaxprice] = useState(minPrice ?? 1000)
+  const [selectmaxprice, setselectmaxprice] = useState(maxPrice ?? 1000)
 
-  // ================= FILTER DATA =================
-
-  const types = [...new Set(product.map((item) => item.type))]
-
-  const styles = [...new Set(product.map((item) => item.style))]
-
-  const colors = [...new Set(product.flatMap((item) => item.colors))]
+  const types = CATALOG_FACETS.types
+  const styles = CATALOG_FACETS.styles
+  const colors = CATALOG_FACETS.colors
 
   const sizes = [
     {

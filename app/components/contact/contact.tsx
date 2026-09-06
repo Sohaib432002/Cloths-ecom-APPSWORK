@@ -17,18 +17,26 @@ export const ContactUs = () => {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-
-    alert('Message sent successfully!')
-
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    })
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Unable to send message.')
+      alert(data.message)
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+      })
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Unable to send message.')
+    }
   }
 
   return (

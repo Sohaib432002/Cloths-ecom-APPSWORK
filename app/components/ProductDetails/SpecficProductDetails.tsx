@@ -1,17 +1,20 @@
 'use client'
 
 import { useWishlist } from '@/context/wishlistContext'
-import { useProducts } from '@/context/ProductsContext'
-import { Product } from '@/types/product'
 
 type SpecificProductProps = {
   finalPrice: number
-  title:string
+  title: string
   rating: number
   discount: number
   price: number
-  description:string
-  slug:string
+  description: string
+  slug: string
+  id: number
+  image: string
+  sizes: string[]
+  colors: string[]
+  stock: number
 }
 
 export const SpecificProductDetails = ({
@@ -22,20 +25,19 @@ export const SpecificProductDetails = ({
   finalPrice,
   description,
   slug,
+  id,
+  image,
+  sizes,
+  colors,
+  stock,
 }: SpecificProductProps) => {
   const { addToWishlist, isInWishlist, removeFromWishlist } = useWishlist()
-
-  const { products } = useProducts()
-
-  const product = products.find((item) => item.slug === slug)
-
-  const isWishlisted = product ? isInWishlist(product.id) : false
+  const product = { id, slug, title, price, image, rating, discount, sizes, colors, stock }
+  const isWishlisted = isInWishlist(id)
 
   const handleWishlist = () => {
-    if (!product) return
-
     if (isWishlisted) {
-      removeFromWishlist(product.id)
+      removeFromWishlist(id)
     } else {
       addToWishlist(product)
     }

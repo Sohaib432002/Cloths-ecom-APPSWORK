@@ -1,6 +1,6 @@
 import Link from 'next/link'
-
-import {VerifyEmailForm} from '../Components/auth'
+import { Suspense } from 'react'
+import { VerifyEmailForm } from '../Components/auth'
 
 export default function VerifyEmailPage() {
   return (
@@ -29,7 +29,9 @@ export default function VerifyEmailPage() {
         </div>
 
         {/* Right Side */}
-        <VerifyEmailForm />
+        <Suspense fallback={<p className="p-8">Loading verification...</p>}>
+          <VerifyEmailForm />
+        </Suspense>
       </div>
     </div>
   )

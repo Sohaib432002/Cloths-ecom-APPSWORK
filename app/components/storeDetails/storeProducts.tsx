@@ -20,18 +20,12 @@ export const Products = ({ products, lengthofProducts }: Props) => {
   const searchParams = useSearchParams()
 
   const PRODUCTS_PER_PAGE = 18
-
   const currentPage = Number(searchParams.get('page')) || 1
-
+  const visibleProducts = products
+  const totalPages = Math.max(1, Math.ceil(lengthofProducts / PRODUCTS_PER_PAGE))
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE
-  const endIndex = startIndex + PRODUCTS_PER_PAGE
-
-  const visibleProducts = products.slice(startIndex, endIndex)
-
-  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE)
-
-  const showingFrom = products.length === 0 ? 0 : startIndex + 1
-  const showingTo = Math.min(endIndex, products.length)
+  const showingFrom = lengthofProducts === 0 ? 0 : startIndex + 1
+  const showingTo = Math.min(startIndex + products.length, lengthofProducts)
 
   const changePage = (page: number) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -44,12 +38,11 @@ export const Products = ({ products, lengthofProducts }: Props) => {
   }
 
   useEffect(() => {
-    const maxPage = Math.ceil(products.length / PRODUCTS_PER_PAGE)
-
+    const maxPage = Math.ceil(lengthofProducts / PRODUCTS_PER_PAGE)
     if (currentPage > maxPage && maxPage > 0) {
       changePage(1)
     }
-  }, [products.length])
+  }, [lengthofProducts])
 
   const getPageNumbers = () => {
     const pages: (number | string)[] = []
@@ -102,7 +95,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
             <h2 className="text-xl font-bold sm:text-2xl">{lengthofProducts} Products</h2>
 
             <p className="mt-1 text-xs text-gray-500 sm:text-sm">
-              Showing {showingFrom}-{showingTo} of {products.length} Products
+              Showing {showingFrom}-{showingTo} of {lengthofProducts} Products
             </p>
           </div>
         </div>
@@ -169,6 +162,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
                   discount={item.discount}
                   sizes={item.sizes}
                   colors={item.colors}
+                  stock={item.stock}
                 />
               </div>
             ))}
@@ -189,7 +183,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
         </div>
       )}
       {/* Pagination */}
-      {products.length > PRODUCTS_PER_PAGE && (
+      {lengthofProducts > PRODUCTS_PER_PAGE && (
         <div className="mt-8 flex items-center justify-center pb-8">
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Previous */}

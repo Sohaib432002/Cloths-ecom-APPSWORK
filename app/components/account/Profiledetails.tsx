@@ -1,366 +1,122 @@
-import React from 'react'
+'use client'
+
+import { useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
+import { apiFetch } from '@/lib/client/api'
+import type { SessionUser } from '@/types/product'
 
 export const Profiledetails = () => {
+  const { user, refresh } = useAuth()
+  const [firstName, setFirstName] = useState(user?.firstName || '')
+  const [lastName, setLastName] = useState(user?.lastName || '')
+  const [phone, setPhone] = useState(user?.phone || '')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [nextPassword, setNextPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const saveProfile = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setLoading(true)
+    setError('')
+    setMessage('')
+    try {
+      await apiFetch<{ user: SessionUser }>('/api/auth/me', {
+        method: 'PATCH',
+        body: JSON.stringify({ firstName, lastName, phone }),
+      })
+      await refresh()
+      setMessage('Profile updated.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to update profile.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const savePassword = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setLoading(true)
+    setError('')
+    setMessage('')
+    try {
+      await apiFetch('/api/auth/me', {
+        method: 'PATCH',
+        body: JSON.stringify({ currentPassword, nextPassword }),
+      })
+      setCurrentPassword('')
+      setNextPassword('')
+      setMessage('Password updated.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to update password.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <div
-      className="
-      lg:col-span-3
-      space-y-4
-      sm:space-y-6
-      lg:space-y-8
-      p-3
-      sm:p-5
-      lg:p-0
-      "
-    >
-      {/* Profile Header */}
-
-      <div
-        className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        lg:p-8
-        flex
-        flex-col
-        md:flex-row
-        items-center
-        gap-4
-        sm:gap-6
-        "
-      >
-        <div
-          className="
-          h-20
-          w-20
-          sm:h-24
-          sm:w-24
-          lg:h-28
-          lg:w-28
-          rounded-full
-          bg-gray-200
-          flex
-          items-center
-          justify-center
-          text-3xl
-          sm:text-4xl
-          lg:text-5xl
-          "
-        >
-          <i className="fa-regular fa-user"></i>
-        </div>
-
-        <div className="flex-1 text-center md:text-left">
-          <h1
-            className="
-            text-xl
-            sm:text-2xl
-            lg:text-3xl
-            font-bold
-            "
-          >
-            Muhammad Sohaib Maqsood
-          </h1>
-
-          <p
-            className="
-            text-sm
-            sm:text-base
-            text-gray-500
-            mt-1
-            "
-          >
-            sohaib@example.com
-          </p>
-
-          <button
-            className="
-            mt-3
-            sm:mt-5
-            bg-black
-            text-white
-            px-5
-            sm:px-6
-            py-2
-            sm:py-3
-            text-sm
-            sm:text-base
-            rounded-full
-            hover:bg-gray-800
-            transition
-            "
-          >
-            Change Photo
-          </button>
-        </div>
+    <div className="space-y-6">
+      <div className="rounded-3xl border p-6 sm:p-8">
+        <h1 className="text-3xl font-bold">{user?.name || 'Your profile'}</h1>
+        <p className="mt-1 text-gray-500">{user?.email}</p>
       </div>
-
-      {/* Profile Form */}
-
-      <div
-        className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        lg:p-8
-        "
-      >
-        <h2
-          className="
-          text-xl
-          sm:text-2xl
-          font-bold
-          mb-4
-          sm:mb-6
-          "
-        >
-          Personal Information
-        </h2>
-
-        <form
-          className="
-          grid
-          grid-cols-1
-          md:grid-cols-2
-          gap-4
-          sm:gap-6
-          "
-        >
-          {[
-            {
-              label: 'Full Name',
-              type: 'text',
-              placeholder: 'Muhammad Sohaib',
-            },
-            {
-              label: 'Email',
-              type: 'email',
-              placeholder: 'sohaib@example.com',
-            },
-            {
-              label: 'Phone Number',
-              type: 'text',
-              placeholder: '+92 300 1234567',
-            },
-            {
-              label: 'Country',
-              type: 'text',
-              placeholder: 'Pakistan',
-            },
-            {
-              label: 'City',
-              type: 'text',
-              placeholder: 'Lahore',
-            },
-          ].map((item, index) => (
-            <div key={index}>
-              <label
-                className="
-                  text-sm
-                  sm:text-base
-                  font-medium
-                  block
-                  mb-1
-                  sm:mb-2
-                  "
-              >
-                {item.label}
-              </label>
-
-              <input
-                type={item.type}
-                placeholder={item.placeholder}
-                className="
-                w-full
-                bg-[#F0F0F0]
-                rounded-full
-                px-4
-                sm:px-5
-                py-3
-                sm:py-4
-                text-sm
-                sm:text-base
-                outline-none
-                "
-              />
-            </div>
-          ))}
-
-          {/* Gender */}
-
-          <div>
-            <label
-              className="
-              text-sm
-              sm:text-base
-              font-medium
-              block
-              mb-1
-              sm:mb-2
-              "
-            >
-              Gender
-            </label>
-
-            <select
-              className="
-              w-full
-              bg-[#F0F0F0]
-              rounded-full
-              px-4
-              sm:px-5
-              py-3
-              sm:py-4
-              text-sm
-              sm:text-base
-              outline-none
-              "
-            >
-              <option>Male</option>
-
-              <option>Female</option>
-            </select>
-          </div>
-
-          {/* Address */}
-
-          <div
-            className="
-            md:col-span-2
-            "
-          >
-            <label
-              className="
-              text-sm
-              sm:text-base
-              font-medium
-              block
-              mb-1
-              sm:mb-2
-              "
-            >
-              Address
-            </label>
-
-            <textarea
-              rows={3}
-              placeholder="Enter your address..."
-              className="
-            w-full
-            bg-[#F0F0F0]
-            rounded-2xl
-            sm:rounded-3xl
-            px-4
-            sm:px-5
-            py-3
-            sm:py-4
-            text-sm
-            sm:text-base
-            outline-none
-            resize-none
-            "
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <button
-              type="submit"
-              className="
-            bg-black
-            text-white
-            rounded-full
-            px-7
-            sm:px-10
-            py-3
-            sm:py-4
-            text-sm
-            sm:text-base
-            hover:bg-gray-800
-            transition
-            "
-            >
-              Save Changes
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* Change Password */}
-
-      <div
-        className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        lg:p-8
-        "
-      >
-        <h2
-          className="
-          text-xl
-          sm:text-2xl
-          font-bold
-          mb-4
-          sm:mb-6
-          "
-        >
-          Change Password
-        </h2>
-
-        <form
-          className="
-          space-y-3
-          sm:space-y-5
-          "
-        >
-          {['Current Password', 'New Password', 'Confirm New Password'].map(
-            (placeholder, index) => (
-              <input
-                key={index}
-                type="password"
-                placeholder={placeholder}
-                className="
-              w-full
-              bg-[#F0F0F0]
-              rounded-full
-              px-4
-              sm:px-5
-              py-3
-              sm:py-4
-              text-sm
-              sm:text-base
-              outline-none
-              "
-              />
-            )
-          )}
-
-          <button
-            type="submit"
-            className="
-          bg-black
-          text-white
-          rounded-full
-          px-6
-          sm:px-8
-          py-3
-          sm:py-4
-          text-sm
-          sm:text-base
-          hover:bg-gray-800
-          transition
-          "
-          >
-            Update Password
-          </button>
-        </form>
-      </div>
+      <form onSubmit={saveProfile} className="space-y-4 rounded-3xl border p-6">
+        <h2 className="text-xl font-bold">Personal details</h2>
+        <label className="block text-sm font-medium">
+          First name
+          <input
+            value={firstName}
+            onChange={(event) => setFirstName(event.target.value)}
+            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+          />
+        </label>
+        <label className="block text-sm font-medium">
+          Last name
+          <input
+            value={lastName}
+            onChange={(event) => setLastName(event.target.value)}
+            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+          />
+        </label>
+        <label className="block text-sm font-medium">
+          Phone
+          <input
+            value={phone}
+            onChange={(event) => setPhone(event.target.value)}
+            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+          />
+        </label>
+        <button type="submit" disabled={loading} className="rounded-full bg-black px-6 py-3 text-white">
+          Save profile
+        </button>
+      </form>
+      <form onSubmit={savePassword} className="space-y-4 rounded-3xl border p-6">
+        <h2 className="text-xl font-bold">Password</h2>
+        <label className="block text-sm font-medium">
+          Current password
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={(event) => setCurrentPassword(event.target.value)}
+            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+          />
+        </label>
+        <label className="block text-sm font-medium">
+          New password
+          <input
+            type="password"
+            value={nextPassword}
+            onChange={(event) => setNextPassword(event.target.value)}
+            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+          />
+        </label>
+        <button type="submit" disabled={loading} className="rounded-full bg-black px-6 py-3 text-white">
+          Update password
+        </button>
+      </form>
+      {message && <p className="text-sm text-emerald-700">{message}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   )
 }

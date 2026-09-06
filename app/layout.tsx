@@ -2,18 +2,15 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-
 import Footer from './components/common/Footer'
 import Navbar from './components/common/Navbar'
-
 import { CartProvider } from '@/context/CartContext'
-import { ProductProvider } from '@/context/ProductsContext'
 import { WishlistProvider } from '@/context/wishlistContext'
 import { OrdersProvider } from '@/context/OrdersContext'
-
-import '@fortawesome/fontawesome-free/css/all.min.css'
 import { NotificationProvider } from '@/context/NotificationContext'
-import ClearStorage from './components/common/clearStorage'
+import { AuthProvider } from '@/context/AuthContext'
+import { getCurrentUser } from '@/lib/auth/session'
+import { StylistLauncher } from './components/stylist/StylistChat'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,32 +23,42 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'SHOP.CO | Premium Fashion & Clothing Store',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  title: {
+    default: 'SHOP.CO | Premium Fashion Store',
+    template: '%s | SHOP.CO',
+  },
   description:
-    'Discover the latest trends in men’s, women’s, and kids’ fashion at SHOP.CO. Shop premium clothing, footwear, accessories, and exclusive collections with fast delivery and secure checkout.',
+    'Shop premium mens, womens, and kids fashion at SHOP.CO. Discover curated clothing with secure checkout and an AI personal stylist.',
+  openGraph: {
+    title: 'SHOP.CO | Premium Fashion Store',
+    description: 'Curated clothing, secure checkout, and an AI stylist built into the shopping experience.',
+    type: 'website',
+  },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const user = await getCurrentUser()
+
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body>
-        
-        <ProductProvider>
-          <NotificationProvider>
-            <CartProvider>
-              <OrdersProvider>
+      <body className="min-h-full bg-white text-neutral-950">
+        <AuthProvider initialUser={user}>
+          <CartProvider>
+            <OrdersProvider>
+              <NotificationProvider>
                 <WishlistProvider>
                   <Suspense fallback={null}>
                     <Navbar />
                   </Suspense>
-                  <div className="mx-4">{children}</div>
-
+                  <main id="main-content">{children}</main>
                   <Footer />
+                  <StylistLauncher />
                 </WishlistProvider>
-              </OrdersProvider>
-            </CartProvider>
-          </NotificationProvider>
-        </ProductProvider>
+              </NotificationProvider>
+            </OrdersProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   )

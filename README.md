@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SHOP.CO
 
-## Getting Started
+SHOP.CO is a production-ready fashion e-commerce storefront for menswear, womenswear, kids, and accessories. Customers can browse a 1,050-piece catalog, save items, check out with coupon support, and get outfit recommendations from an in-house stylist powered by Llama 3.1 8B Instruct on Hugging Face Inference.
 
-First, run the development server:
+The project is built as a single Next.js 16 application so the storefront and API deploy together on Vercel.
+
+## Features
+
+- Catalog search, filters, pagination, product details, related items, and reviews
+- Cart and wishlist with size/color line items and persistent local storage
+- JWT authentication with httpOnly cookies, signup, login, password reset, and profile updates
+- Guest-friendly checkout with Cash on Delivery, card, and PayPal selection
+- Working coupon codes: `WELCOME20`, `SHOP10`, `STYLE25`, `FREESHIP`
+- Newsletter and contact APIs with validation and rate limiting
+- Native **AI Personal Stylist** that maps a shopper's occasion onto live catalog products
+- Responsive storefront with skip-to-content, labeled controls, and Vercel-ready image optimization
+
+## Technology stack
+
+- Next.js 16 App Router, React 19, TypeScript
+- Tailwind CSS 4
+- Zod validation, Jose JWT sessions, bcryptjs password hashing
+- Hugging Face Inference (`meta-llama/Llama-3.1-8B-Instruct`)
+- Catalog data served from server-only modules through REST route handlers
+
+## Installation
 
 ```bash
+git clone https://github.com/Sohaib432002/Cloths-ecom-APPSWORK.git
+cd Cloths-ecom-APPSWORK
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Demo account:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Email: `demo@shop.co`
+- Password: `ShopCo123!`
 
-## Learn More
+## Environment variables
 
-To learn more about Next.js, take a look at the following resources:
+| Name | Required | Description |
+| --- | --- | --- |
+| `AUTH_SECRET` | Yes in production | 32+ character secret used to sign session cookies |
+| `HF_TOKEN` | Recommended | Hugging Face access token for the stylist |
+| `HF_MODEL` | No | Defaults to `meta-llama/Llama-3.1-8B-Instruct` |
+| `NEXT_PUBLIC_APP_URL` | Recommended | Public site URL used in auth reset links |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a Hugging Face token at [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens). The stylist still returns catalog matches if the token is missing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+### Frontend and API on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Import the GitHub repository in Vercel.
+2. Set `AUTH_SECRET`, `HF_TOKEN`, `HF_MODEL`, and `NEXT_PUBLIC_APP_URL`.
+3. Deploy. Vercel detects Next.js automatically.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Hugging Face integration uses the official Inference API from Next.js route handlers. No separate backend host is required.
+
+## API documentation
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/health` | Service health and Hugging Face status |
+| `GET` | `/api/products` | Paginated catalog with filters (`search`, `category`, `type`, `style`, `color`, `size`, `sale`, `arrival`, `minPrice`, `maxPrice`, `page`, `limit`, `sort`) |
+| `GET` | `/api/products/[slug]` | Product, related items, and reviews |
+| `GET` | `/api/collections` | Home new arrivals and top sellers |
+| `POST` | `/api/auth/signup` | Create an account |
+| `POST` | `/api/auth/login` | Sign in |
+| `POST` | `/api/auth/logout` | Clear the session cookie |
+| `GET` | `/api/auth/me` | Current user |
+| `PATCH` | `/api/auth/me` | Update profile or password |
+| `POST` | `/api/auth/forgot-password` | Create a reset link |
+| `POST` | `/api/auth/reset-password` | Set a new password |
+| `POST` | `/api/auth/verify-email` | Verify an email token |
+| `POST` | `/api/orders` | Validate cart, coupons, and create an order |
+| `GET/POST` | `/api/coupons` | List or validate coupons |
+| `POST` | `/api/newsletter` | Subscribe |
+| `POST` | `/api/contact` | Send a contact message |
+| `POST` | `/api/stylist` | AI outfit recommendation |
+
+Example stylist request:
+
+```bash
+curl -X POST http://localhost:3000/api/stylist \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Black tie dinner next Friday, keep it under $400"}'
+```
+
+## Screenshots
+
+Run the app locally and visit:
+
+- `/` seasonal homepage and stylist entry
+- `/Store` filtered catalog
+- `/stylist` full-page concierge
+- `/ProductDetails/[slug]` product page with inline styling advice
+
+## Future improvements
+
+- Persist users and orders in Postgres or a managed database
+- Add transactional email for verification, resets, and shipping updates
+- Connect a real payment processor for card and PayPal capture
+- Precompute catalog embeddings for faster semantic matching
+- Replace placeholder photography with studio product assets

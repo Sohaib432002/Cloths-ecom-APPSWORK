@@ -1,323 +1,118 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { apiFetch } from '@/lib/client/api'
 
 const Footer = () => {
-  const [loginDetails, setLoginDetails] = useState('')
-  const router = useRouter()
-  useEffect(() => {
-    const data = localStorage.getItem('Login Details') || ''
-    setLoginDetails(data)
-  }, [])
-  const handleLogiSystem = () => {
-    if (loginDetails) {
-      const data = JSON.parse(loginDetails)
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('')
+  const [loading, setLoading] = useState(false)
 
-      return router.push('/account/profile?Tab=Dashboard')
-    } else router.push('login')
+  const subscribe = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setLoading(true)
+    setStatus('')
+    try {
+      const data = await apiFetch<{ message: string }>('/api/newsletter', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      })
+      setStatus(data.message)
+      setEmail('')
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Unable to subscribe right now.')
+    } finally {
+      setLoading(false)
+    }
   }
-  const handleOrdersystem = () => {
-    if (loginDetails) {
-      const data = JSON.parse(loginDetails)
-      return router.push('/account/profile?Tab=Orders')
-    } else router.push('login')
-  }
-  const handlePayementsystem = () => {
-    if (loginDetails) {
-      const data = JSON.parse(loginDetails)
-      return router.push('/account/profile?Tab=Payment+Methods')
-    } else router.push('login')
-  }
+
   return (
-    <div className="mt-40">
-      <section className="  bg-[#F0F0F0]  pb-3">
-        <div
-          className="
-    mx-4
-    -mt-20
-    rounded-3xl
-    bg-black
-    px-5
-    py-8
-    -translate-y-5
-    sm:mx-6
-    sm:px-8
-    sm:py-10
-    lg:mx-auto
-    lg:max-w-310 
-    lg:px-12
-    lg:py-12
-  "
-        >
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-            {/* Heading */}
-            <div className="max-w-310 m-auto ">
-              <h2
-                className="
-          text-2xl
-          font-extrabold
-          leading-tight
-          text-white
-          sm:text-3xl
-          md:text-4xl
-          lg:text-5xl
-        "
-              >
-                STAY UP TO DATE ABOUT OUR LATEST OFFERS
-              </h2>
-            </div>
-
-            {/* Newsletter */}
-            <div className="w-full max-w-md space-y-4">
-              <div
-                className="
-          flex
-          items-center
-          rounded-full
-          bg-white
-          px-4
-          py-3
-          sm:px-5
-          sm:py-4
-        "
-              >
-                <i className="fa-regular fa-envelope text-gray-500 text-base sm:text-lg"></i>
-
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="
-            ml-3
-            w-full
-            bg-transparent
-            text-sm
-            sm:text-base
-            outline-none
-          "
-                />
-              </div>
-
-              <button
-                className="
-          w-full
-          rounded-full
-          bg-white
-          py-3
-          text-sm
-          font-semibold
-          text-black
-          transition-all
-          duration-300
-          hover:bg-gray-200
-          active:scale-95
-          sm:py-4
-          sm:text-base
-        "
-              >
-                Subscribe to Newsletter
-              </button>
-            </div>
-          </div>
+    <footer className="mt-24 bg-[#F0F0F0]">
+      <section className="mx-4 -translate-y-10 rounded-3xl bg-black px-5 py-8 text-white sm:mx-6 sm:px-8 lg:mx-auto lg:max-w-310 lg:px-12">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+          <h2 className="max-w-xl text-2xl font-extrabold leading-tight sm:text-4xl">
+            Stay up to date about our latest offers
+          </h2>
+          <form onSubmit={subscribe} className="w-full max-w-md space-y-3">
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="newsletter-email"
+              type="email"
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="Enter your email address"
+              className="w-full rounded-full bg-white px-5 py-3 text-black outline-none"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-full bg-white py-3 font-semibold text-black hover:bg-gray-200 disabled:opacity-70"
+            >
+              {loading ? 'Subscribing...' : 'Subscribe to Newsletter'}
+            </button>
+            {status && <p className="text-sm text-gray-300">{status}</p>}
+          </form>
         </div>
+      </section>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 lg:mt-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {/* Brand */}
-            <div className="sm:col-span-2">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black">SHOP.CO</h2>
-
-              <p
-                className="
-          mt-4
-          max-w-md
-          text-xs
-          leading-6
-          text-gray-500
-          sm:text-sm
-          sm:leading-7
-          lg:text-base
-        "
-              >
-                We have clothes that suit your style and you'll be proud to wear them. From women to
-                men, discover premium fashion for every occasion.
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-3">
-                {[
-                  { icon: '𝕏', label: 'X' },
-                  { icon: 'f', label: 'Facebook' },
-                  { icon: '◎', label: 'Instagram' },
-                  { icon: '◉', label: 'YouTube' },
-                ].map((item) => (
-                  <a
-                    key={item.label}
-                    href="#"
-                    aria-label={item.label}
-                    className="
-              flex
-              h-9
-              w-9
-              items-center
-              justify-center
-              rounded-full
-              border
-              text-sm
-              transition-all
-              duration-300
-              hover:bg-black
-              hover:text-white
-              sm:h-10
-              sm:w-10
-              sm:text-base
-            "
-                  >
-                    {item.icon}
-                  </a>
+      <div className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="lg:col-span-2">
+            <Link href="/" className="text-3xl font-black">
+              SHOP.CO
+            </Link>
+            <p className="mt-4 max-w-md text-sm leading-7 text-gray-500">
+              Clothes that suit your style, from everyday denim to event-ready tailoring. Discover
+              curated fashion for men, women, and kids with an in-house AI stylist.
+            </p>
+          </div>
+          {[
+            {
+              title: 'Company',
+              links: [
+                { href: '/about', label: 'About' },
+                { href: '/contact', label: 'Contact' },
+                { href: '/stylist', label: 'AI Stylist' },
+              ],
+            },
+            {
+              title: 'Help',
+              links: [
+                { href: '/account/profile?Tab=Orders', label: 'Orders' },
+                { href: '/PrivacyPolicy', label: 'Privacy' },
+                { href: '/TermsConditions', label: 'Terms' },
+              ],
+            },
+            {
+              title: 'Shop',
+              links: [
+                { href: '/Store?category=Mens', label: 'Mens' },
+                { href: '/Store?category=Womens', label: 'Womens' },
+                { href: '/Store?sale=true', label: 'Sale' },
+              ],
+            },
+          ].map((group) => (
+            <div key={group.title}>
+              <h3 className="text-sm font-semibold uppercase tracking-widest text-gray-500">{group.title}</h3>
+              <div className="mt-4 flex flex-col gap-2 text-sm">
+                {group.links.map((link) => (
+                  <Link key={link.href} href={link.href} className="hover:underline">
+                    {link.label}
+                  </Link>
                 ))}
               </div>
             </div>
-
-            {/* Company */}
-            <div>
-              <h3
-                className="
-          mb-4
-          text-sm
-          font-semibold
-          uppercase
-          tracking-[2px]
-          sm:text-base
-        "
-              >
-                Company
-              </h3>
-
-              <ul className="flex flex-col space-y-3 text-sm text-gray-500">
-                <Link href="/account/profile?Tab=Dashboard">
-                  <li className="cursor-pointer transition hover:text-black">Account</li>
-                </Link>
-
-                <Link href="/contact">
-                  <li className="cursor-pointer transition hover:text-black">Contact Us</li>
-                </Link>
-
-                <Link href="/about">
-                  <li className="cursor-pointer transition hover:text-black">About Us</li>
-                </Link>
-              </ul>
-            </div>
-
-            {/* Help */}
-            <div>
-              <h3
-                className="
-          mb-4
-          text-sm
-          font-semibold
-          uppercase
-          tracking-[2px]
-          sm:text-base
-        "
-              >
-                Help
-              </h3>
-
-              <ul className="flex flex-col space-y-3 text-sm text-gray-500">
-                <Link href="/contact">
-                  <li className="cursor-pointer transition hover:text-black">Customer Support</li>
-                </Link>
-
-                <Link href="/TermsConditions">
-                  <li className="cursor-pointer transition hover:text-black">Terms & Conditions</li>
-                </Link>
-
-                <Link href="/PrivacyPolicy">
-                  <li className="cursor-pointer transition hover:text-black">Privacy Policy</li>
-                </Link>
-              </ul>
-            </div>
-          </div>
+          ))}
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 sm:mt-10 lg:mt-12">
-          <hr className="border-gray-300" />
-
-          <div
-            className="
-      flex
-      flex-col
-      items-center
-      justify-between
-      gap-5
-      py-5
-      sm:gap-6
-      sm:py-6
-      lg:flex-row
-    "
-          >
-            {/* Copyright */}
-            <p
-              className="
-        text-center
-        text-xs
-        text-gray-500
-        sm:text-sm
-        lg:text-left
-      "
-            >
-              Shop.co © 2000–2023. All Rights Reserved.
-            </p>
-
-            {/* Payment Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {[
-                {
-                  src: '/images/home/badges/Badge.svg',
-                  alt: 'Visa',
-                },
-                {
-                  src: '/images/home/badges/Badge (3).png',
-                  alt: 'MasterCard',
-                },
-                {
-                  src: '/images/home/badges/Badge (4).png',
-                  alt: 'PayPal',
-                },
-                {
-                  src: '/images/home/badges/Badge (1).png',
-                  alt: 'Apple Pay',
-                },
-              ].map((badge) => (
-                <div
-                  key={badge.alt}
-                  className="
-            rounded-lg
-            bg-white
-            p-1
-            shadow-sm
-            transition
-            hover:shadow-md
-            sm:p-2
-          "
-                >
-                  <img
-                    src={badge.src}
-                    alt={badge.alt}
-                    className="
-              h-8
-              w-auto
-              object-contain
-              sm:h-10
-              lg:h-12
-            "
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+        <p className="mt-10 border-t border-gray-300 pt-6 text-sm text-gray-500">
+          © {new Date().getFullYear()} SHOP.CO. All rights reserved.
+        </p>
+      </div>
+    </footer>
   )
 }
 

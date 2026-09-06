@@ -2,7 +2,9 @@
 
 import { BillingForm } from './BillingForm'
 import { OrderSummary } from './OrderSummary'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useAuth } from '@/context/AuthContext'
+import type { PaymentMethodId } from '@/types/product'
 
 type FormData = {
   firstName: string
@@ -16,6 +18,8 @@ type FormData = {
 }
 
 export const CheckoutParenet = () => {
+  const { user } = useAuth()
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodId>('cod')
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -23,72 +27,44 @@ export const CheckoutParenet = () => {
     phone: '',
     address: '',
     city: '',
-    country: '',
+    country: 'United States',
     zipCode: '',
   })
-
   const [errors, setErrors] = useState<Record<string, string>>({})
 
+  useEffect(() => {
+    if (!user) return
+    setFormData((prev) => ({
+      ...prev,
+      firstName: prev.firstName || user.firstName,
+      lastName: prev.lastName || user.lastName,
+      email: prev.email || user.email,
+      phone: prev.phone || user.phone || '',
+    }))
+  }, [user])
+
   return (
-    <section
-      className="
-      mx-auto
-      w-full
-      max-w-310
-      py-6
-      
-      
-    "
-    >
-      {/* Header */}
-      <div className="mb-6 sm:mb-8">
-        <h1
-          className="
-          text-[16px]
-          sm:text-xl
-          lg:text-2xl
-          font-extrabold
-          text-black
-        "
-        >
-          CHECKOUT
-        </h1>
-      </div>
-
-      {/* Checkout Layout */}
-
-      <div
-        className="
-    grid
-    grid-cols-1
-    gap-5
-    sm:gap-6
-    lg:grid-cols-3
-    lg:gap-4
-    direction-rtl
-  "
-      >
-        {/* Billing Form */}
-
+    <section className="mx-auto w-full max-w-310 px-4 py-6">
+      <h1 className="mb-6 text-2xl font-extrabold">Checkout</h1>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <BillingForm
             formData={formData}
             setFormData={setFormData}
             errors={errors}
             setErrors={setErrors}
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
           />
         </div>
-
-        {/* Order Summary */}
-
         <div className="lg:col-span-1">
-          <div
-            className="
-            lg:sticky
-            lg:top-24
-          "
-          >
-            <OrderSummary formData={formData} errors={errors} setErrors={setErrors} />
+          <div className="lg:sticky lg:top-24">
+            <OrderSummary
+              formData={formData}
+              errors={errors}
+              setErrors={setErrors}
+              paymentMethod={paymentMethod}
+            />
           </div>
         </div>
       </div>

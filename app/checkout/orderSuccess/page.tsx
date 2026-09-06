@@ -2,210 +2,65 @@
 
 import Link from 'next/link'
 import { CheckCircle2 } from 'lucide-react'
-import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useOrders } from '@/context/OrdersContext'
+import { formatMoney } from '@/lib/commerce/pricing'
+import { Suspense } from 'react'
 
-const OrderSuccess = () => {
-  const [orderId] = useState(() => {
-    return `ORD-${Math.floor(100000 + Math.random() * 900000)}`
-  })
+function OrderSuccessContent() {
+  const searchParams = useSearchParams()
+  const orderId = searchParams.get('orderId')
+  const { getOrder } = useOrders()
+  const order = orderId ? getOrder(orderId) : undefined
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 sm:px-6 py-10 sm:py-20">
-      <div
-        className="
-        w-full
-        max-w-2xl
-        rounded-3xl
-        border
-        bg-white
-        p-5
-        sm:p-8
-        lg:p-10
-        text-center
-        shadow-lg
-        "
-      >
-        {/* Icon */}
-        <div className="flex justify-center">
-          <div
-            className="
-            flex
-            h-16
-            w-16
-            sm:h-20
-            sm:w-20
-            lg:h-24
-            lg:w-24
-            items-center
-            justify-center
-            rounded-full
-            bg-green-100
-            "
-          >
-            <CheckCircle2
-              className="
-              h-10
-              w-10
-              sm:h-12
-              sm:w-12
-              lg:h-14
-              lg:w-14
-              text-green-600
-              "
-            />
-          </div>
+    <div className="flex min-h-[80vh] items-center justify-center px-4 py-10">
+      <div className="w-full max-w-2xl rounded-3xl border bg-white p-8 text-center shadow-lg">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+          <CheckCircle2 className="h-12 w-12 text-green-600" />
         </div>
-
-        {/* Heading */}
-        <h1
-          className="
-          mt-5
-          sm:mt-8
-          text-2xl
-          sm:text-3xl
-          lg:text-4xl
-          font-bold
-          text-black
-          "
-        >
-          Order Placed Successfully!
-        </h1>
-
-        {/* Description */}
-        <p
-          className="
-          mt-3
-          sm:mt-4
-          text-sm
-          sm:text-base
-          lg:text-lg
-          text-gray-500
-          "
-        >
-          Thank you for shopping with us. Your order has been received and is now being processed.
+        <h1 className="mt-6 text-3xl font-bold">Order placed successfully</h1>
+        <p className="mt-3 text-gray-500">
+          Thank you for shopping with SHOP.CO. We are preparing your pieces for dispatch.
         </p>
-
-        {/* Order Info */}
-        <div
-          className="
-          mt-6
-          sm:mt-8
-          rounded-2xl
-          border
-          bg-gray-50
-          p-4
-          sm:p-6
-          text-left
-          "
-        >
-          <div
-            className="
-            flex
-            flex-col
-            gap-1
-            sm:flex-row
-            sm:justify-between
-            sm:items-center
-            border-b
-            py-3
-            text-sm
-            sm:text-base
-            "
-          >
+        <div className="mt-8 rounded-2xl border bg-gray-50 p-6 text-left">
+          <div className="flex justify-between border-b py-3">
             <span className="text-gray-500">Order Number</span>
-
-            <span className="font-semibold break-all">{orderId}</span>
+            <span className="font-semibold">{orderId || 'Processing'}</span>
           </div>
-
-          <div
-            className="
-            flex
-            flex-col
-            gap-1
-            sm:flex-row
-            sm:justify-between
-            sm:items-center
-            border-b
-            py-3
-            text-sm
-            sm:text-base
-            "
-          >
+          <div className="flex justify-between border-b py-3">
+            <span className="text-gray-500">Payment</span>
+            <span className="font-semibold">{order?.payment || 'Confirmed'}</span>
+          </div>
+          <div className="flex justify-between border-b py-3">
             <span className="text-gray-500">Payment Status</span>
-
-            <span className="font-semibold text-green-600">Paid</span>
+            <span className="font-semibold">{order?.paymentStatus || 'Pending'}</span>
           </div>
-
-          <div
-            className="
-            flex
-            flex-col
-            gap-1
-            sm:flex-row
-            sm:justify-between
-            sm:items-center
-            py-3
-            text-sm
-            sm:text-base
-            "
-          >
-            <span className="text-gray-500">Estimated Delivery</span>
-
-            <span className="font-semibold">3 - 5 Business Days</span>
+          <div className="flex justify-between py-3">
+            <span className="text-gray-500">Total</span>
+            <span className="font-semibold">{order ? formatMoney(order.total) : '—'}</span>
           </div>
         </div>
-
-        {/* Buttons */}
-        <div
-          className="
-          mt-6
-          sm:mt-10
-          flex
-          flex-col
-          sm:flex-row
-          gap-3
-          sm:gap-4
-          "
-        >
-          <Link
-            href="/Store"
-            className="
-            flex-1
-            rounded-xl
-            bg-black
-            py-3
-            text-sm
-            sm:text-base
-            font-semibold
-            text-white
-            transition
-            hover:bg-gray-900
-            "
-          >
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link href="/Store" className="flex-1 rounded-xl bg-black py-3 font-semibold text-white">
             Continue Shopping
           </Link>
-
           <Link
-            href="/checkout/vieworders"
-            className="
-            flex-1
-            rounded-xl
-            border
-            border-black
-            py-3
-            text-sm
-            sm:text-base
-            font-semibold
-            transition
-            hover:bg-gray-100
-            "
+            href={orderId ? `/checkout/vieworders/${orderId}` : '/checkout/vieworders'}
+            className="flex-1 rounded-xl border border-black py-3 font-semibold"
           >
-            View Orders
+            View Order
           </Link>
         </div>
       </div>
     </div>
   )
 }
+
+const OrderSuccess = () => (
+  <Suspense fallback={<div className="py-20 text-center">Loading order confirmation...</div>}>
+    <OrderSuccessContent />
+  </Suspense>
+)
 
 export default OrderSuccess

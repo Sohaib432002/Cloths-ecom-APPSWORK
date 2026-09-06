@@ -43,6 +43,7 @@ const Reviews = () => {
         <div className="hidden items-center gap-3 sm:flex">
           <button
             onClick={scrollLeft}
+            aria-label="Previous reviews"
             className="
               flex
               h-11
@@ -67,6 +68,7 @@ const Reviews = () => {
 
           <button
             onClick={scrollRight}
+            aria-label="Next reviews"
             className="
               flex
               h-11

@@ -11,7 +11,9 @@ import {
   PaymentMethods,
   Coupons,
   Settings,
+  Notifications,
 } from '../account'
+import { WishlistPage } from '../wishlist/wishlistParent'
 
 export const ProfileParent = () => {
   const searchParams = useSearchParams()
@@ -24,6 +26,8 @@ export const ProfileParent = () => {
     'Addresses',
     'Payment Methods',
     'Coupons',
+    'Wishlists',
+    'Notifications',
     'Profile Details',
     'Settings',
   ]
@@ -92,6 +96,10 @@ export const ProfileParent = () => {
           {currentTab === 'Payment Methods' && <PaymentMethods />}
 
           {currentTab === 'Coupons' && <Coupons />}
+
+          {currentTab === 'Wishlists' && <WishlistPage />}
+
+          {currentTab === 'Notifications' && <Notifications />}
 
           {currentTab === 'Profile Details' && <Profiledetails />}
 

@@ -97,7 +97,7 @@ export default function ViewOrders() {
                     </div>
 
                     <p className="text-lg font-bold sm:text-xl">
-                      £{(item.price * item.quantity).toFixed(2)}
+                      ${(item.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -109,7 +109,7 @@ export default function ViewOrders() {
               <div>
                 <p className="text-sm text-gray-500">Total Amount</p>
 
-                <h3 className="text-xl font-bold sm:text-2xl">£{order.total.toFixed(2)}</h3>
+                <h3 className="text-xl font-bold sm:text-2xl">${order.total.toFixed(2)}</h3>
               </div>
 
               <Link

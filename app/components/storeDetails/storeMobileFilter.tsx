@@ -7,6 +7,7 @@ import { X, ChevronDown, ChevronRight, Check, Filter, RotateCcw } from 'lucide-r
 
 import { Product } from '@/types/product'
 import { PriceSlider } from '../storeDetails/storefilterslider'
+import { CATALOG_FACETS } from '@/lib/catalog/facets'
 type Props = {
   products: Pick<Product, 'id' | 'title' | 'type' | 'style' | 'colors'>[]
 
@@ -213,11 +214,9 @@ export const MobileFilter = ({
 
   // FILTER DATA
 
-  const types = [...new Set(products.map((item) => item.type))]
-
-  const styles = [...new Set(products.map((item) => item.style))]
-
-  const colors = [...new Set(products.flatMap((item) => item.colors))]
+  const types = CATALOG_FACETS.types
+  const styles = CATALOG_FACETS.styles
+  const colors = CATALOG_FACETS.colors
 
   // QUERY BUILDER
   const [selectminprice, setselectminprice] = useState(minPrice ?? 0)

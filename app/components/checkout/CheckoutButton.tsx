@@ -3,8 +3,12 @@
 import { useState } from 'react'
 import { useCart } from '@/hooks/usecart'
 import { useOrders } from '@/context/OrdersContext'
+import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { FaArrowRight } from 'react-icons/fa6'
+import { apiFetch } from '@/lib/client/api'
+import type { Order } from '@/context/OrdersContext'
+import type { PaymentMethodId } from '@/types/product'
 
 type FormData = {
   firstName: string
@@ -17,150 +21,98 @@ type FormData = {
   zipCode: string
 }
 
-type CheckoutButtonProps = {
+export const CheckoutButton = ({
+  formData,
+  setErrors,
+  paymentMethod,
+}: {
   formData: FormData
   setErrors?: React.Dispatch<React.SetStateAction<Record<string, string>>>
-}
-
-export const CheckoutButton = ({ formData, setErrors }: CheckoutButtonProps) => {
+  paymentMethod: PaymentMethodId
+}) => {
   const router = useRouter()
-
-  const { clearCart, cart } = useCart()
-
+  const { clearCart, cart, coupon } = useCart()
   const { addOrder } = useOrders()
-
+  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
-
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city']
-
-    requiredFields.forEach((field) => {
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ;['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'zipCode'].forEach((field) => {
       const value = formData[field as keyof FormData]
-
-      if (typeof value === 'string' && !value.trim()) {
-        newErrors[field] = 'Please fill this field.'
-      }
+      if (!value.trim()) newErrors[field] = 'Please fill this field.'
     })
-
-    if (setErrors) {
-      setErrors(newErrors)
+    if (formData.email && !emailOk) newErrors.email = 'Enter a valid email address.'
+    if (formData.phone && formData.phone.replace(/\D/g, '').length < 7) {
+      newErrors.phone = 'Enter a valid phone number.'
     }
-
+    setErrors?.(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const handlePlaceOrder = () => {
-    // Check Login
-    // const loginDetails = localStorage.getItem('Login Details')
-
-    // if (!loginDetails) {
-    //   alert('Please login to place your order.')
-    //   router.push('/login')
-    //   return
-    // }
-
-    // Check Cart
+  const handlePlaceOrder = async () => {
+    setError('')
     if (cart.length === 0) {
-      alert('Your cart is empty.')
+      setError('Your cart is empty.')
       return
     }
-
-    // Validate Form
-    const isValid = validateForm()
-
-    if (!isValid) {
-      return
-    }
+    if (!validateForm()) return
 
     setLoading(true)
-
-    const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0)
-
-    const discount = (subtotal * 20) / 100
-
-    const deliveryFee = 15
-
-    const total = subtotal - discount + deliveryFee
-
-    const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`
-
-    const newOrder = {
-      id: orderId,
-
-      status: 'Processing',
-
-      date: new Date().toLocaleDateString('en-GB'),
-
-      payment: 'Cash On Delivery',
-
-      shipping: 'Standard Shipping',
-
-      items: cart.map((item) => ({
-        id: item.id,
-        title: item.title,
-        image: item.image,
-        quantity: item.quantity,
-        price: item.price,
-      })),
-
-      address: {
-        name: `${formData.firstName} ${formData.lastName}`,
-        phone: formData.phone,
-        address: formData.address,
-        city: formData.city,
-        country: formData.country,
-        zipCode: formData.zipCode,
-      },
-
-      subtotal,
-      discount,
-      deliveryFee,
-      total,
-    }
-
-    addOrder(newOrder)
-
-    setTimeout(() => {
+    try {
+      const data = await apiFetch<{ order: Order }>('/api/orders', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...formData,
+          country: formData.country || 'United States',
+          paymentMethod,
+          couponCode: coupon?.code,
+          items: cart.map((item) => ({
+            id: item.id,
+            slug: item.slug,
+            title: item.title,
+            image: item.image,
+            quantity: item.quantity,
+            price: item.price,
+            size: item.size,
+            color: item.color,
+          })),
+        }),
+      })
+      addOrder(data.order)
       clearCart()
-      router.push(`/checkout/orderSuccess?orderId=${orderId}`)
-    }, 500)
+      router.push(`/checkout/orderSuccess?orderId=${data.order.id}`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to place this order.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <button
-      onClick={handlePlaceOrder}
-      disabled={cart.length === 0 || loading}
-      className={`
-
-      flex
-      w-full
-      items-center
-      justify-center
-      gap-3
-      rounded-xl
-      py-3
-      sm:py-4
-      text-sm
-      sm:text-lg
-      font-semibold
-      transition-all
-      duration-300
-
-
-      ${
-        cart.length === 0 || loading
-          ? 'cursor-not-allowed bg-gray-300 text-gray-500'
-          : 'bg-black text-white hover:bg-gray-800 hover:scale-[1.02] active:scale-[0.98]'
-      }
-
-      `}
-    >
-      {loading ? 'Processing...' : 'Place Order'}
-
-      {!loading && <FaArrowRight className="text-sm sm:text-base" />}
-    </button>
+    <div className="space-y-3">
+      {!user && (
+        <p className="text-sm text-gray-500">
+          Guest checkout is available. Sign in if you want the order saved to your account profile.
+        </p>
+      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
+      <button
+        type="button"
+        onClick={() => void handlePlaceOrder()}
+        disabled={cart.length === 0 || loading}
+        className={`flex w-full items-center justify-center gap-3 rounded-xl py-4 text-lg font-semibold ${
+          cart.length === 0 || loading
+            ? 'cursor-not-allowed bg-gray-300 text-gray-500'
+            : 'bg-black text-white hover:bg-gray-800'
+        }`}
+      >
+        {loading ? 'Placing order...' : 'Place Order'}
+        {!loading && <FaArrowRight />}
+      </button>
+    </div>
   )
 }
 

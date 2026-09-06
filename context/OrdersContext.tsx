@@ -1,14 +1,17 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import type { AppliedCoupon, PaymentMethodId } from '@/types/product'
 
 export type Order = {
   id: string
   status: string
   date: string
   payment: string
+  paymentMethod?: PaymentMethodId
+  paymentStatus?: string
   shipping: string
-
+  email?: string
   items: {
     id: number
     title: string
@@ -17,8 +20,8 @@ export type Order = {
     size?: string
     color?: string
     price: number
+    slug?: string
   }[]
-
   address: {
     name: string
     phone: string
@@ -27,7 +30,7 @@ export type Order = {
     country: string
     zipCode: string
   }
-
+  coupon?: AppliedCoupon | null
   subtotal: number
   discount: number
   deliveryFee: number
@@ -36,47 +39,40 @@ export type Order = {
 
 type OrdersContextType = {
   orders: Order[]
-
+  ready: boolean
   addOrder: (order: Order) => void
-
   getOrder: (id: string) => Order | undefined
 }
 
 const OrdersContext = createContext<OrdersContextType | undefined>(undefined)
 
-export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
+export const OrdersProvider = ({ children }: { children: ReactNode }) => {
   const [orders, setOrders] = useState<Order[]>([])
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    const savedOrders = localStorage.getItem('orders')
-
-    if (savedOrders) {
-      setOrders(JSON.parse(savedOrders))
+    try {
+      const saved = localStorage.getItem('orders')
+      if (saved) setOrders(JSON.parse(saved))
+    } catch {
+      setOrders([])
     }
+    setReady(true)
   }, [])
 
+  useEffect(() => {
+    if (!ready) return
+    localStorage.setItem('orders', JSON.stringify(orders))
+  }, [orders, ready])
+
   const addOrder = (order: Order) => {
-    const updatedOrders = [order, ...orders]
-
-    setOrders(updatedOrders)
-
-    localStorage.setItem('orders', JSON.stringify(updatedOrders))
+    setOrders((prev) => [order, ...prev.filter((item) => item.id !== order.id)])
   }
 
-  const getOrder = (id: string) => {
-    return orders.find((order) => order.id === id)
-  }
+  const getOrder = (id: string) => orders.find((order) => order.id === id)
 
   return (
-    <OrdersContext.Provider
-      value={{
-        orders,
-
-        addOrder,
-
-        getOrder,
-      }}
-    >
+    <OrdersContext.Provider value={{ orders, ready, addOrder, getOrder }}>
       {children}
     </OrdersContext.Provider>
   )
@@ -84,10 +80,6 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useOrders = () => {
   const context = useContext(OrdersContext)
-
-  if (!context) {
-    throw new Error('useOrders must be used inside OrdersProvider')
-  }
-
+  if (!context) throw new Error('useOrders must be used inside OrdersProvider')
   return context
 }
