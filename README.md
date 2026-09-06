@@ -2,7 +2,7 @@
 
 SHOP.CO is a production-ready fashion e-commerce storefront for menswear, womenswear, kids, and accessories. Customers can browse a 1,050-piece catalog, save items, check out with coupon support, and get outfit recommendations from an in-house stylist powered by Llama 3.1 8B Instruct on Hugging Face Inference.
 
-The project is built as a single Next.js 16 application so the storefront and API deploy together on Vercel.
+The storefront is a Next.js 16 app (Vercel). Catalog, orders, and inventory live in a Django 5 API under `backend/` (Render, Railway, or Fly).
 
 ## Features
 
@@ -21,7 +21,7 @@ The project is built as a single Next.js 16 application so the storefront and AP
 - Tailwind CSS 4
 - Zod validation, Jose JWT sessions, bcryptjs password hashing
 - Hugging Face Inference (`meta-llama/Llama-3.1-8B-Instruct`)
-- Catalog data served from server-only modules through REST route handlers
+- Django 5 + Django REST Framework API for catalog, orders, and inventory
 
 ## Installation
 
@@ -34,6 +34,20 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+Django API (separate terminal):
+
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env
+python manage.py migrate
+python manage.py runserver
+```
+
+Health check: [http://127.0.0.1:8000/api/health/](http://127.0.0.1:8000/api/health/). See `backend/README.md` for Cloudinary, CORS, and production notes.
 
 Demo account:
 
@@ -48,18 +62,23 @@ Demo account:
 | `HF_TOKEN` | Recommended | Hugging Face access token for the stylist |
 | `HF_MODEL` | No | Defaults to `meta-llama/Llama-3.1-8B-Instruct` |
 | `NEXT_PUBLIC_APP_URL` | Recommended | Public site URL used in auth reset links |
+| `DJANGO_API_URL` | Recommended | Django API origin, e.g. `http://127.0.0.1:8000` |
 
 Create a Hugging Face token at [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens). The stylist still returns catalog matches if the token is missing.
 
 ## Deployment
 
-### Frontend and API on Vercel
+### Frontend on Vercel
 
 1. Import the GitHub repository in Vercel.
-2. Set `AUTH_SECRET`, `HF_TOKEN`, `HF_MODEL`, and `NEXT_PUBLIC_APP_URL`.
+2. Set `AUTH_SECRET`, `HF_TOKEN`, `HF_MODEL`, `NEXT_PUBLIC_APP_URL`, and `DJANGO_API_URL`.
 3. Deploy. Vercel detects Next.js automatically.
 
-The Hugging Face integration uses the official Inference API from Next.js route handlers. No separate backend host is required.
+### Django API on Render, Railway, or Fly
+
+Use `backend/` as the service root. Set `DJANGO_DEBUG=False`, a unique `DJANGO_SECRET_KEY`, and `ALLOWED_HOSTS`. A Render Blueprint is in `render.yaml`. See `backend/README.md` for Cloudinary, CORS, and Postgres notes.
+
+The Hugging Face integration uses the official Inference API from Next.js route handlers.
 
 ## API documentation
 
