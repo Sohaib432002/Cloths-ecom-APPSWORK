@@ -34,16 +34,30 @@ if not DEBUG and SECRET_KEY.startswith("django-insecure"):
         "Set a unique DJANGO_SECRET_KEY before running with DJANGO_DEBUG=False."
     )
 
+def _append_unique(values, item):
+    item = (item or "").strip()
+    if item and item not in values:
+        values.append(item)
+
+
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[]) or env.list(
     "DJANGO_ALLOWED_HOSTS", default=["localhost", "127.0.0.1"]
 )
 if RUNNING_TESTS:
     for host in ("testserver", "localhost", "127.0.0.1"):
-        if host not in ALLOWED_HOSTS:
-            ALLOWED_HOSTS.append(host)
+        _append_unique(ALLOWED_HOSTS, host)
+
 render_host = env("RENDER_EXTERNAL_HOSTNAME", default="")
-if render_host and render_host not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append(render_host)
+railway_host = env("RAILWAY_PUBLIC_DOMAIN", default="")
+fly_app = env("FLY_APP_NAME", default="")
+_append_unique(ALLOWED_HOSTS, render_host)
+_append_unique(ALLOWED_HOSTS, railway_host)
+if fly_app:
+    _append_unique(ALLOWED_HOSTS, f"{fly_app}.fly.dev")
+if not DEBUG:
+    _append_unique(ALLOWED_HOSTS, ".onrender.com")
+    _append_unique(ALLOWED_HOSTS, ".up.railway.app")
+    _append_unique(ALLOWED_HOSTS, ".fly.dev")
 
 CORS_ALLOWED_ORIGINS = env.list(
     "CORS_ALLOWED_ORIGINS",
@@ -61,6 +75,9 @@ CSRF_TRUSTED_ORIGINS = env.list(
         "http://127.0.0.1:8000",
     ],
 )
+for platform_host in (render_host, railway_host, f"{fly_app}.fly.dev" if fly_app else ""):
+    if platform_host:
+        _append_unique(CSRF_TRUSTED_ORIGINS, f"https://{platform_host}")
 
 USE_CLOUDINARY = is_cloudinary_configured(
     cloudinary_url=env("CLOUDINARY_URL", default=""),
@@ -137,7 +154,7 @@ DATABASES = {
     "default": dj_database_url.parse(
         _database_url or _sqlite_url,
         conn_max_age=env.int("DATABASE_CONN_MAX_AGE", default=600),
-        ssl_require=env.bool("DATABASE_SSL_REQUIRE", default=False)
+        ssl_require=env.bool("DATABASE_SSL_REQUIRE", default=not DEBUG)
         if (_database_url or "").startswith("postgres")
         else False,
     )

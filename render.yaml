@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: shopco-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash start.sh
+    healthCheckPath: /api/health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"

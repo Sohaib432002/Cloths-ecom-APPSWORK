@@ -53,3 +53,5 @@ python manage.py test
 ## Production
 
 Host this project on Render, Railway, or Fly. Set `DJANGO_DEBUG=False`, a unique `DJANGO_SECRET_KEY`, Postgres `DATABASE_URL`, `ALLOWED_HOSTS`, and CORS/CSRF origins for the Vercel storefront. Point Next.js at this service with `DJANGO_API_URL`.
+
+A Render Blueprint lives at the repo root (`render.yaml`). The first deploy can run on SQLite so the free web service boots; add a Postgres `DATABASE_URL` and Cloudinary before putting real catalog data on an ephemeral disk.
