@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { SignupForm } from '../Components/auth'
+import { SocialLogin } from '@/app/components/auth/SocialLogin'
 
 export default function SignupPage() {
   return (
@@ -27,6 +29,9 @@ export default function SignupPage() {
             Create your account in a few simple steps.
           </p>
 
+          <Suspense fallback={null}>
+            <SocialLogin />
+          </Suspense>
           <SignupForm />
 
           <div className="my-5 flex items-center gap-3 sm:my-6">

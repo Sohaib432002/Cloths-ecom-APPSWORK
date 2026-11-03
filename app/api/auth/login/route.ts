@@ -1,5 +1,4 @@
 import { authenticate } from '@/lib/auth/users'
-import { demoCredentials } from '@/lib/auth/public'
 import { setSessionCookie } from '@/lib/auth/session'
 import { getClientIp, jsonError, jsonOk, logEvent, readJson } from '@/lib/http'
 import { rateLimit } from '@/lib/rate-limit'
@@ -24,5 +23,5 @@ export async function POST(request: Request) {
 
   await setSessionCookie(user)
   logEvent('auth.login', { email: user.email })
-  return jsonOk({ user, demo: parsed.data.email === demoCredentials.email })
+  return jsonOk({ user })
 }

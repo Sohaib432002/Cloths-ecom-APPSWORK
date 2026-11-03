@@ -1,7 +1,6 @@
 import { getDb } from '@/lib/db/client'
 import type { SessionUser } from '@/types/product'
 import { hashPassword, verifyPassword } from './password'
-import { demoCredentials } from './public'
 
 export type StoredAccount = {
   id: string
@@ -133,4 +132,3 @@ export async function changePassword(user: SessionUser, currentPassword: string,
   await setPassword(user.id, nextPassword)
 }
 
-export { demoCredentials }

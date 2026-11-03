@@ -85,8 +85,9 @@ async function hydrate(rows: Row[]): Promise<Product[]> {
 
 async function selectProducts(where = '', args: InValue[] = [], order = SORTS.featured, tail = '') {
   const db = await getDb()
+  const visible = where ? where.replace(/^WHERE /, 'WHERE p.is_active = 1 AND ') : 'WHERE p.is_active = 1'
   const result = await db.execute({
-    sql: `SELECT p.* FROM products p ${where} ORDER BY ${order} ${tail}`,
+    sql: `SELECT p.* FROM products p ${visible} ORDER BY ${order} ${tail}`,
     args,
   })
   return hydrate(result.rows as unknown as Row[])
@@ -117,7 +118,7 @@ export async function getRelatedProducts(product: Product, limit = 8) {
 
 export async function searchCatalog(query: ProductQuery) {
   const db = await getDb()
-  const clauses: string[] = []
+  const clauses: string[] = ['p.is_active = 1']
   const args: InValue[] = []
 
   if (query.sale) clauses.push('p.discount > 0')
@@ -194,8 +195,8 @@ async function distinct(sql: string) {
 export async function getFacets() {
   const [categories, types, styles, colors, sizes] = await Promise.all([
     distinct('SELECT name FROM categories ORDER BY position'),
-    distinct('SELECT DISTINCT type FROM products ORDER BY type'),
-    distinct('SELECT DISTINCT style FROM products ORDER BY style'),
+    distinct('SELECT DISTINCT type FROM products WHERE is_active = 1 ORDER BY type'),
+    distinct('SELECT DISTINCT style FROM products WHERE is_active = 1 ORDER BY style'),
     distinct('SELECT DISTINCT color FROM product_colors ORDER BY color'),
     distinct('SELECT DISTINCT size FROM product_sizes ORDER BY size'),
   ])
@@ -221,7 +222,7 @@ export async function getCategorySummary() {
   const db = await getDb()
   const result = await db.execute(
     `SELECT c.name, c.label, COUNT(p.id) AS count
-     FROM categories c LEFT JOIN products p ON p.category = c.name
+     FROM categories c LEFT JOIN products p ON p.category = c.name AND p.is_active = 1
      GROUP BY c.name ORDER BY c.position`
   )
   return result.rows.map((row) => ({
@@ -233,7 +234,7 @@ export async function getCategorySummary() {
 
 export async function getCatalogSummary() {
   const db = await getDb()
-  const [count, facets] = await Promise.all([db.execute('SELECT COUNT(*) AS n FROM products'), getFacets()])
+  const [count, facets] = await Promise.all([db.execute('SELECT COUNT(*) AS n FROM products WHERE is_active = 1'), getFacets()])
   return {
     count: Number(count.rows[0].n),
     styles: facets.styles,
@@ -245,7 +246,7 @@ export async function getCatalogSummary() {
 export async function getStoreStats() {
   const db = await getDb()
   const [products, customers, orders, reviews] = await Promise.all([
-    db.execute('SELECT COUNT(*) AS n FROM products'),
+    db.execute('SELECT COUNT(*) AS n FROM products WHERE is_active = 1'),
     db.execute('SELECT COUNT(*) AS n FROM users'),
     db.execute('SELECT COUNT(*) AS n FROM orders'),
     db.execute('SELECT COUNT(*) AS n FROM reviews'),

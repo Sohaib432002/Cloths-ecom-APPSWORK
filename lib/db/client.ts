@@ -42,6 +42,12 @@ async function init() {
   await client.execute('PRAGMA foreign_keys = ON')
   await client.batch(SCHEMA, 'write')
 
+  // databases created before a column existed are upgraded in place
+  const columns = await client.execute('PRAGMA table_info(products)')
+  if (!columns.rows.some((row) => row.name === 'is_active')) {
+    await client.execute('ALTER TABLE products ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1')
+  }
+
   const current = await client.execute({ sql: "SELECT value FROM meta WHERE key = 'schema_version'" })
   if (!current.rows.length) {
     await client.execute({

@@ -1,3 +1,4 @@
+import { googleEnabled } from '@/lib/auth/google'
 import { jsonOk } from '@/lib/http'
 import { emailEnabled, smsEnabled } from '@/lib/notify'
 import { stripeEnabled } from '@/lib/payments/stripe'
@@ -7,6 +8,7 @@ import { SITE } from '@/lib/site'
 export async function GET() {
   return jsonOk({
     payments: { cod: true, card: stripeEnabled() },
+    auth: { google: googleEnabled() },
     notifications: { email: emailEnabled(), sms: smsEnabled() },
     support: { phone: SITE.phoneDisplay, email: SITE.email },
   })

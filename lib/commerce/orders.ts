@@ -55,7 +55,7 @@ export async function createOrder(input: CheckoutInput, user: SessionUser | null
   const found = await db.execute({
     sql: `SELECT p.id, p.title, p.price, p.stock,
             (SELECT url FROM product_images WHERE product_id = p.id ORDER BY position LIMIT 1) AS image
-          FROM products p WHERE p.id IN (${ids.map(() => '?').join(',')})`,
+          FROM products p WHERE p.is_active = 1 AND p.id IN (${ids.map(() => '?').join(',')})`,
     args: ids,
   })
   const catalog = new Map(found.rows.map((row) => [Number(row.id), row]))

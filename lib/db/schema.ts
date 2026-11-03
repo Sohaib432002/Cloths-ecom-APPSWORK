@@ -49,7 +49,8 @@ export const SCHEMA = [
     arrival_date TEXT NOT NULL,
     is_new INTEGER NOT NULL DEFAULT 0,
     is_featured INTEGER NOT NULL DEFAULT 0,
-    is_bestseller INTEGER NOT NULL DEFAULT 0
+    is_bestseller INTEGER NOT NULL DEFAULT 0,
+    is_active INTEGER NOT NULL DEFAULT 1
   )`,
   `CREATE INDEX IF NOT EXISTS idx_products_category ON products(category)`,
   `CREATE INDEX IF NOT EXISTS idx_products_type ON products(type)`,
@@ -142,6 +143,18 @@ export const SCHEMA = [
     product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
     created_at TEXT NOT NULL,
     PRIMARY KEY (user_id, product_id)
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+  )`,
+
+  `CREATE TABLE IF NOT EXISTS product_media (
+    id TEXT PRIMARY KEY,
+    mime TEXT NOT NULL,
+    data BLOB NOT NULL,
+    created_at TEXT NOT NULL
   )`,
 
   `CREATE TABLE IF NOT EXISTS newsletter_subscribers (

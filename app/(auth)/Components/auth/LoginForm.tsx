@@ -5,12 +5,11 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { apiFetch } from '@/lib/client/api'
 import { useAuth } from '@/context/AuthContext'
-import { demoCredentials } from '@/lib/auth/public'
 import type { SessionUser } from '@/types/product'
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState(demoCredentials.email)
-  const [password, setPassword] = useState(demoCredentials.password)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -39,9 +38,6 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-      <p className="rounded-2xl bg-lavender-50 px-4 py-3 text-sm text-gray-600">
-        Demo account: <strong>{demoCredentials.email}</strong> / <strong>{demoCredentials.password}</strong>
-      </p>
       <div>
         <label htmlFor="login-email" className="mb-2 block text-sm font-semibold">
           Email Address

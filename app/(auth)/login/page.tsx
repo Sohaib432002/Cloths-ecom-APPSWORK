@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { LoginForm } from '../Components/auth'
+import { SocialLogin } from '@/app/components/auth/SocialLogin'
 
 export default function LoginPage() {
   return (
@@ -47,6 +48,7 @@ export default function LoginPage() {
 
           <div className="mt-6 sm:mt-8">
             <Suspense fallback={<p className="text-sm text-gray-500">Loading sign-in form...</p>}>
+              <SocialLogin />
               <LoginForm />
             </Suspense>
           </div>

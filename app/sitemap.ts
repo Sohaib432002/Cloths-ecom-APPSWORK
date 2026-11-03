@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getAppUrl()
   const db = await getDb()
-  const products = await db.execute('SELECT slug FROM products')
+  const products = await db.execute('SELECT slug FROM products WHERE is_active = 1')
 
   const pages = ['', '/Store', '/about', '/contact', '/help', '/track', '/stylist', '/PrivacyPolicy', '/TermsConditions']
   return [

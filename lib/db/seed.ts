@@ -1,10 +1,8 @@
-import bcrypt from 'bcryptjs'
 import type { Client, InStatement } from '@libsql/client'
 import { products as baseProducts } from '../../db/products.seed.js'
 import { productReviews } from '../../db/reviews.seed.js'
 import { resolveProductGallery, resolveProductImage } from '../catalog/images'
 import { CATEGORY_LABELS } from '../catalog/facets'
-import { demoCredentials } from '../auth/public'
 
 type SeedProduct = {
   title: string
@@ -371,12 +369,6 @@ export async function seedDatabase(db: Client) {
     args: [coupon.code, coupon.label, coupon.description, coupon.type, coupon.value, coupon.minSubtotal],
   }))
 
-  const demoStatement: InStatement = {
-    sql: `INSERT INTO users (id, email, first_name, last_name, phone, password_hash, email_verified, created_at)
-          VALUES ('usr_demo', ?, 'Alex', 'Morgan', '+1 415 555 0148', ?, 1, '2026-01-12T10:00:00.000Z')`,
-    args: [demoCredentials.email, bcrypt.hashSync(demoCredentials.password, 10)],
-  }
-
   // Best sellers: the most-reviewed discounted hoodie, shirt, jacket and jeans, plus the Véora picks.
   const bestsellerStatements: InStatement[] = [
     ['Womens', 'Hoodie'],
@@ -393,7 +385,7 @@ export async function seedDatabase(db: Client) {
     bestsellerStatements.push({ sql: 'UPDATE products SET is_bestseller = 1 WHERE slug = ?', args: [item.slug] })
   }
 
-  await db.batch([...categoryStatements, ...couponStatements, demoStatement], 'write')
+  await db.batch([...categoryStatements, ...couponStatements], 'write')
   await db.batch(catalogStatements, 'write')
   await db.batch(reviewStatements, 'write')
   await db.batch(bestsellerStatements, 'write')

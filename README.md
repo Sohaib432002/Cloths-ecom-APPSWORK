@@ -35,7 +35,7 @@ npm run db:setup   # create tables and seed (does nothing if already seeded)
 npm run db:reset   # delete data/veora.db and rebuild it (stop the dev server first on Windows)
 ```
 
-Demo account: `demo@veora.com` / `Veora123!`
+Create the owner account with `npm run admin:create -- you@example.com "Password1" "Your Name"` and list the email in `ADMIN_EMAILS` to open `/admin`.
 
 ## Database
 
