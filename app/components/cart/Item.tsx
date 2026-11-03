@@ -12,7 +12,7 @@ export const Item = ({ item }: { item: CartLine }) => {
   return (
     <div className="rounded-3xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md sm:p-6">
       <div className="flex flex-col gap-5 sm:flex-row">
-        <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-2xl bg-gray-100 sm:h-52 sm:w-52">
+        <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-2xl bg-lavender-100 sm:h-52 sm:w-52">
           <Image src={item.image} alt={item.title} fill className="object-cover" />
         </div>
         <div className="flex flex-1 flex-col justify-between">
@@ -20,10 +20,10 @@ export const Item = ({ item }: { item: CartLine }) => {
             <div>
               <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">{item.title}</h2>
               <div className="mt-4 flex flex-wrap gap-3">
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+                <span className="rounded-full bg-lavender-100 px-3 py-1 text-sm font-medium text-gray-700">
                   Size: {item.size || 'N/A'}
                 </span>
-                <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700">
+                <span className="rounded-full bg-lavender-100 px-3 py-1 text-sm font-medium text-gray-700">
                   Color: {item.color || 'N/A'}
                 </span>
               </div>
@@ -44,12 +44,12 @@ export const Item = ({ item }: { item: CartLine }) => {
               </p>
               <h3 className="text-2xl font-bold">{formatMoney(item.price * item.quantity)}</h3>
             </div>
-            <div className="flex w-fit items-center rounded-full bg-gray-100 p-2">
+            <div className="flex w-fit items-center rounded-full bg-lavender-100 p-2">
               <button
                 type="button"
                 aria-label="Decrease quantity"
                 onClick={() => decreaseQuantity(item.lineId)}
-                className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-black hover:text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-brand hover:text-white"
               >
                 <Minus size={18} />
               </button>
@@ -58,7 +58,7 @@ export const Item = ({ item }: { item: CartLine }) => {
                 type="button"
                 aria-label="Increase quantity"
                 onClick={() => increaseQuantity(item.lineId)}
-                className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-black hover:text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-brand hover:text-white"
               >
                 <Plus size={18} />
               </button>

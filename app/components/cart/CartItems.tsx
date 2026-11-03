@@ -14,7 +14,7 @@ export const CartItems = () => {
         <h2 className="text-2xl font-semibold">Your cart is empty</h2>
         <p className="text-gray-500">Add a few pieces, or ask the stylist to build an outfit.</p>
         <div className="flex gap-3">
-          <Link href="/Store" className="rounded-full bg-black px-6 py-3 text-white">
+          <Link href="/Store" className="rounded-full bg-brand px-6 py-3 text-white">
             Shop catalog
           </Link>
           <Link href="/stylist" className="rounded-full border px-6 py-3">

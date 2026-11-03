@@ -3,7 +3,7 @@ export function getAuthSecret() {
   if (secret && secret.length >= 32) return secret
 
   if (process.env.NODE_ENV !== 'production') {
-    return 'shopco-local-dev-secret-change-me-32chars'
+    return 'veora-local-dev-secret-change-me-32chars'
   }
 
   throw new Error('AUTH_SECRET must be set to a string of at least 32 characters in production.')

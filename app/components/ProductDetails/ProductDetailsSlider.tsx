@@ -46,7 +46,7 @@ export const ProductDetailslider = ({ Productslug, image, gallery }: SliderProps
             className={`
               shrink-0
               rounded-xl
-              bg-gray-100
+              bg-lavender-100
               p-2
               transition-all
               
@@ -59,7 +59,7 @@ export const ProductDetailslider = ({ Productslug, image, gallery }: SliderProps
               lg:w-24
               lg:h-24
 
-              ${selectImg === i ? 'border-2 border-black' : 'border-2 border-transparent'}
+              ${selectImg === i ? 'border-2 border-brand' : 'border-2 border-transparent'}
             `}
           >
             <Image
@@ -87,7 +87,7 @@ export const ProductDetailslider = ({ Productslug, image, gallery }: SliderProps
           items-center
           justify-center
           rounded-2xl
-          bg-gray-100
+          bg-lavender-100
           p-4
 
           sm:p-6

@@ -14,9 +14,9 @@ export const Dashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl bg-black p-6 text-white sm:p-8">
+      <div className="rounded-3xl bg-brand p-6 text-white sm:p-8">
         <h1 className="text-3xl font-bold">Welcome back</h1>
-        <p className="mt-2 text-gray-300">{user?.name || 'SHOP.CO member'}</p>
+        <p className="mt-2 text-gray-300">{user?.name || 'Véora member'}</p>
         <p className="mt-4 text-sm text-gray-300">
           Manage orders, saved pieces, and the looks your stylist recommended.
         </p>
@@ -64,11 +64,11 @@ export const Dashboard = () => {
         )}
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Link href="/account/profile?Tab=Profile Details" className="rounded-3xl border p-6 hover:bg-gray-50">
+        <Link href="/account/profile?Tab=Profile Details" className="rounded-3xl border p-6 hover:bg-lavender-50">
           <h3 className="text-xl font-bold">Edit Profile</h3>
           <p className="mt-2 text-sm text-gray-500">Update your personal information.</p>
         </Link>
-        <Link href="/wishlist" className="rounded-3xl border p-6 hover:bg-gray-50">
+        <Link href="/wishlist" className="rounded-3xl border p-6 hover:bg-lavender-50">
           <h3 className="text-xl font-bold">Wishlist</h3>
           <p className="mt-2 text-sm text-gray-500">Jump back into saved pieces.</p>
         </Link>

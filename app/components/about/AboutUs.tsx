@@ -27,7 +27,7 @@ export const AboutUs = () => {
             {/* Left */}
             <div>
               <span className="inline-block rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-medium backdrop-blur">
-                About SHOP.CO
+                About Véora
               </span>
 
               <h1 className="mt-8 text-5xl md:text-7xl font-black leading-tight">
@@ -36,7 +36,7 @@ export const AboutUs = () => {
               </h1>
 
               <p className="mt-8 text-lg text-gray-300 leading-8 max-w-xl">
-                At SHOP.CO, we believe fashion is more than clothing— it's confidence, personality,
+                At Véora, we believe fashion is more than clothing— it's confidence, personality,
                 and self-expression. We bring together premium quality, modern trends, and
                 affordable prices to help everyone look and feel amazing.
               </p>
@@ -75,7 +75,7 @@ export const AboutUs = () => {
               </div>
 
               {/* Top Right Card */}
-              <div className="absolute -top-8 -right-8 rounded-3xl bg-black p-6 text-white shadow-2xl">
+              <div className="absolute -top-8 -right-8 rounded-3xl bg-brand p-6 text-white shadow-2xl">
                 <div className="flex items-center gap-4">
                   <img
                     src="https://randomuser.me/api/portraits/men/32.jpg"
@@ -114,7 +114,7 @@ export const AboutUs = () => {
               <h2 className="mt-5 text-5xl font-black">Started With A Simple Mission</h2>
 
               <p className="mt-8 text-gray-600 leading-8">
-                SHOP.CO began with one vision: making premium fashion accessible to everyone. What
+                Véora began with one vision: making premium fashion accessible to everyone. What
                 started as a small online store has grown into a trusted destination for thousands
                 of fashion lovers worldwide.
               </p>
@@ -152,7 +152,7 @@ export const AboutUs = () => {
       </section>
 
       {/* Journey Intro */}
-      <section className="bg-gray-50 py-20">
+      <section className="bg-lavender-50 py-20">
         <div className="max-w-4xl mx-auto px-5 text-center">
           <span className="uppercase tracking-[4px] text-gray-500 font-semibold">Our Journey</span>
 
@@ -174,7 +174,7 @@ export const AboutUs = () => {
         <div className="max-w-310 mx-auto px-5">
           <div className="grid lg:grid-cols-2 gap-10">
             {/* Mission */}
-            <div className="rounded-[35px] bg-black text-white p-10  transition duration-300 hover:shadow-xl">
+            <div className="rounded-[35px] bg-brand text-white p-10  transition duration-300 hover:shadow-xl">
               <h2 className="mt-8 text-4xl font-black">Our Mission</h2>
 
               <p className="mt-6 text-gray-300 leading-8">
@@ -243,7 +243,7 @@ export const AboutUs = () => {
       </section>
 
       {/* Core Values */}
-      <section className="bg-gray-50 py-24">
+      <section className="bg-lavender-50 py-24">
         <div className="max-w-310 mx-auto px-5">
           <div className="text-center max-w-3xl mx-auto">
             <span className="uppercase tracking-[4px] text-gray-500 font-semibold">Our Values</span>
@@ -326,7 +326,7 @@ export const AboutUs = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
-            <div className="rounded-3xl border p-8 text-center hover:bg-black hover:text-white transition duration-300">
+            <div className="rounded-3xl border p-8 text-center hover:bg-brand hover:text-white transition duration-300">
               <div className="text-5xl">🚚</div>
 
               <h3 className="text-2xl font-bold mt-6">Fast Delivery</h3>
@@ -336,7 +336,7 @@ export const AboutUs = () => {
               </p>
             </div>
 
-            <div className="rounded-3xl border p-8 text-center hover:bg-black hover:text-white transition duration-300">
+            <div className="rounded-3xl border p-8 text-center hover:bg-brand hover:text-white transition duration-300">
               <div className="text-5xl">🛡️</div>
 
               <h3 className="text-2xl font-bold mt-6">Secure Payments</h3>
@@ -346,7 +346,7 @@ export const AboutUs = () => {
               </p>
             </div>
 
-            <div className="rounded-3xl border p-8 text-center hover:bg-black hover:text-white transition duration-300">
+            <div className="rounded-3xl border p-8 text-center hover:bg-brand hover:text-white transition duration-300">
               <div className="text-5xl">🔄</div>
 
               <h3 className="text-2xl font-bold mt-6">Easy Returns</h3>
@@ -356,7 +356,7 @@ export const AboutUs = () => {
               </p>
             </div>
 
-            <div className="rounded-3xl border p-8 text-center hover:bg-black hover:text-white transition duration-300">
+            <div className="rounded-3xl border p-8 text-center hover:bg-brand hover:text-white transition duration-300">
               <div className="text-5xl">🎧</div>
 
               <h3 className="text-2xl font-bold mt-6">24/7 Support</h3>
@@ -369,7 +369,7 @@ export const AboutUs = () => {
         </div>
       </section>
       {/* ================= OUR STORY ================= */}
-      <section className="py-20 bg-black text-white">
+      <section className="py-20 bg-brand text-white">
         <div className="max-w-310 mx-auto px-5 grid lg:grid-cols-2 gap-16 items-center">
           {/* Left */}
           <div>
@@ -380,7 +380,7 @@ export const AboutUs = () => {
             </h2>
 
             <p className="text-gray-300 mt-6 leading-8">
-              Shop.co started with one simple mission — to create fashion that empowers people.
+              Véora started with one simple mission — to create fashion that empowers people.
               Every collection is carefully designed with comfort, confidence and individuality in
               mind.
             </p>
@@ -475,7 +475,7 @@ export const AboutUs = () => {
       {/* ================= FINAL CTA ================= */}
 
       {/* ================= TESTIMONIALS ================= */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-lavender-50">
         <div className="max-w-310 mx-auto px-5">
           <div className="text-center">
             <span className="uppercase tracking-[4px] text-gray-500">Testimonials</span>
@@ -486,7 +486,7 @@ export const AboutUs = () => {
 
             <p className="text-gray-500 mt-5 max-w-2xl mx-auto">
               Customer satisfaction is our biggest achievement. Here's what people say about their
-              experience with Shop.co.
+              experience with Véora.
             </p>
           </div>
 
@@ -571,10 +571,10 @@ export const AboutUs = () => {
       </section>
 
       {/* ================= WHY CHOOSE US ================= */}
-      <section className="py-24 bg-gray-100">
+      <section className="py-24 bg-lavender-100">
         <div className="max-w-310 mx-auto px-5">
           <div className="text-center">
-            <span className="uppercase tracking-[4px] text-gray-500">Why Shop.co</span>
+            <span className="uppercase tracking-[4px] text-gray-500">Why Véora</span>
 
             <h2 className="text-4xl md:text-5xl font-black mt-4">Why Customers Trust Us</h2>
           </div>
@@ -617,7 +617,7 @@ export const AboutUs = () => {
         </div>
       </section>
       {/* ================= COMPANY CULTURE ================= */}
-      <section className="py-24 bg-black text-white">
+      <section className="py-24 bg-brand text-white">
         <div className="max-w-310 mx-auto px-5">
           <div className="text-center">
             <span className="uppercase tracking-[4px] text-gray-400">Our Culture</span>
@@ -686,7 +686,7 @@ export const AboutUs = () => {
           <div className="text-center">
             <span className="uppercase tracking-[4px] text-gray-500">Gallery</span>
 
-            <h2 className="text-4xl md:text-5xl font-black mt-4">Inside Shop.co</h2>
+            <h2 className="text-4xl md:text-5xl font-black mt-4">Inside Véora</h2>
 
             <p className="text-gray-500 mt-5 max-w-2xl mx-auto">
               Take a quick look inside our offices, creative spaces, and the people who make
@@ -717,7 +717,7 @@ export const AboutUs = () => {
 
       {/* ================= COMPANY NUMBERS ================= */}
       {/* ================= GLOBAL PRESENCE ================= */}
-      <section className="py-14 bg-black text-white">
+      <section className="py-14 bg-brand text-white">
         <div className="max-w-310 mx-auto px-5">
           <div className="text-center">
             <span className="uppercase tracking-[4px] text-gray-400">Global Presence</span>
@@ -727,7 +727,7 @@ export const AboutUs = () => {
             </h2>
 
             <p className="text-gray-300 max-w-3xl mx-auto mt-6 leading-8">
-              From local communities to international markets, Shop.co has become a trusted fashion
+              From local communities to international markets, Véora has become a trusted fashion
               destination delivering premium products across multiple countries.
             </p>
           </div>
@@ -795,7 +795,7 @@ export const AboutUs = () => {
                 'Ethical Manufacturing',
               ].map((item) => (
                 <div key={item} className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-black text-white flex items-center justify-center">
+                  <div className="h-12 w-12 rounded-full bg-brand text-white flex items-center justify-center">
                     ✓
                   </div>
 
@@ -812,7 +812,7 @@ export const AboutUs = () => {
       {/* =========================
     Final CTA Section
 ========================= */}
-      <section className="bg-black py-24">
+      <section className="bg-brand py-24">
         <div className="max-w-310 mx-auto px-5">
           <div className="grid lg:grid-cols-2 gap-14 items-center">
             {/* Left */}
@@ -827,7 +827,7 @@ export const AboutUs = () => {
               </h2>
 
               <p className="mt-6 text-gray-400 leading-8 max-w-xl">
-                Whether you're dressing for work, a casual day out, or a special event, SHOP.CO
+                Whether you're dressing for work, a casual day out, or a special event, Véora
                 offers premium quality fashion that helps you look and feel your best. Join our
                 growing community today.
               </p>

@@ -87,7 +87,7 @@ export const ProductDetailsSizeChoser = ({
 
                 ${
                   selectedSize === size
-                    ? 'bg-black text-white scale-105'
+                    ? 'bg-brand text-white scale-105'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }
 

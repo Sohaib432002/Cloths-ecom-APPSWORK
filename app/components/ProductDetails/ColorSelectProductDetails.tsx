@@ -36,6 +36,14 @@ export const ColorSelectProductDetails = ({
     Orange: 'bg-orange-500',
 
     Pink: 'bg-pink-500',
+
+    Navy: 'bg-blue-900',
+
+    Burgundy: 'bg-rose-900',
+
+    Tan: 'bg-amber-600',
+
+    Pastel: 'bg-gradient-to-br from-pink-200 via-violet-200 to-sky-200',
   }
 
   const handleColorSelect = (color: string) => {
@@ -96,7 +104,7 @@ export const ColorSelectProductDetails = ({
 
                 ${
                   selectedColor === color
-                    ? 'ring-2 ring-black ring-offset-2 scale-110'
+                    ? 'ring-2 ring-brand ring-offset-2 scale-110'
                     : 'hover:scale-105'
                 }
 

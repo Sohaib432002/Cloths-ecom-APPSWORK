@@ -17,7 +17,7 @@ export const CheckoutDetails = ({ cart }: { cart: CartLine[] }) => {
       <div className="rounded-3xl border bg-white p-8 text-center shadow-sm">
         <ShoppingBag className="mx-auto h-16 w-16 text-gray-400" />
         <h2 className="mt-5 text-2xl font-bold">Your cart is empty</h2>
-        <Link href="/Store" className="mt-6 inline-flex rounded-full bg-black px-8 py-3 text-white">
+        <Link href="/Store" className="mt-6 inline-flex rounded-full bg-brand px-8 py-3 text-white">
           Continue Shopping
         </Link>
       </div>
@@ -57,7 +57,7 @@ export const CheckoutDetails = ({ cart }: { cart: CartLine[] }) => {
       </div>
       <Link
         href="/checkout"
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-black py-4 text-lg font-semibold text-white hover:bg-gray-800"
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-brand py-4 text-lg font-semibold text-white hover:bg-brand-dark"
       >
         Proceed to Checkout
         <ArrowRight size={20} />

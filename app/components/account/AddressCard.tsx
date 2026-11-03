@@ -192,11 +192,11 @@ export const Addresses = () => {
             setIsModalOpen(true)
           }}
           className="
-          bg-black text-white 
+          bg-brand text-white 
           px-4 py-2 sm:px-6 sm:py-3
           text-sm sm:text-base
           rounded-full 
-          hover:bg-gray-800 transition
+          hover:bg-brand-dark transition
           w-full sm:w-auto
           "
         >
@@ -328,7 +328,7 @@ export const Addresses = () => {
           className="
         fixed 
         inset-0 
-        bg-black/50 
+        bg-brand/50 
         flex 
         items-center 
         justify-center 
@@ -423,7 +423,7 @@ export const Addresses = () => {
                     ${
                       errors.fullName
                         ? 'border-red-500'
-                        : 'border-gray-300 focus:ring-2 focus:ring-black'
+                        : 'border-gray-300 focus:ring-2 focus:ring-brand'
                     }
                     `}
                   />
@@ -462,7 +462,7 @@ export const Addresses = () => {
                     ${
                       errors.phone
                         ? 'border-red-500'
-                        : 'border-gray-300 focus:ring-2 focus:ring-black'
+                        : 'border-gray-300 focus:ring-2 focus:ring-brand'
                     }
                     `}
                   />
@@ -504,7 +504,7 @@ export const Addresses = () => {
                   ${
                     errors.address
                       ? 'border-red-500'
-                      : 'border-gray-300 focus:ring-2 focus:ring-black'
+                      : 'border-gray-300 focus:ring-2 focus:ring-brand'
                   }
                   `}
                 />
@@ -568,7 +568,7 @@ export const Addresses = () => {
                       border
                       border-gray-300
                       focus:ring-2
-                      focus:ring-black
+                      focus:ring-brand
                       "
                     />
                   </div>
@@ -617,7 +617,7 @@ export const Addresses = () => {
                 py-2 sm:py-3
                 rounded-xl
                 text-sm sm:text-base
-                hover:bg-gray-100
+                hover:bg-lavender-100
                 "
               >
                 Cancel
@@ -626,13 +626,13 @@ export const Addresses = () => {
               <button
                 onClick={handleSaveAddress}
                 className="
-                bg-black
+                bg-brand
                 text-white
                 px-6 sm:px-8
                 py-2
                 rounded-xl
                 text-sm sm:text-base
-                hover:bg-gray-800
+                hover:bg-brand-dark
                 "
               >
                 Save Address

@@ -55,7 +55,7 @@ export const SignupForm = () => {
           required
           value={fullName}
           onChange={(event) => setFullName(event.target.value)}
-          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+          className="w-full rounded-full bg-[#F4F0FF] px-5 py-4 outline-none"
         />
       </div>
       <div>
@@ -68,7 +68,7 @@ export const SignupForm = () => {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+          className="w-full rounded-full bg-[#F4F0FF] px-5 py-4 outline-none"
         />
       </div>
       <div>
@@ -81,7 +81,7 @@ export const SignupForm = () => {
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+          className="w-full rounded-full bg-[#F4F0FF] px-5 py-4 outline-none"
         />
         <p className="mt-2 text-xs text-gray-500">Use 8+ characters with a number and an uppercase letter.</p>
       </div>
@@ -95,7 +95,7 @@ export const SignupForm = () => {
           required
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
-          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+          className="w-full rounded-full bg-[#F4F0FF] px-5 py-4 outline-none"
         />
       </div>
       <label className="flex items-start gap-3 text-sm">
@@ -106,7 +106,7 @@ export const SignupForm = () => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-full bg-black py-4 font-semibold text-white hover:bg-gray-800 disabled:opacity-70"
+        className="w-full rounded-full bg-brand py-4 font-semibold text-white hover:bg-brand-dark disabled:opacity-70"
       >
         {loading ? 'Creating account...' : 'Create Account'}
       </button>

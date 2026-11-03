@@ -158,7 +158,7 @@ export const SpecificProductDetails = ({
           items-center
           justify-center
           rounded-full
-          hover:bg-gray-100
+          hover:bg-lavender-100
           "
         >
           <i

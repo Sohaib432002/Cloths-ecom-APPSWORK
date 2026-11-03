@@ -81,7 +81,7 @@ const AvalibileProducts = ({ headline, products }: AvailbleProductProps) => {
                 font-medium
                 transition-all
                 duration-300
-                hover:bg-black
+                hover:bg-brand
                 hover:text-white
                 active:scale-95
                 md:px-16

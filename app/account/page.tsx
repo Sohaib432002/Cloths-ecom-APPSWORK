@@ -76,7 +76,7 @@ export default function AccountPage() {
             className="rounded-3xl border p-6 transition hover:-translate-y-1 hover:shadow-xl"
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black text-white">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white">
                 <i className={`${item.icon} text-xl`} />
               </div>
 

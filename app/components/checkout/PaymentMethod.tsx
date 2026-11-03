@@ -24,7 +24,7 @@ export const PaymentMethod = ({
           <label
             key={option.id}
             className={`cursor-pointer rounded-2xl border p-5 ${
-              value === option.id ? 'border-black bg-gray-100' : 'border-gray-300'
+              value === option.id ? 'border-brand bg-lavender-100' : 'border-gray-300'
             }`}
           >
             <input

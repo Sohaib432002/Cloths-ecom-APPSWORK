@@ -82,6 +82,9 @@ const colorClassMap: Record<string, string> = {
   Olive: 'bg-lime-700',
 
   Maroon: 'bg-red-900',
+  Burgundy: 'bg-rose-900',
+  Tan: 'bg-amber-600',
+  Pastel: 'bg-gradient-to-br from-pink-200 via-violet-200 to-sky-200',
 
   Gold: 'bg-yellow-500',
 }
@@ -281,17 +284,17 @@ hover:shadow-md
           className="
       rounded-xl
       border
-      border-red-200
-      bg-red-50
+      border-lavender-300
+      bg-lavender-100
       px-2
       py-2
       text-[12px]
       font-semibold
-      text-red-600
+      text-brand-dark
       transition-all
       duration-200
-      hover:border-red-500
-      hover:bg-red-500
+      hover:border-brand
+      hover:bg-brand
       hover:text-white
       active:scale-95
     "
@@ -325,7 +328,7 @@ px-3
 py-2
 transition
 
-${selectedType === item ? 'bg-black text-white' : 'hover:bg-gray-100 text-gray-600'}
+${selectedType === item ? 'bg-brand text-white' : 'hover:bg-lavender-100 text-gray-600'}
 
 `}
               >
@@ -348,7 +351,7 @@ ${selectedType === item ? 'bg-black text-white' : 'hover:bg-gray-100 text-gray-6
         <div
           className="
 rounded-xl
-bg-gray-50
+bg-lavender-50
 p-3
 "
         >
@@ -401,7 +404,7 @@ hover:scale-110
 ${colorClassMap[color] ?? 'bg-gray-300'}
 
 
-${selectedColor === color ? 'ring-2 ring-black ring-offset-2' : ''}
+${selectedColor === color ? 'ring-2 ring-brand ring-offset-2' : ''}
 
 `}
               >
@@ -461,8 +464,8 @@ transition-all
 
 ${
   selectedSize === size.value
-    ? 'bg-black text-white'
-    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+    ? 'bg-brand text-white'
+    : 'bg-lavender-100 text-gray-700 hover:bg-gray-200'
 }
 
 
@@ -510,7 +513,7 @@ cursor-pointer
 transition
 
 
-${selectedStyle === style ? 'bg-black text-white' : 'hover:bg-gray-100 text-gray-600'}
+${selectedStyle === style ? 'bg-brand text-white' : 'hover:bg-lavender-100 text-gray-600'}
 
 `}
               >
@@ -530,7 +533,7 @@ ${selectedStyle === style ? 'bg-black text-white' : 'hover:bg-gray-100 text-gray
           className="
 mt-5
 rounded-2xl
-bg-gray-50
+bg-lavender-50
 p-4
 "
         >
@@ -561,7 +564,7 @@ gap-2
                   key={item}
                   className="
 rounded-full
-bg-black
+bg-brand
 px-3
 py-1
 text-xs

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Plus_Jakarta_Sans, Caveat } from 'next/font/google'
 import './globals.css'
 import Footer from './components/common/Footer'
 import Navbar from './components/common/Navbar'
@@ -12,27 +12,27 @@ import { AuthProvider } from '@/context/AuthContext'
 import { getCurrentUser } from '@/lib/auth/session'
 import { StylistLauncher } from './components/stylist/StylistChat'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const jakarta = Plus_Jakarta_Sans({
+  variable: '--font-jakarta',
   subsets: ['latin'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const caveat = Caveat({
+  variable: '--font-hand',
   subsets: ['latin'],
 })
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   title: {
-    default: 'SHOP.CO | Premium Fashion Store',
-    template: '%s | SHOP.CO',
+    default: 'Véora | Modern Fashion For Every You',
+    template: '%s | Véora',
   },
   description:
-    'Shop premium mens, womens, and kids fashion at SHOP.CO. Discover curated clothing with secure checkout and an AI personal stylist.',
+    'Véora is a modern fashion store for women, men, accessories and footwear. Premium quality, effortless style, secure checkout and an in-house personal stylist.',
   openGraph: {
-    title: 'SHOP.CO | Premium Fashion Store',
-    description: 'Curated clothing, secure checkout, and an AI stylist built into the shopping experience.',
+    title: 'Véora | Modern Fashion For Every You',
+    description: 'Premium quality, effortless style, all in one place.',
     type: 'website',
   },
 }
@@ -41,8 +41,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const user = await getCurrentUser()
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full bg-white text-neutral-950">
+    <html lang="en" className={`${jakarta.variable} ${caveat.variable} h-full antialiased`}>
+      <body className="min-h-full bg-white text-black">
         <AuthProvider initialUser={user}>
           <CartProvider>
             <OrdersProvider>
@@ -51,7 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                   <Suspense fallback={null}>
                     <Navbar />
                   </Suspense>
-                  <main id="main-content">{children}</main>
+                  <main id="main-content" className="px-4 lg:px-6">{children}</main>
                   <Footer />
                   <StylistLauncher />
                 </WishlistProvider>

@@ -14,7 +14,7 @@ export const WishlistPage = () => {
         <div className="flex flex-col items-center justify-center rounded-3xl border bg-white py-24 text-center">
           <Heart className="mb-6 h-20 w-20 fill-red-500 text-red-500" />
           <h1 className="text-3xl font-bold">Your wishlist is empty</h1>
-          <Link href="/Store" className="mt-6 rounded-full bg-black px-8 py-3 text-white">
+          <Link href="/Store" className="mt-6 rounded-full bg-brand px-8 py-3 text-white">
             Browse the catalog
           </Link>
         </div>

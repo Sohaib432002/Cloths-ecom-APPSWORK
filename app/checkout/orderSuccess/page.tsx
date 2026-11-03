@@ -21,9 +21,9 @@ function OrderSuccessContent() {
         </div>
         <h1 className="mt-6 text-3xl font-bold">Order placed successfully</h1>
         <p className="mt-3 text-gray-500">
-          Thank you for shopping with SHOP.CO. We are preparing your pieces for dispatch.
+          Thank you for shopping with Véora. We are preparing your pieces for dispatch.
         </p>
-        <div className="mt-8 rounded-2xl border bg-gray-50 p-6 text-left">
+        <div className="mt-8 rounded-2xl border bg-lavender-50 p-6 text-left">
           <div className="flex justify-between border-b py-3">
             <span className="text-gray-500">Order Number</span>
             <span className="font-semibold">{orderId || 'Processing'}</span>
@@ -42,12 +42,12 @@ function OrderSuccessContent() {
           </div>
         </div>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Link href="/Store" className="flex-1 rounded-xl bg-black py-3 font-semibold text-white">
+          <Link href="/Store" className="flex-1 rounded-xl bg-brand py-3 font-semibold text-white">
             Continue Shopping
           </Link>
           <Link
             href={orderId ? `/checkout/vieworders/${orderId}` : '/checkout/vieworders'}
-            className="flex-1 rounded-xl border border-black py-3 font-semibold"
+            className="flex-1 rounded-xl border border-brand py-3 font-semibold"
           >
             View Order
           </Link>

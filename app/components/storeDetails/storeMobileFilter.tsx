@@ -71,6 +71,9 @@ const colorClassMap: Record<string, string> = {
   Olive: 'bg-lime-700',
 
   Maroon: 'bg-red-900',
+  Burgundy: 'bg-rose-900',
+  Tan: 'bg-amber-600',
+  Pastel: 'bg-gradient-to-br from-pink-200 via-violet-200 to-sky-200',
 
   Gold: 'bg-yellow-500',
 }
@@ -271,7 +274,7 @@ export const MobileFilter = ({
 fixed
 inset-0
 z-50
-bg-black/5
+bg-brand/5
 bg-blend-screen
 xl:hidden
 "
@@ -298,7 +301,7 @@ animate-slideIn
             {/* Left Side */}
             <div>
               <div className="mb-2 flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-white">
                   <Filter size={18} />
                 </div>
 
@@ -318,17 +321,17 @@ animate-slideIn
           gap-2
           rounded-xl
           border
-          border-red-200
-          bg-red-50
+          border-lavender-300
+          bg-lavender-100
           px-4
           py-2
           text-sm
           font-semibold
-          text-red-600
+          text-brand-dark
           transition-all
           duration-300
-          hover:border-red-500
-          hover:bg-red-500
+          hover:border-brand
+          hover:bg-brand
           hover:text-white
           active:scale-95
         "
@@ -356,8 +359,8 @@ animate-slideIn
         transition-all
         duration-300
         hover:-translate-y-0.5
-        hover:border-black
-        hover:bg-black
+        hover:border-brand
+        hover:bg-brand
         hover:text-white
         active:scale-95
       "
@@ -403,7 +406,7 @@ py-3
 transition
 
 
-${selectedType === item ? 'bg-black text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}
+${selectedType === item ? 'bg-brand text-white' : 'bg-lavender-50 text-gray-600 hover:bg-lavender-100'}
 
 `}
                 >
@@ -426,7 +429,7 @@ ${selectedType === item ? 'bg-black text-white' : 'bg-gray-50 text-gray-600 hove
           <div
             className="
 rounded-2xl
-bg-gray-50
+bg-lavender-50
 p-4
 "
           >
@@ -476,7 +479,7 @@ hover:scale-110
 ${colorClassMap[item] ?? 'bg-gray-300'}
 
 
-${selectedColor === item ? 'ring-2 ring-black ring-offset-2' : ''}
+${selectedColor === item ? 'ring-2 ring-brand ring-offset-2' : ''}
 
 `}
                 >
@@ -537,8 +540,8 @@ transition
 
 ${
   selectedSize === item.value
-    ? 'bg-black text-white'
-    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+    ? 'bg-brand text-white'
+    : 'bg-lavender-100 text-gray-700 hover:bg-gray-200'
 }
 
 `}
@@ -586,7 +589,7 @@ py-3
 transition
 
 
-${selectedStyle === item ? 'bg-black text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}
+${selectedStyle === item ? 'bg-brand text-white' : 'bg-lavender-50 text-gray-600 hover:bg-lavender-100'}
 
 `}
                 >
@@ -606,7 +609,7 @@ ${selectedStyle === item ? 'bg-black text-white' : 'bg-gray-50 text-gray-600 hov
             className="
 mt-5
 rounded-2xl
-bg-gray-100
+bg-lavender-100
 p-4
 "
           >
@@ -634,7 +637,7 @@ gap-2
                     key={item}
                     className="
 rounded-full
-bg-black
+bg-brand
 px-3
 py-1
 text-xs

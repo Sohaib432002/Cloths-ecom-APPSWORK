@@ -69,13 +69,10 @@ export const CheckoutButton = ({
           country: formData.country || 'United States',
           paymentMethod,
           couponCode: coupon?.code,
+          // the server prices every line itself, so only ids and options are sent
           items: cart.map((item) => ({
             id: item.id,
-            slug: item.slug,
-            title: item.title,
-            image: item.image,
             quantity: item.quantity,
-            price: item.price,
             size: item.size,
             color: item.color,
           })),
@@ -98,7 +95,11 @@ export const CheckoutButton = ({
           Guest checkout is available. Sign in if you want the order saved to your account profile.
         </p>
       )}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p role="alert" className="text-sm text-red-600">
+          {error}
+        </p>
+      )}
       <button
         type="button"
         onClick={() => void handlePlaceOrder()}
@@ -106,7 +107,7 @@ export const CheckoutButton = ({
         className={`flex w-full items-center justify-center gap-3 rounded-xl py-4 text-lg font-semibold ${
           cart.length === 0 || loading
             ? 'cursor-not-allowed bg-gray-300 text-gray-500'
-            : 'bg-black text-white hover:bg-gray-800'
+            : 'bg-brand text-white hover:bg-brand-dark'
         }`}
       >
         {loading ? 'Placing order...' : 'Place Order'}

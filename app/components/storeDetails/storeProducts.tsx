@@ -104,7 +104,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
         <div className="xl:hidden shrink-0">
           <button
             onClick={() => setShowFilter(true)}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 transition hover:bg-gray-200"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-lavender-100 transition hover:bg-gray-200"
           >
             <i className="fa-solid fa-sliders rotate-90 text-sm"></i>
           </button>
@@ -113,7 +113,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
       {/* Mobile Overlay */}
       <div
         onClick={() => setShowFilter(false)}
-        className={`fixed inset-0 z-50 mx-3 bg-black/40   transition-all duration-300 ${
+        className={`fixed inset-0 z-50 mx-3 bg-brand/40   transition-all duration-300 ${
           showFilter ? 'visible opacity-100' : 'invisible opacity-0'
         }`}
       >
@@ -171,7 +171,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
       {/* Empty State */}
       {lengthofProducts === 0 && (
         <div className="col-span-2 lg:col-span-3 flex min-h-[300px] items-center justify-center">
-          <div className="rounded-2xl bg-gray-100 px-6 py-8 text-center shadow-sm">
+          <div className="rounded-2xl bg-lavender-100 px-6 py-8 text-center shadow-sm">
             <div className="mb-3 text-5xl">😔</div>
 
             <h3 className="text-lg font-semibold text-gray-800">No Products Found</h3>
@@ -201,7 +201,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
                 px-3
                 text-sm
                 transition
-                hover:bg-gray-100
+                hover:bg-lavender-100
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "
@@ -232,7 +232,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
                       font-medium
                       transition
 
-                      ${currentPage === page ? 'bg-black text-white' : 'hover:bg-gray-100'}
+                      ${currentPage === page ? 'bg-brand text-white' : 'hover:bg-lavender-100'}
                     `}
                   >
                     {page}
@@ -256,7 +256,7 @@ export const Products = ({ products, lengthofProducts }: Props) => {
                 px-3
                 text-sm
                 transition
-                hover:bg-gray-100
+                hover:bg-lavender-100
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "

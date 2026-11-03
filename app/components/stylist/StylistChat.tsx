@@ -42,7 +42,7 @@ export function StylistChat({
     {
       role: 'assistant',
       content:
-        'Tell me the occasion, weather, or vibe. I will build an outfit from live SHOP.CO pieces.',
+        'Tell me the occasion, weather, or vibe. I will build an outfit from live Véora pieces.',
     },
   ])
   const endRef = useRef<HTMLDivElement>(null)
@@ -86,7 +86,7 @@ export function StylistChat({
           <div key={`${item.role}-${index}`} className={item.role === 'user' ? 'text-right' : ''}>
             <div
               className={`inline-block max-w-[90%] rounded-2xl px-4 py-3 text-sm leading-6 ${
-                item.role === 'user' ? 'bg-black text-white' : 'bg-gray-100 text-gray-800'
+                item.role === 'user' ? 'bg-brand text-white' : 'bg-lavender-100 text-gray-800'
               }`}
             >
               {item.content}
@@ -99,7 +99,7 @@ export function StylistChat({
                     href={`/ProductDetails/${product.slug}`}
                     className="overflow-hidden rounded-2xl border bg-white hover:shadow-md"
                   >
-                    <div className="relative aspect-square bg-gray-100">
+                    <div className="relative aspect-square bg-lavender-100">
                       <Image src={product.image} alt={product.title} fill className="object-cover" />
                     </div>
                     <div className="p-3">
@@ -123,7 +123,7 @@ export function StylistChat({
             key={prompt}
             type="button"
             onClick={() => send(prompt)}
-            className="rounded-full border px-3 py-1.5 text-xs hover:bg-gray-50"
+            className="rounded-full border px-3 py-1.5 text-xs hover:bg-lavender-50"
           >
             {prompt}
           </button>
@@ -152,7 +152,7 @@ export function StylistChat({
           type="submit"
           aria-label="Send message"
           disabled={loading}
-          className="rounded-full bg-black p-2 text-white disabled:opacity-50"
+          className="rounded-full bg-brand p-2 text-white disabled:opacity-50"
         >
           <Send size={16} />
         </button>
@@ -171,13 +171,13 @@ export function StylistLauncher() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-black px-4 py-3 text-sm font-semibold text-white shadow-xl hover:bg-gray-800"
+        className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-sm font-semibold text-white shadow-xl hover:bg-brand-dark"
       >
         <Sparkles size={16} />
         Ask Stylist
       </button>
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setOpen(false)}>
+        <div className="fixed inset-0 z-50 bg-brand/40" onClick={() => setOpen(false)}>
           <div
             className="absolute bottom-0 right-0 flex h-[min(720px,90vh)] w-full max-w-md flex-col rounded-t-3xl bg-white p-5 shadow-2xl sm:bottom-6 sm:right-6 sm:rounded-3xl"
             onClick={(event) => event.stopPropagation()}

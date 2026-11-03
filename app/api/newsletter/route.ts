@@ -1,8 +1,7 @@
+import { getDb } from '@/lib/db/client'
 import { getClientIp, jsonError, jsonOk, logEvent, readJson } from '@/lib/http'
 import { rateLimit } from '@/lib/rate-limit'
 import { newsletterSchema } from '@/lib/validation'
-
-const subscribers = new Set<string>()
 
 export async function POST(request: Request) {
   const limited = rateLimit(`newsletter:${getClientIp(request)}`, 8, 60_000)
@@ -16,9 +15,17 @@ export async function POST(request: Request) {
   }
 
   const email = parsed.data.email.trim().toLowerCase()
-  subscribers.add(email)
-  logEvent('newsletter.subscribe', { email })
+  const db = await getDb()
+  const result = await db.execute({
+    sql: 'INSERT OR IGNORE INTO newsletter_subscribers (email, created_at) VALUES (?, ?)',
+    args: [email, new Date().toISOString()],
+  })
+  logEvent('newsletter.subscribe', { email, isNew: result.rowsAffected > 0 })
+
   return jsonOk({
-    message: 'You are on the list. Watch your inbox for early access to drops and private offers.',
+    message:
+      result.rowsAffected > 0
+        ? 'You are on the list. Watch your inbox for new drops and private offers.'
+        : 'You are already subscribed. Thanks for staying with us.',
   })
 }

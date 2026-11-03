@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   try {
     const user = await createAccount(parsed.data)
     await setSessionCookie(user)
-    const token = createAccountToken(user.email, 'verify')
+    const token = await createAccountToken(user.id, 'verify')
     logEvent('auth.signup', { email: user.email })
 
     return jsonOk({

@@ -40,7 +40,7 @@ export const ForgotPasswordForm = () => {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+          className="w-full rounded-full bg-[#F4F0FF] px-5 py-4 outline-none"
         />
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -53,7 +53,7 @@ export const ForgotPasswordForm = () => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-full bg-black py-4 font-semibold text-white disabled:opacity-70"
+        className="w-full rounded-full bg-brand py-4 font-semibold text-white disabled:opacity-70"
       >
         {loading ? 'Sending...' : 'Send Reset Link'}
       </button>

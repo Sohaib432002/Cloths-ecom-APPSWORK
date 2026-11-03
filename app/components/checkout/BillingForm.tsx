@@ -253,7 +253,7 @@ const InputField = ({
         py-3
         sm:py-4
         
-        ${error ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-gray-50'}
+        ${error ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-lavender-50'}
         `}
       >
         <Icon

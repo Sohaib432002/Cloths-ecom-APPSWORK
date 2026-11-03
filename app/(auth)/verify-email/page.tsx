@@ -4,12 +4,12 @@ import { VerifyEmailForm } from '../Components/auth'
 
 export default function VerifyEmailPage() {
   return (
-    <div className="min-h-screen bg-[#F2F0F1] flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-[#F4F0FF] flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-6xl bg-white rounded-[32px] overflow-hidden shadow-xl grid lg:grid-cols-2">
         {/* Left Side */}
-        <div className="hidden lg:flex bg-black text-white flex-col justify-between p-12">
+        <div className="hidden lg:flex bg-brand text-white flex-col justify-between p-12">
           <Link href="/">
-            <h1 className="text-4xl font-black cursor-pointer">SHOP.CO</h1>
+            <h1 className="text-4xl font-black cursor-pointer">Véora</h1>
           </Link>
 
           <div>
@@ -25,7 +25,7 @@ export default function VerifyEmailPage() {
             </p>
           </div>
 
-          <p className="text-sm text-gray-400">© 2026 SHOP.CO. All rights reserved.</p>
+          <p className="text-sm text-gray-400">© 2026 Véora. All rights reserved.</p>
         </div>
 
         {/* Right Side */}

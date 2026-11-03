@@ -1,12 +1,15 @@
 {
-  "name": "shop-co",
+  "name": "veora",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/db-setup.ts && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:setup": "tsx scripts/db-setup.ts",
+    "db:reset": "tsx scripts/db-setup.ts --reset",
+    "db:stats": "tsx scripts/db-setup.ts --stats"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -14,6 +17,7 @@
     "@headlessui/react": "^2.2.10",
     "@heroicons/react": "^2.2.0",
     "@huggingface/inference": "^4.13.5",
+    "@libsql/client": "^0.18.0",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -42,6 +46,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

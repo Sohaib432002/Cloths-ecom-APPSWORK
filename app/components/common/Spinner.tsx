@@ -29,9 +29,9 @@ export const LoadingSpinner = ({
         <p className="text-sm font-medium text-gray-700">{text}</p>
 
         <div className="mt-2 flex gap-1">
-          <span className="h-2 w-2 animate-bounce rounded-full bg-black [animation-delay:-0.3s]" />
-          <span className="h-2 w-2 animate-bounce rounded-full bg-black [animation-delay:-0.15s]" />
-          <span className="h-2 w-2 animate-bounce rounded-full bg-black" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-brand [animation-delay:-0.3s]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-brand [animation-delay:-0.15s]" />
+          <span className="h-2 w-2 animate-bounce rounded-full bg-brand" />
         </div>
       </div>
     </div>

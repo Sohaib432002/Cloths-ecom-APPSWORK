@@ -4,6 +4,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --color-black: #1b1540;
+  --color-brand: #7c5cdc;
+  --color-brand-dark: #6847c8;
+  --color-brand-soft: #b9a5f2;
+  --color-lavender-50: #f9f7ff;
+  --color-lavender-100: #f1ecff;
+  --color-lavender-200: #e4dcfb;
+  --color-lavender-300: #d3c7f7;
+  --color-indigo-deep: #231a5c;
+  --color-indigo-deeper: #1a1348;
+  --font-display: var(--font-jakarta), system-ui, sans-serif;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -49,7 +63,7 @@
 }
 
 body {
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
   position: relative;
   height: 100%;
 }
@@ -80,18 +94,18 @@ body {
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --primary: #7c5cdc;
+  --primary-foreground: #ffffff;
+  --secondary: #f1ecff;
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --muted: #f4f0ff;
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: #f1ecff;
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
+  --border: #e9e3fa;
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: #b9a5f2;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -149,6 +163,9 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
   html {
     @apply font-sans;
   }
@@ -192,7 +209,7 @@ body {
 }
 
 .swiper-pagination-bullet-active {
-  border: 2px solid black;
+  border: 2px solid #7c5cdc;
 }
 .rtl-grid {
   direction: rtl;
@@ -226,4 +243,37 @@ body {
 
 .animate-brand-scroll:hover {
   animation-play-state: paused;
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-brand);
+}
+
+.hand-note {
+  font-family: var(--font-hand), cursive;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-brand-scroll {
+    animation: none;
+  }
+}
+
+@keyframes collection-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.collection-progress {
+  animation-name: collection-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
 }

@@ -6,8 +6,8 @@ export default function SignupPage() {
     <section className="min-h-screen max-w-310 m-auto   py-8 ">
       <div className="mx-auto grid  overflow-hidden rounded-xl bg-white shadow-xl lg:grid-cols-2 lg:rounded-3xl">
         {/* Left Side */}
-        <div className="bg-black px-6 py-10 text-white sm:px-8 sm:py-12 lg:px-12 lg:py-16">
-          <h1 className="text-2xl font-extrabold sm:text-3xl lg:text-5xl">SHOP.CO</h1>
+        <div className="bg-brand px-6 py-10 text-white sm:px-8 sm:py-12 lg:px-12 lg:py-16">
+          <h1 className="text-2xl font-extrabold sm:text-3xl lg:text-5xl">Véora</h1>
 
           <h2 className="mt-6 text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">
             Create your account and start shopping today.
@@ -37,7 +37,7 @@ export default function SignupPage() {
             <div className="flex-1 border"></div>
           </div>
 
-          <button className="w-full rounded-full border py-3 text-sm font-medium transition hover:bg-gray-100 sm:py-4 sm:text-base">
+          <button className="w-full rounded-full border py-3 text-sm font-medium transition hover:bg-lavender-100 sm:py-4 sm:text-base">
             Continue with Google
           </button>
 

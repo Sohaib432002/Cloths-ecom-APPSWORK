@@ -25,9 +25,9 @@ export async function POST(request: Request) {
     })
   }
 
-  const token = createAccountToken(account.email, 'reset')
+  const token = await createAccountToken(account.id, 'reset')
   return jsonOk({
-    message: 'Password reset link created. Email delivery is not configured in this demo, so the link is returned directly.',
+    message: 'Password reset link created. Email delivery is not configured, so the link is returned directly.',
     resetUrl: `${getAppUrl()}/reset-password?token=${token}`,
   })
 }

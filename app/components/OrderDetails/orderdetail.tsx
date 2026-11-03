@@ -27,7 +27,7 @@ export const OrderDetailsPage = () => {
 
           <Link
             href="/checkout/vieworders"
-            className="mt-6 inline-flex items-center rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 sm:text-base"
+            className="mt-6 inline-flex items-center rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark sm:text-base"
           >
             Back To Orders
           </Link>
@@ -65,7 +65,7 @@ export const OrderDetailsPage = () => {
             text-sm
             font-medium
             transition
-            hover:bg-gray-100
+            hover:bg-lavender-100
             sm:px-5
             sm:py-3
             sm:text-base

@@ -5,7 +5,7 @@ const TermsConditions = () => {
     {
       title: 'Acceptance of Terms',
       description:
-        'By accessing and using SHOP.CO, you agree to be bound by these Terms & Conditions and all applicable laws.',
+        'By accessing and using Véora, you agree to be bound by these Terms & Conditions and all applicable laws.',
     },
     {
       title: 'Orders & Payments',
@@ -30,12 +30,12 @@ const TermsConditions = () => {
     {
       title: 'Intellectual Property',
       description:
-        'All content, including logos, images, text, and designs on SHOP.CO, is protected by copyright and may not be reproduced without permission.',
+        'All content, including logos, images, text, and designs on Véora, is protected by copyright and may not be reproduced without permission.',
     },
     {
       title: 'Limitation of Liability',
       description:
-        'SHOP.CO shall not be liable for any indirect, incidental, or consequential damages arising from the use of this website.',
+        'Véora shall not be liable for any indirect, incidental, or consequential damages arising from the use of this website.',
     },
     {
       title: 'Changes to Terms',
@@ -45,7 +45,7 @@ const TermsConditions = () => {
   ]
 
   return (
-    <section className="bg-gray-50 py-10 sm:py-14 lg:py-20">
+    <section className="bg-lavender-50 py-10 sm:py-14 lg:py-20">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
 
@@ -54,7 +54,7 @@ const TermsConditions = () => {
             className="
             inline-block
             rounded-full
-            bg-black
+            bg-brand
             px-4
             py-2
             text-xs
@@ -92,7 +92,7 @@ const TermsConditions = () => {
             lg:text-lg
             "
           >
-            Please read these Terms & Conditions carefully before using SHOP.CO. By accessing our
+            Please read these Terms & Conditions carefully before using Véora. By accessing our
             website, you agree to comply with the following terms.
           </p>
 
@@ -139,7 +139,7 @@ const TermsConditions = () => {
                   items-center
                   justify-center
                   rounded-full
-                  bg-black
+                  bg-brand
                   text-sm
                   font-bold
                   text-white
@@ -186,7 +186,7 @@ const TermsConditions = () => {
           className="
           mt-10
           rounded-3xl
-          bg-black
+          bg-brand
           p-5
           text-center
           text-white
@@ -236,7 +236,7 @@ const TermsConditions = () => {
             <div>
               <p className="text-xs text-gray-400 sm:text-sm">Email</p>
 
-              <p className="text-sm font-semibold sm:text-base">support@shop.co</p>
+              <p className="text-sm font-semibold sm:text-base">support@veora.com</p>
             </div>
 
             <div>

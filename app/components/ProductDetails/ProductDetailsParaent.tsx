@@ -60,7 +60,7 @@ export const ProductDetailsParaent = ({ product, related, reviews }: Props) => {
         </div>
       </div>
 
-      <div className="mt-12 rounded-3xl border bg-[#F8F8F8] p-5 sm:p-8">
+      <div className="mt-12 rounded-3xl border bg-lavender-50 p-5 sm:p-8">
         <h2 className="text-2xl font-bold">Ask the stylist about this piece</h2>
         <p className="mt-2 text-sm text-gray-600">
           Get pairing ideas, occasion advice, and similar catalog matches without leaving the page.
@@ -74,7 +74,7 @@ export const ProductDetailsParaent = ({ product, related, reviews }: Props) => {
       </div>
 
       <div className="mt-16">
-        <AboutProductDetails productReviews={{ [slug]: reviews }} slug={slug} />
+        <AboutProductDetails productReviews={{ [slug]: reviews }} slug={slug} productId={product.id} />
       </div>
 
       <div className="my-16">

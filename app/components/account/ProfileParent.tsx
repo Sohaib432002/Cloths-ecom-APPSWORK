@@ -48,8 +48,8 @@ export const ProfileParent = () => {
               }}
               className={`whitespace-nowrap rounded-full border px-5 py-2 text-sm font-medium transition-all duration-200 ${
                 currentTab === item
-                  ? 'border-black bg-black text-white'
-                  : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'border-brand bg-brand text-white'
+                  : 'border-gray-300 bg-white text-gray-700 hover:bg-lavender-100'
               }`}
             >
               {item}
@@ -75,8 +75,8 @@ export const ProfileParent = () => {
                 }}
                 className={`rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   currentTab === item
-                    ? 'bg-black text-white shadow-md'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'bg-brand text-white shadow-md'
+                    : 'text-gray-700 hover:bg-lavender-100'
                 }`}
               >
                 {item}

@@ -126,7 +126,7 @@ export default function NotificationsPage() {
       <div className="mb-8 rounded-3xl border border-gray-200 bg-gradient-to-r from-white via-gray-50 to-white p-6 shadow-sm">
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-black text-white shadow-lg">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand text-white shadow-lg">
               <Bell size={26} />
             </div>
 
@@ -140,7 +140,7 @@ export default function NotificationsPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="rounded-2xl bg-black px-5 py-3 text-white shadow-lg">
+            <div className="rounded-2xl bg-brand px-5 py-3 text-white shadow-lg">
               <p className="text-xs uppercase tracking-wider text-gray-300">Unread</p>
 
               <h2 className="text-2xl font-black">{unreadCount}</h2>
@@ -162,8 +162,8 @@ export default function NotificationsPage() {
                 text-gray-700
                 transition-all
                 duration-300
-                hover:border-black
-                hover:bg-black
+                hover:border-brand
+                hover:bg-brand
                 hover:text-white
               "
             >
@@ -194,7 +194,7 @@ export default function NotificationsPage() {
         duration-300
         hover:-translate-y-1
         hover:shadow-xl
-        ${notification.read ? 'border-gray-200' : 'border-black/10 bg-gray-50'}
+        ${notification.read ? 'border-gray-200' : 'border-brand/10 bg-lavender-50'}
       `}
             >
               {/* Unread Indicator */}
@@ -215,7 +215,7 @@ export default function NotificationsPage() {
             items-center
             justify-center
             rounded-2xl
-            bg-black
+            bg-brand
             text-white
             shadow-md
             transition-transform
@@ -241,7 +241,7 @@ export default function NotificationsPage() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
+                      <span className="rounded-full bg-lavender-100 px-3 py-1 text-xs font-semibold text-gray-600">
                         {notification.time}
                       </span>
 
@@ -259,7 +259,7 @@ export default function NotificationsPage() {
                     <button
                       className="
                 rounded-xl
-                bg-black
+                bg-brand
                 px-5
                 py-2.5
                 text-sm
@@ -267,7 +267,7 @@ export default function NotificationsPage() {
                 text-white
                 transition-all
                 duration-300
-                hover:bg-gray-800
+                hover:bg-brand-dark
               "
                     >
                       View Details
@@ -297,8 +297,8 @@ export default function NotificationsPage() {
                   font-semibold
                   transition-all
                   duration-300
-                  hover:border-black
-                  hover:bg-black
+                  hover:border-brand
+                  hover:bg-brand
                   hover:text-white
                 "
                       >
@@ -311,8 +311,8 @@ export default function NotificationsPage() {
             </div>
           ))
         ) : (
-          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-gray-50 px-6 py-20 text-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-black text-white shadow-lg">
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-gray-300 bg-lavender-50 px-6 py-20 text-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand text-white shadow-lg">
               <Bell size={36} />
             </div>
 
@@ -328,7 +328,7 @@ export default function NotificationsPage() {
               className="
       mt-8
       rounded-2xl
-      bg-black
+      bg-brand
       px-8
       py-3
       text-sm
@@ -337,7 +337,7 @@ export default function NotificationsPage() {
       transition-all
       duration-300
       hover:-translate-y-1
-      hover:bg-gray-800
+      hover:bg-brand-dark
       hover:shadow-xl
     "
             >

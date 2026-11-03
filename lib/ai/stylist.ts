@@ -20,9 +20,9 @@ export type StylistIntent = {
 }
 
 const STYLE_VALUES = ['Casual', 'Formal', 'Party', 'Gym'] as const
-const CATEGORY_VALUES = ['Mens', 'Womens', 'Children', 'Accessories'] as const
-const TYPE_VALUES = ['Jeans', 'Shirts', 'Hoodie', 'Polo Shirts', 'Jackets'] as const
-const COLOR_VALUES = ['Black', 'Gray', 'White'] as const
+const CATEGORY_VALUES = ['Mens', 'Womens', 'Children', 'Unisex', 'Accessories', 'Footwear'] as const
+const TYPE_VALUES = ['Jeans', 'Shirts', 'Hoodie', 'Polo Shirts', 'Jackets', 'Sneakers', 'Caps', 'Bags'] as const
+const COLOR_VALUES = ['Black', 'Gray', 'White', 'Navy', 'Burgundy', 'Orange', 'Tan', 'Red', 'Pastel'] as const
 
 function includesAny(text: string, words: string[]) {
   return words.some((word) => text.includes(word))
@@ -47,7 +47,13 @@ export function inferIntent(message: string, occasion?: string): StylistIntent {
         ? 'Mens'
         : undefined
 
-  const type = includesAny(text, ['jean', 'denim'])
+  const type = includesAny(text, ['shoe', 'sneaker', 'trainer', 'footwear'])
+    ? 'Sneakers'
+    : /(caps?|hats?)/.test(text)
+      ? 'Caps'
+      : /(bags?|handbags?|backpacks?)/.test(text)
+        ? 'Bags'
+        : includesAny(text, ['jean', 'denim'])
     ? 'Jeans'
     : includesAny(text, ['hoodie', 'sweatshirt'])
       ? 'Hoodie'
@@ -79,8 +85,8 @@ export function inferIntent(message: string, occasion?: string): StylistIntent {
   }
 }
 
-export function matchProducts(intent: StylistIntent, excludeSlug?: string, limit = 4) {
-  const catalog = getCatalog().filter((item) => item.slug !== excludeSlug)
+export async function matchProducts(intent: StylistIntent, excludeSlug?: string, limit = 4) {
+  const catalog = (await getCatalog()).filter((item) => item.slug !== excludeSlug)
 
   const scored = catalog.map((item) => {
     let score = item.rating * 8 + (item.isFeatured ? 12 : 0)
@@ -146,7 +152,7 @@ export async function runStylist(input: {
   productSlug?: string
   history?: StylistMessage[]
 }) {
-  const product = input.productSlug ? getProductBySlug(input.productSlug) : null
+  const product = input.productSlug ? await getProductBySlug(input.productSlug) : null
   const fallback = inferIntent(
     `${input.message} ${product ? `${product.title} ${product.style} ${product.category} ${product.type}` : ''}`,
     input.occasion
@@ -154,10 +160,10 @@ export async function runStylist(input: {
 
   const catalogHint = product
     ? `The shopper is looking at "${product.title}", a ${product.style.toLowerCase()} ${product.type.toLowerCase()} in ${product.category}.`
-    : 'Recommend a complete outfit from the live SHOP.CO catalog.'
+    : 'Recommend a complete outfit from the live Véora catalog.'
 
-  const system = `You are SHOP.CO's in-house stylist. Reply with JSON only using this shape:
-{"occasion":"string","style":"Casual|Formal|Party|Gym","category":"Mens|Womens|Children|Accessories","type":"Jeans|Shirts|Hoodie|Polo Shirts|Jackets","colors":["Black"|"Gray"|"White"],"budget":"low|mid|high","advice":"2 short sentences of practical styling advice"}
+  const system = `You are Véora's in-house stylist. Reply with JSON only using this shape:
+{"occasion":"string","style":"Casual|Formal|Party|Gym","category":"Mens|Womens|Children|Unisex|Accessories|Footwear","type":"Jeans|Shirts|Hoodie|Polo Shirts|Jackets|Sneakers|Caps|Bags","colors":["Black"|"Gray"|"White"|"Navy"|"Burgundy"|"Orange"|"Tan"|"Red"|"Pastel"],"budget":"low|mid|high","advice":"2 short sentences of practical styling advice"}
 ${catalogHint}
 Keep advice specific, warm, and commercial. Never mention being an AI model.`
 
@@ -184,7 +190,7 @@ Keep advice specific, warm, and commercial. Never mention being an AI model.`
     })
   }
 
-  const products = matchProducts(intent, product?.slug, 4)
+  const products = await matchProducts(intent, product?.slug, 4)
 
   return {
     advice: intent.advice,

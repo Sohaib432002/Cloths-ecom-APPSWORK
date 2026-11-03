@@ -1,29 +1,24 @@
-# SHOP.CO
+# Véora
 
-SHOP.CO is a production-ready fashion e-commerce storefront for menswear, womenswear, kids, and accessories. Customers can browse a 1,050-piece catalog, save items, check out with coupon support, and get outfit recommendations from an in-house stylist powered by Llama 3.1 8B Instruct on Hugging Face Inference.
-
-The project is built as a single Next.js 16 application so the storefront and API deploy together on Vercel.
+Véora is a fashion storefront for women, men, accessories and footwear, built as a single Next.js 16 application (storefront and API together) on top of a SQLite database.
 
 ## Features
 
-- Catalog search, filters, pagination, product details, related items, and reviews
-- Cart and wishlist with size/color line items and persistent local storage
-- JWT authentication with httpOnly cookies, signup, login, password reset, and profile updates
-- Guest-friendly checkout with Cash on Delivery, card, and PayPal selection
-- Working coupon codes: `WELCOME20`, `SHOP10`, `STYLE25`, `FREESHIP`
-- Newsletter and contact APIs with validation and rate limiting
-- Native **AI Personal Stylist** that maps a shopper's occasion onto live catalog products
-- Responsive storefront with skip-to-content, labeled controls, and Vercel-ready image optimization
+- Catalog with search, filters (category, type, style, colour, size, price), sorting, pagination, product pages, related items and reviews
+- Customer reviews saved to the database, with the product rating updated on every new review
+- Cart, wishlist (synced to the account when signed in), and coupon codes validated on the server
+- Checkout that re-prices every line from the database, checks and decrements stock, and stores the order
+- Accounts: signup, login, logout, profile and password change, password reset and email verification links
+- Order history per account (guests keep the orders they placed in the browser)
+- Newsletter and contact forms stored in the database, with rate limiting
+- AI personal stylist (Hugging Face Llama 3.1 when `HF_TOKEN` is set, catalog matching otherwise)
+- Responsive layout for desktop, tablet and mobile
 
-## Technology stack
+## Stack
 
-- Next.js 16 App Router, React 19, TypeScript
-- Tailwind CSS 4
-- Zod validation, Jose JWT sessions, bcryptjs password hashing
-- Hugging Face Inference (`meta-llama/Llama-3.1-8B-Instruct`)
-- Catalog data served from server-only modules through REST route handlers
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, SQLite through `@libsql/client`, Zod, Jose (JWT cookie sessions), bcryptjs.
 
-## Installation
+## Getting started
 
 ```bash
 git clone https://github.com/Sohaib432002/Cloths-ecom-APPSWORK.git
@@ -33,77 +28,72 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open <http://localhost:3000>. The database is created and seeded automatically on first request. To do it explicitly:
 
-Demo account:
+```bash
+npm run db:setup   # create tables and seed (does nothing if already seeded)
+npm run db:reset   # delete data/veora.db and rebuild it (stop the dev server first on Windows)
+```
 
-- Email: `demo@shop.co`
-- Password: `ShopCo123!`
+Demo account: `demo@veora.com` / `Veora123!`
+
+## Database
+
+`lib/db/schema.ts` defines the schema; `lib/db/seed.ts` fills it. Tables:
+
+| Table | Purpose |
+| --- | --- |
+| `users`, `auth_tokens` | Accounts and one-time reset / verification tokens |
+| `categories`, `products` | Catalog (1,062 products across Women, Men, Kids, Unisex, Accessories, Footwear) |
+| `product_images`, `product_colors`, `product_sizes`, `product_features` | Product child tables |
+| `reviews` | Customer reviews (FK to product and optionally user) |
+| `coupons` | Coupon codes (`WELCOME20`, `SHOP10`, `STYLE25`, `FREESHIP`) |
+| `orders`, `order_items` | Placed orders and their lines (price snapshot per line) |
+| `wishlist_items` | Saved items per signed-in user |
+| `newsletter_subscribers`, `contact_messages` | Form submissions |
+
+The seed imports the original catalog data (`db/products.seed.js`, `db/reviews.seed.js`) and adds a Véora footwear and accessories line. The product ratings and review counts in that imported data are catalog data, not live statistics; new reviews are added on top of them.
+
+### Where the data lives
+
+| Setup | Database | Persistent? |
+| --- | --- | --- |
+| Local | `data/veora.db` (SQLite file) | Yes |
+| Vercel without extra config | pre-seeded copy in `/tmp` | **No** — resets when the serverless instance recycles |
+| Vercel / any host with `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN` | Turso (hosted SQLite, free tier) | Yes |
+| Node server or VPS with `DATABASE_PATH` | file on disk | Yes |
+
+`GET /api/health` reports the engine and whether it is persistent.
 
 ## Environment variables
 
-| Name | Required | Description |
-| --- | --- | --- |
-| `AUTH_SECRET` | Yes in production | 32+ character secret used to sign session cookies |
-| `HF_TOKEN` | Recommended | Hugging Face access token for the stylist |
-| `HF_MODEL` | No | Defaults to `meta-llama/Llama-3.1-8B-Instruct` |
-| `NEXT_PUBLIC_APP_URL` | Recommended | Public site URL used in auth reset links |
-
-Create a Hugging Face token at [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens). The stylist still returns catalog matches if the token is missing.
+See `.env.example`. `AUTH_SECRET` (32+ characters) is required in production.
 
 ## Deployment
 
-### Frontend and API on Vercel
+```bash
+npm run build   # seeds data/veora.db, then runs next build
+npm start
+```
 
-1. Import the GitHub repository in Vercel.
-2. Set `AUTH_SECRET`, `HF_TOKEN`, `HF_MODEL`, and `NEXT_PUBLIC_APP_URL`.
-3. Deploy. Vercel detects Next.js automatically.
+On Vercel, import the repository and set `AUTH_SECRET` (plus the Turso variables if you want accounts, orders and reviews to persist).
 
-The Hugging Face integration uses the official Inference API from Next.js route handlers. No separate backend host is required.
-
-## API documentation
+## API
 
 | Method | Path | Description |
 | --- | --- | --- |
-| `GET` | `/api/health` | Service health and Hugging Face status |
-| `GET` | `/api/products` | Paginated catalog with filters (`search`, `category`, `type`, `style`, `color`, `size`, `sale`, `arrival`, `minPrice`, `maxPrice`, `page`, `limit`, `sort`) |
-| `GET` | `/api/products/[slug]` | Product, related items, and reviews |
-| `GET` | `/api/collections` | Home new arrivals and top sellers |
-| `POST` | `/api/auth/signup` | Create an account |
-| `POST` | `/api/auth/login` | Sign in |
-| `POST` | `/api/auth/logout` | Clear the session cookie |
-| `GET` | `/api/auth/me` | Current user |
-| `PATCH` | `/api/auth/me` | Update profile or password |
-| `POST` | `/api/auth/forgot-password` | Create a reset link |
-| `POST` | `/api/auth/reset-password` | Set a new password |
-| `POST` | `/api/auth/verify-email` | Verify an email token |
-| `POST` | `/api/orders` | Validate cart, coupons, and create an order |
-| `GET/POST` | `/api/coupons` | List or validate coupons |
-| `POST` | `/api/newsletter` | Subscribe |
-| `POST` | `/api/contact` | Send a contact message |
-| `POST` | `/api/stylist` | AI outfit recommendation |
+| `GET` | `/api/health` | Service and database status |
+| `GET` | `/api/products` | Catalog query (`search`, `category`, `type`, `style`, `color`, `size`, `sale`, `arrival`, `minPrice`, `maxPrice`, `sort`, `page`, `limit`) |
+| `GET` | `/api/products/[slug]` | Product, related items, reviews |
+| `GET` | `/api/collections` | New arrivals, best sellers, featured |
+| `GET/POST` | `/api/reviews` | List / add a product review |
+| `GET/POST` | `/api/coupons` | List coupons / validate a code |
+| `GET/POST` | `/api/orders` | Own orders (signed in) / place an order |
+| `GET` | `/api/orders/[id]` | One of your own orders |
+| `GET/PUT` | `/api/wishlist` | Read / replace the signed-in user's wishlist |
+| `POST` | `/api/auth/signup`, `login`, `logout`, `forgot-password`, `reset-password`, `verify-email` | Authentication |
+| `GET/PATCH` | `/api/auth/me` | Current user / update profile or password |
+| `POST` | `/api/newsletter`, `/api/contact` | Forms |
+| `POST` | `/api/stylist` | Outfit recommendations |
 
-Example stylist request:
-
-```bash
-curl -X POST http://localhost:3000/api/stylist \
-  -H "Content-Type: application/json" \
-  -d '{"message":"Black tie dinner next Friday, keep it under $400"}'
-```
-
-## Screenshots
-
-Run the app locally and visit:
-
-- `/` seasonal homepage and stylist entry
-- `/Store` filtered catalog
-- `/stylist` full-page concierge
-- `/ProductDetails/[slug]` product page with inline styling advice
-
-## Future improvements
-
-- Persist users and orders in Postgres or a managed database
-- Add transactional email for verification, resets, and shipping updates
-- Connect a real payment processor for card and PayPal capture
-- Precompute catalog embeddings for faster semantic matching
-- Replace placeholder photography with studio product assets
+Email delivery is not configured, so password-reset and verification links are returned in the API response instead of being emailed.

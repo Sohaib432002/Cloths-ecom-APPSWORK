@@ -7,9 +7,9 @@ export default function LoginPage() {
     <div className="min-h-screen max-w-310 m-auto    py-6 sm:py-8">
       <div className="mx-auto grid  overflow-hidden rounded-xl bg-white shadow-xl lg:grid-cols-2 lg:rounded-3xl">
         {/* Left Side */}
-        <div className="hidden flex-col justify-between bg-black p-8 text-white sm:p-10 lg:flex lg:p-16">
+        <div className="hidden flex-col justify-between bg-brand p-8 text-white sm:p-10 lg:flex lg:p-16">
           <Link href="/">
-            <h1 className="text-3xl font-black lg:text-5xl">SHOP.CO</h1>
+            <h1 className="text-3xl font-black lg:text-5xl">Véora</h1>
           </Link>
 
           <div>
@@ -26,7 +26,7 @@ export default function LoginPage() {
           </div>
 
           <div className="text-xs text-gray-400 lg:text-sm">
-            © 2026 SHOP.CO. All rights reserved.
+            © 2026 Véora. All rights reserved.
           </div>
         </div>
 
@@ -35,7 +35,7 @@ export default function LoginPage() {
           {/* Mobile Logo */}
           <div className="mb-8 lg:hidden">
             <Link href="/">
-              <h1 className="text-3xl font-black sm:text-4xl">SHOP.CO</h1>
+              <h1 className="text-3xl font-black sm:text-4xl">Véora</h1>
             </Link>
           </div>
 

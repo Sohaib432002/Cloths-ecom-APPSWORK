@@ -45,7 +45,7 @@ const PrivacyPolicy = () => {
   ]
 
   return (
-    <section className="bg-gray-50 py-12 sm:py-16 lg:py-20">
+    <section className="bg-lavender-50 py-12 sm:py-16 lg:py-20">
       <div
         className="
         mx-auto
@@ -64,7 +64,7 @@ const PrivacyPolicy = () => {
             className="
             inline-block
             rounded-full
-            bg-black
+            bg-brand
 
             px-4
             py-2
@@ -114,7 +114,7 @@ const PrivacyPolicy = () => {
           >
             We value your privacy and are committed to protecting your personal information. This
             Privacy Policy explains how we collect, use, and safeguard your data when you use
-            SHOP.CO.
+            Véora.
           </p>
 
           <p
@@ -186,7 +186,7 @@ const PrivacyPolicy = () => {
                   items-center
                   justify-center
                   rounded-full
-                  bg-black
+                  bg-brand
 
                   text-sm
                   font-bold

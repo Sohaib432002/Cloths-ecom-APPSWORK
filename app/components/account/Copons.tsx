@@ -16,7 +16,7 @@ export const Coupons = () => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl bg-black p-6 text-white">
+      <div className="rounded-3xl bg-brand p-6 text-white">
         <h1 className="text-3xl font-bold">Coupons</h1>
         <p className="mt-2 text-gray-300">Apply these codes at checkout to reduce your order total.</p>
       </div>

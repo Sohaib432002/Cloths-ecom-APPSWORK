@@ -40,10 +40,10 @@ export const ContactUs = () => {
   }
 
   return (
-    <div className="bg-gray-50 overflow-hidden">
+    <div className="bg-lavender-50 overflow-hidden">
       {/* ================= HERO ================= */}
 
-      <section className="bg-black text-white">
+      <section className="bg-brand text-white">
         <div
           className="
           mx-auto 
@@ -156,7 +156,7 @@ export const ContactUs = () => {
               items-center
               justify-center
               rounded-full
-              bg-black
+              bg-brand
               text-xl
               text-white
 
@@ -222,7 +222,7 @@ export const ContactUs = () => {
               items-center
               justify-center
               rounded-full
-              bg-black
+              bg-brand
               text-xl
               text-white
 
@@ -275,7 +275,7 @@ export const ContactUs = () => {
               items-center
               justify-center
               rounded-full
-              bg-black
+              bg-brand
               text-xl
               text-white
 
@@ -300,9 +300,9 @@ export const ContactUs = () => {
               Email
             </h2>
 
-            <p className="mt-3 text-sm text-gray-500 sm:mt-4 sm:text-base">support@shop.co</p>
+            <p className="mt-3 text-sm text-gray-500 sm:mt-4 sm:text-base">support@veora.com</p>
 
-            <p className="text-sm text-gray-500 sm:text-base">contact@shop.co</p>
+            <p className="text-sm text-gray-500 sm:text-base">contact@veora.com</p>
           </div>
         </div>
       </section>
@@ -409,7 +409,7 @@ export const ContactUs = () => {
                     sm:text-base
 
                     focus:ring-2
-                    focus:ring-black
+                    focus:ring-brand
                     "
                   />
                 </div>
@@ -434,7 +434,7 @@ export const ContactUs = () => {
                     sm:text-base
 
                     focus:ring-2
-                    focus:ring-black
+                    focus:ring-brand
                     "
                   />
                 </div>
@@ -459,7 +459,7 @@ export const ContactUs = () => {
                   sm:text-base
 
                   focus:ring-2
-                  focus:ring-black
+                  focus:ring-brand
                   "
                 />
               </div>
@@ -483,7 +483,7 @@ export const ContactUs = () => {
                   sm:text-base
 
                   focus:ring-2
-                  focus:ring-black
+                  focus:ring-brand
                   "
                 />
               </div>
@@ -507,7 +507,7 @@ export const ContactUs = () => {
                   sm:text-base
 
                   focus:ring-2
-                  focus:ring-black
+                  focus:ring-brand
                   "
                 />
               </div>
@@ -532,7 +532,7 @@ export const ContactUs = () => {
                   sm:text-base
 
                   focus:ring-2
-                  focus:ring-black
+                  focus:ring-brand
                   "
                 />
               </div>
@@ -540,7 +540,7 @@ export const ContactUs = () => {
                 className="
                 w-full
                 rounded-xl
-                bg-black
+                bg-brand
                 py-3
                 text-sm
                 font-semibold
@@ -550,7 +550,7 @@ export const ContactUs = () => {
                 sm:py-4
                 sm:text-base
 
-                hover:bg-gray-800
+                hover:bg-brand-dark
                 "
               >
                 Send Message
@@ -564,7 +564,7 @@ export const ContactUs = () => {
             <div
               className="
               rounded-3xl
-              bg-black
+              bg-brand
               p-5
               text-white
 
@@ -619,7 +619,7 @@ export const ContactUs = () => {
                   {
                     icon: '✉️',
                     title: 'Email Address',
-                    text: 'support@shopco.com',
+                    text: 'support@veora.com',
                   },
 
                   {
@@ -693,7 +693,7 @@ export const ContactUs = () => {
 
       {/* FAQ SECTION */}
 
-      <section className="bg-gray-50 py-12 sm:py-20">
+      <section className="bg-lavender-50 py-12 sm:py-20">
         <div
           className="
           mx-auto
@@ -799,7 +799,7 @@ export const ContactUs = () => {
           <div
             className="
             rounded-[35px]
-            bg-black
+            bg-brand
             p-6
             text-white
 

@@ -41,8 +41,8 @@ export const PriceSlider = () => {
         to right,
         #e5e7eb 0%,
         #e5e7eb ${(values[0] / MAX) * 100}%,
-        #000 ${(values[0] / MAX) * 100}%,
-        #000 ${(values[1] / MAX) * 100}%,
+        #7c5cdc ${(values[0] / MAX) * 100}%,
+        #7c5cdc ${(values[1] / MAX) * 100}%,
         #e5e7eb ${(values[1] / MAX) * 100}%,
         #e5e7eb 100%
       )`,
@@ -51,10 +51,11 @@ export const PriceSlider = () => {
             {children}
           </div>
         )}
-        renderThumb={({ props }) => (
+        renderThumb={({ props: { key, ...props } }) => (
           <div
+            key={key}
             {...props}
-            className="w-4 h-4 rounded-full bg-black border-2 border-black shadow-lg outline-none cursor-pointer"
+            className="w-4 h-4 rounded-full bg-brand border-2 border-brand shadow-lg outline-none cursor-pointer"
           />
         )}
       />

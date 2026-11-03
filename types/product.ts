@@ -23,6 +23,7 @@ export interface Product {
   features: string[]
   isNew: boolean
   isFeatured: boolean
+  isBestseller?: boolean
 }
 
 export type CartLine = {
@@ -45,8 +46,10 @@ export type ProductCardData = {
   slug: string
   title: string
   price: number
+  oldPrice?: number | null
   image: string
   rating: number
+  reviews?: number
   discount: number
   sizes: string[]
   colors: string[]

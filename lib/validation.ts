@@ -61,14 +61,10 @@ export const couponSchema = z.object({
 })
 
 export const orderItemSchema = z.object({
-  id: z.number(),
-  slug: z.string(),
-  title: z.string(),
-  image: z.string(),
-  quantity: z.number().int().positive(),
-  price: z.number().positive(),
-  size: z.string().optional(),
-  color: z.string().optional(),
+  id: z.number().int().positive(),
+  quantity: z.number().int().positive().max(20, 'You can order up to 20 of one item.'),
+  size: z.string().max(20).optional(),
+  color: z.string().max(30).optional(),
 })
 
 export const checkoutSchema = z.object({
@@ -98,4 +94,15 @@ export const stylistSchema = z.object({
     )
     .max(8)
     .optional(),
+})
+
+export const reviewSchema = z.object({
+  productId: z.number().int().positive(),
+  name: z.string().trim().min(2, 'Enter your name.').max(60),
+  rating: z.number().int().min(1, 'Choose a rating.').max(5),
+  comment: z.string().trim().min(10, 'Tell us a little more (at least 10 characters).').max(1000),
+})
+
+export const wishlistSchema = z.object({
+  productIds: z.array(z.number().int().positive()).max(200),
 })

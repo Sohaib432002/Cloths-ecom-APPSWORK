@@ -154,7 +154,7 @@ export const Notifications = () => {
             onClick={markAllAsRead}
             className="
           rounded-full
-          bg-black
+          bg-brand
           px-4
           sm:px-6
           py-2
@@ -162,7 +162,7 @@ export const Notifications = () => {
           text-sm
           sm:text-base
           text-white
-          hover:bg-gray-800
+          hover:bg-brand-dark
           transition
           "
           >
@@ -415,7 +415,7 @@ export const Notifications = () => {
           items-center
           justify-center
           rounded-full
-          bg-gray-100
+          bg-lavender-100
           "
           >
             <i

@@ -1,44 +1,45 @@
 type PropsStarRating = {
   rating: number
+  size?: 'sm' | 'md'
+  showValue?: boolean
 }
 
-export const StarRating = ({ rating }: PropsStarRating) => {
+export const StarRating = ({ rating, size = 'md', showValue = true }: PropsStarRating) => {
+  const starSize = size === 'sm' ? 'text-[13px]' : 'text-[12px] sm:text-[15px] md:text-[18px]'
+
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1" role="img" aria-label={`${rating.toFixed(1)} out of 5 stars`}>
       <div className="flex">
         {[1, 2, 3, 4, 5].map((star) => {
           const full = rating >= star
           const half = rating >= star - 0.5 && rating < star
 
           return (
-            <span
-              key={star}
-              className="relative inline-block text-[12px] xs:text-[13px] sm:text-[15px] md:text-[18px]"
-            >
+            <span key={star} className={`relative inline-block leading-none ${starSize}`}>
               {full ? (
-                <span className="text-yellow-400">★</span>
+                <span className="text-amber-400">★</span>
               ) : half ? (
                 <>
-                  <span className="text-gray-300">★</span>
+                  <span className="text-lavender-300">★</span>
 
                   <span
-                    className="absolute left-0 top-0 overflow-hidden text-yellow-400"
+                    className="absolute left-0 top-0 overflow-hidden text-amber-400"
                     style={{ width: '50%' }}
                   >
                     ★
                   </span>
                 </>
               ) : (
-                <span className="text-gray-300">★</span>
+                <span className="text-lavender-300">★</span>
               )}
             </span>
           )
         })}
       </div>
 
-      <span className="text-[10px] xs:text-[11px] sm:text-xs md:text-sm font-medium text-gray-500">
-        {rating.toFixed(1)}/5
-      </span>
+      {showValue && (
+        <span className="text-[10px] font-medium text-gray-500 sm:text-xs md:text-sm">{rating.toFixed(1)}/5</span>
+      )}
     </div>
   )
 }

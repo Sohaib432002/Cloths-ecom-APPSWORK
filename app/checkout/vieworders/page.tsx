@@ -21,7 +21,7 @@ export default function ViewOrders() {
 
           <Link
             href="/Store"
-            className="mt-6 rounded-full bg-black  py-3 text-sm font-semibold text-white transition hover:bg-gray-800 sm:px-8 sm:text-base"
+            className="mt-6 rounded-full bg-brand  py-3 text-sm font-semibold text-white transition hover:bg-brand-dark sm:px-8 sm:text-base"
           >
             Continue Shopping
           </Link>
@@ -81,7 +81,7 @@ export default function ViewOrders() {
               {order.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex flex-col gap-4 rounded-2xl bg-gray-50 p-3 transition hover:bg-gray-100 sm:flex-row sm:items-center sm:p-4"
+                  className="flex flex-col gap-4 rounded-2xl bg-lavender-50 p-3 transition hover:bg-lavender-100 sm:flex-row sm:items-center sm:p-4"
                 >
                   <div className="relative h-28 w-full overflow-hidden rounded-xl sm:h-24 sm:w-24 md:h-28 md:w-28">
                     <Image src={item.image} alt={item.title} fill className="object-cover" />
@@ -114,7 +114,7 @@ export default function ViewOrders() {
 
               <Link
                 href={`/checkout/vieworders/${order.id}`}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-gray-800 sm:w-auto sm:text-base"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-dark sm:w-auto sm:text-base"
               >
                 <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
                 View Details

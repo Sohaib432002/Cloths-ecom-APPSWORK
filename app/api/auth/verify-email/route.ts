@@ -1,4 +1,4 @@
-import { findAccountByEmail, updateAccount } from '@/lib/auth/users'
+import { findAccountById, toPublicUser, updateAccount } from '@/lib/auth/users'
 import { consumeAccountToken } from '@/lib/auth/tokens'
 import { setSessionCookie } from '@/lib/auth/session'
 import { jsonError, jsonOk, readJson } from '@/lib/http'
@@ -8,26 +8,15 @@ export async function POST(request: Request) {
   const token = body?.token
   if (!token) return jsonError('Verification token is required.', 400)
 
-  const email = consumeAccountToken(token, 'verify')
-  if (!email) {
+  const userId = await consumeAccountToken(token, 'verify')
+  if (!userId) {
     return jsonError('This verification link is invalid or has expired.', 400, 'EXPIRED')
   }
 
-  const account = await findAccountByEmail(email)
+  const account = await findAccountById(userId)
   if (!account) return jsonError('Account not found.', 404)
 
-  const user = await updateAccount(
-    {
-      id: account.id,
-      email: account.email,
-      name: account.name,
-      firstName: account.firstName,
-      lastName: account.lastName,
-      phone: account.phone,
-      emailVerified: account.emailVerified,
-    },
-    { emailVerified: true }
-  )
+  const user = await updateAccount(toPublicUser(account), { emailVerified: true })
   await setSessionCookie(user)
   return jsonOk({ user })
 }

@@ -10,9 +10,9 @@ export const Orders = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl bg-black p-6 text-white sm:p-8">
+      <div className="rounded-3xl bg-brand p-6 text-white sm:p-8">
         <h1 className="text-3xl font-bold">My Orders</h1>
-        <p className="mt-2 text-gray-300">Track every SHOP.CO order placed in this browser session.</p>
+        <p className="mt-2 text-gray-300">Track every Véora order placed in this browser session.</p>
       </div>
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
         <div className="rounded-3xl border p-6">
@@ -31,7 +31,7 @@ export const Orders = () => {
       {orders.length === 0 ? (
         <div className="rounded-3xl border p-8 text-center">
           <p className="text-gray-500">You have not placed an order yet.</p>
-          <Link href="/Store" className="mt-4 inline-block rounded-full bg-black px-6 py-3 text-white">
+          <Link href="/Store" className="mt-4 inline-block rounded-full bg-brand px-6 py-3 text-white">
             Start shopping
           </Link>
         </div>
@@ -41,7 +41,7 @@ export const Orders = () => {
             <Link
               key={order.id}
               href={`/checkout/vieworders/${order.id}`}
-              className="block rounded-3xl border p-5 hover:bg-gray-50"
+              className="block rounded-3xl border p-5 hover:bg-lavender-50"
             >
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>

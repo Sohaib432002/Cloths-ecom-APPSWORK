@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { AppliedCoupon, PaymentMethodId } from '@/types/product'
+import { apiFetch } from '@/lib/client/api'
+import { useAuth } from './AuthContext'
 
 export type Order = {
   id: string
@@ -46,33 +48,62 @@ type OrdersContextType = {
 
 const OrdersContext = createContext<OrdersContextType | undefined>(undefined)
 
+const GUEST_KEY = 'veora_guest_orders'
+
+// Signed-in shoppers read their orders from the database; guests keep the orders they placed in this browser.
 export const OrdersProvider = ({ children }: { children: ReactNode }) => {
+  const { user, loading } = useAuth()
   const [orders, setOrders] = useState<Order[]>([])
+  const [guestOrders, setGuestOrders] = useState<Order[]>([])
   const [ready, setReady] = useState(false)
+  const userId = user?.id
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('orders')
-      if (saved) setOrders(JSON.parse(saved))
+      const saved = localStorage.getItem(GUEST_KEY)
+      if (saved) setGuestOrders(JSON.parse(saved))
     } catch {
-      setOrders([])
+      setGuestOrders([])
     }
-    setReady(true)
   }, [])
 
   useEffect(() => {
-    if (!ready) return
-    localStorage.setItem('orders', JSON.stringify(orders))
-  }, [orders, ready])
+    if (loading) return
+    if (!userId) {
+      setOrders([])
+      setReady(true)
+      return
+    }
+
+    let cancelled = false
+    apiFetch<{ orders: Order[] }>('/api/orders')
+      .then((data) => !cancelled && setOrders(data.orders))
+      .catch(() => !cancelled && setOrders([]))
+      .finally(() => !cancelled && setReady(true))
+    return () => {
+      cancelled = true
+    }
+  }, [userId, loading])
 
   const addOrder = (order: Order) => {
-    setOrders((prev) => [order, ...prev.filter((item) => item.id !== order.id)])
+    if (userId) {
+      setOrders((prev) => [order, ...prev.filter((item) => item.id !== order.id)])
+      return
+    }
+    setGuestOrders((prev) => {
+      const next = [order, ...prev.filter((item) => item.id !== order.id)]
+      try {
+        localStorage.setItem(GUEST_KEY, JSON.stringify(next))
+      } catch {}
+      return next
+    })
   }
 
-  const getOrder = (id: string) => orders.find((order) => order.id === id)
+  const visible = userId ? orders : guestOrders
+  const getOrder = (id: string) => visible.find((order) => order.id === id)
 
   return (
-    <OrdersContext.Provider value={{ orders, ready, addOrder, getOrder }}>
+    <OrdersContext.Provider value={{ orders: visible, ready, addOrder, getOrder }}>
       {children}
     </OrdersContext.Provider>
   )

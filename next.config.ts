@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: { '/**': ['./data/veora.db'] },
+  serverExternalPackages: ['@libsql/client', 'libsql', 'bcryptjs'],
   images: {
     remotePatterns: [
       {

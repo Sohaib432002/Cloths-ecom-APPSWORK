@@ -68,7 +68,7 @@ export const Profiledetails = () => {
           <input
             value={firstName}
             onChange={(event) => setFirstName(event.target.value)}
-            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+            className="mt-2 w-full rounded-2xl bg-lavender-100 px-4 py-3 outline-none"
           />
         </label>
         <label className="block text-sm font-medium">
@@ -76,7 +76,7 @@ export const Profiledetails = () => {
           <input
             value={lastName}
             onChange={(event) => setLastName(event.target.value)}
-            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+            className="mt-2 w-full rounded-2xl bg-lavender-100 px-4 py-3 outline-none"
           />
         </label>
         <label className="block text-sm font-medium">
@@ -84,10 +84,10 @@ export const Profiledetails = () => {
           <input
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
-            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+            className="mt-2 w-full rounded-2xl bg-lavender-100 px-4 py-3 outline-none"
           />
         </label>
-        <button type="submit" disabled={loading} className="rounded-full bg-black px-6 py-3 text-white">
+        <button type="submit" disabled={loading} className="rounded-full bg-brand px-6 py-3 text-white">
           Save profile
         </button>
       </form>
@@ -99,7 +99,7 @@ export const Profiledetails = () => {
             type="password"
             value={currentPassword}
             onChange={(event) => setCurrentPassword(event.target.value)}
-            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+            className="mt-2 w-full rounded-2xl bg-lavender-100 px-4 py-3 outline-none"
           />
         </label>
         <label className="block text-sm font-medium">
@@ -108,10 +108,10 @@ export const Profiledetails = () => {
             type="password"
             value={nextPassword}
             onChange={(event) => setNextPassword(event.target.value)}
-            className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-3 outline-none"
+            className="mt-2 w-full rounded-2xl bg-lavender-100 px-4 py-3 outline-none"
           />
         </label>
-        <button type="submit" disabled={loading} className="rounded-full bg-black px-6 py-3 text-white">
+        <button type="submit" disabled={loading} className="rounded-full bg-brand px-6 py-3 text-white">
           Update password
         </button>
       </form>

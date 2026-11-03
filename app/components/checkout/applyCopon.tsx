@@ -40,13 +40,13 @@ export const ApplyCoupon = ({ subtotal }: { subtotal: number }) => {
           value={code}
           onChange={(event) => setCode(event.target.value.toUpperCase())}
           placeholder="WELCOME20"
-          className="h-12 w-full rounded-xl border bg-gray-50 px-4 outline-none focus:border-black"
+          className="h-12 w-full rounded-xl border bg-lavender-50 px-4 outline-none focus:border-brand"
         />
         <button
           type="button"
           onClick={() => void apply()}
           disabled={loading}
-          className="h-12 rounded-xl bg-black px-6 text-sm font-semibold text-white disabled:opacity-70"
+          className="h-12 rounded-xl bg-brand px-6 text-sm font-semibold text-white disabled:opacity-70"
         >
           {loading ? 'Checking...' : 'Apply'}
         </button>

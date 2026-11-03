@@ -224,7 +224,7 @@ export const PaymentMethods = () => {
           }}
           className="
           rounded-full
-          bg-black
+          bg-brand
           px-4
           py-2
           sm:px-6
@@ -233,7 +233,7 @@ export const PaymentMethods = () => {
           sm:text-base
           text-white
           transition
-          hover:bg-gray-800
+          hover:bg-brand-dark
           w-full
           sm:w-auto
           "
@@ -540,7 +540,7 @@ export const PaymentMethods = () => {
               key={method}
               className="
               rounded-full
-              bg-gray-100
+              bg-lavender-100
               px-3
               sm:px-5
               py-1.5
@@ -566,7 +566,7 @@ export const PaymentMethods = () => {
         flex
         items-center
         justify-center
-        bg-black/50
+        bg-brand/50
         p-3
         sm:p-5
         "
@@ -678,7 +678,7 @@ export const PaymentMethods = () => {
             outline-none
 
             ${
-              errors.cardHolder ? 'border-red-500' : 'border-gray-300 focus:ring-2 focus:ring-black'
+              errors.cardHolder ? 'border-red-500' : 'border-gray-300 focus:ring-2 focus:ring-brand'
             }
 
             `}
@@ -733,7 +733,7 @@ export const PaymentMethods = () => {
             outline-none
 
             ${
-              errors.cardNumber ? 'border-red-500' : 'border-gray-300 focus:ring-2 focus:ring-black'
+              errors.cardNumber ? 'border-red-500' : 'border-gray-300 focus:ring-2 focus:ring-brand'
             }
 
             `}
@@ -797,7 +797,7 @@ export const PaymentMethods = () => {
               sm:text-base
               outline-none
               focus:ring-2
-              focus:ring-black
+              focus:ring-brand
               "
                   />
                 </div>
@@ -833,7 +833,7 @@ export const PaymentMethods = () => {
               sm:text-base
               outline-none
               focus:ring-2
-              focus:ring-black
+              focus:ring-brand
               "
                   >
                     <option value="Visa">Visa</option>
@@ -902,7 +902,7 @@ export const PaymentMethods = () => {
             sm:py-3
             text-sm
             sm:text-base
-            hover:bg-gray-100
+            hover:bg-lavender-100
             "
               >
                 Cancel
@@ -912,7 +912,7 @@ export const PaymentMethods = () => {
                 onClick={handleSaveCard}
                 className="
             rounded-xl
-            bg-black
+            bg-brand
             px-6
             sm:px-8
             py-2
@@ -920,7 +920,7 @@ export const PaymentMethods = () => {
             text-sm
             sm:text-base
             text-white
-            hover:bg-gray-800
+            hover:bg-brand-dark
             "
               >
                 {editingId ? 'Update Card' : 'Save Card'}

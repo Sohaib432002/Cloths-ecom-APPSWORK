@@ -40,7 +40,7 @@ export const VerifyEmailForm = () => {
       <button
         type="submit"
         disabled={loading || !token}
-        className="w-full rounded-full bg-black py-4 font-semibold text-white disabled:opacity-70"
+        className="w-full rounded-full bg-brand py-4 font-semibold text-white disabled:opacity-70"
       >
         {loading ? 'Verifying...' : 'Verify Email'}
       </button>

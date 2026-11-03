@@ -4,8 +4,8 @@ import { jsonOk } from '@/lib/http'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const result = searchCatalog(queryFromSearchParams(searchParams))
-  const summary = getCatalogSummary()
+  const result = await searchCatalog(queryFromSearchParams(searchParams))
+  const summary = await getCatalogSummary()
 
   return jsonOk({
     products: result.items,

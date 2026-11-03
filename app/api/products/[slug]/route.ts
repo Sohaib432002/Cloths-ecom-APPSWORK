@@ -8,7 +8,7 @@ type Params = {
 
 export async function GET(_request: Request, { params }: Params) {
   const { slug } = await params
-  const product = getProductBySlug(slug)
+  const product = await getProductBySlug(slug)
 
   if (!product) {
     return jsonError('Product not found.', 404, 'NOT_FOUND')
@@ -16,7 +16,7 @@ export async function GET(_request: Request, { params }: Params) {
 
   return jsonOk({
     product,
-    related: getRelatedProducts(product),
-    reviews: getReviewsForProduct(product.slug),
+    related: await getRelatedProducts(product),
+    reviews: await getReviewsForProduct(product.id),
   })
 }

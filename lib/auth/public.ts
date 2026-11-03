@@ -1,4 +1,4 @@
 export const demoCredentials = {
-  email: 'demo@shop.co',
-  password: 'ShopCo123!',
+  email: 'demo@veora.com',
+  password: 'Veora123!',
 }

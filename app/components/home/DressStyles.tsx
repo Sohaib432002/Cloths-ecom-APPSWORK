@@ -26,7 +26,7 @@ const Customstyles = () => {
 
   return (
     <section className="my-20">
-      <div className="max-w-310 mx-auto bg-[#F2F0F1] rounded-3xl p-5 md:p-8">
+      <div className="max-w-310 mx-auto bg-[#F4F0FF] rounded-3xl p-5 md:p-8">
         <h1 className="text-center text-3xl sm:text-4xl lg:text-5xl font-black mb-10">
           BROWSE BY DRESS STYLE
         </h1>

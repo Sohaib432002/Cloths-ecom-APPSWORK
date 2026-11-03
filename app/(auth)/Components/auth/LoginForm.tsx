@@ -39,7 +39,7 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-      <p className="rounded-2xl bg-gray-50 px-4 py-3 text-sm text-gray-600">
+      <p className="rounded-2xl bg-lavender-50 px-4 py-3 text-sm text-gray-600">
         Demo account: <strong>{demoCredentials.email}</strong> / <strong>{demoCredentials.password}</strong>
       </p>
       <div>
@@ -52,7 +52,7 @@ export const LoginForm = () => {
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className="w-full rounded-full bg-[#F5F5F5] px-6 py-4 outline-none ring-black focus:ring-2"
+          className="w-full rounded-full bg-[#F5F5F5] px-6 py-4 outline-none ring-brand focus:ring-2"
         />
       </div>
       <div>
@@ -66,7 +66,7 @@ export const LoginForm = () => {
             required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="w-full rounded-full bg-[#F5F5F5] px-6 py-4 pr-14 outline-none ring-black focus:ring-2"
+            className="w-full rounded-full bg-[#F5F5F5] px-6 py-4 pr-14 outline-none ring-brand focus:ring-2"
           />
           <button
             type="button"
@@ -87,7 +87,7 @@ export const LoginForm = () => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-full bg-black py-4 font-semibold text-white hover:bg-gray-800 disabled:opacity-70"
+        className="w-full rounded-full bg-brand py-4 font-semibold text-white hover:bg-brand-dark disabled:opacity-70"
       >
         {loading ? 'Signing in...' : 'Sign In'}
       </button>

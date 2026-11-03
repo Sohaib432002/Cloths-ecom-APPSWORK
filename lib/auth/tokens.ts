@@ -1,26 +1,29 @@
-type TokenRecord = {
-  email: string
-  type: 'reset' | 'verify'
-  expiresAt: number
-}
+import { getDb } from '@/lib/db/client'
 
-const tokens = new Map<string, TokenRecord>()
+type TokenType = 'reset' | 'verify'
 
-export function createAccountToken(email: string, type: TokenRecord['type'], ttlMs = 1000 * 60 * 30) {
+export async function createAccountToken(userId: string, type: TokenType, ttlMs = 1000 * 60 * 30) {
+  const db = await getDb()
   const token = crypto.randomUUID().replace(/-/g, '')
-  tokens.set(token, {
-    email: email.trim().toLowerCase(),
-    type,
-    expiresAt: Date.now() + ttlMs,
-  })
+  await db.batch(
+    [
+      { sql: 'DELETE FROM auth_tokens WHERE expires_at < ?', args: [Date.now()] },
+      {
+        sql: 'INSERT INTO auth_tokens (token, user_id, type, expires_at) VALUES (?, ?, ?, ?)',
+        args: [token, userId, type, Date.now() + ttlMs],
+      },
+    ],
+    'write'
+  )
   return token
 }
 
-export function consumeAccountToken(token: string, type: TokenRecord['type']) {
-  const record = tokens.get(token)
-  if (!record || record.type !== type || record.expiresAt < Date.now()) {
-    return null
-  }
-  tokens.delete(token)
-  return record.email
+/** Returns the owning user id and deletes the token, or null when it is unknown, wrong-typed or expired. */
+export async function consumeAccountToken(token: string, type: TokenType) {
+  const db = await getDb()
+  const result = await db.execute({
+    sql: 'DELETE FROM auth_tokens WHERE token = ? AND type = ? AND expires_at >= ? RETURNING user_id',
+    args: [token, type, Date.now()],
+  })
+  return result.rows.length ? String(result.rows[0].user_id) : null
 }

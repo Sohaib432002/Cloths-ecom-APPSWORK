@@ -1,173 +1,58 @@
 'use client'
 
 import { useRef } from 'react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import ReviewCard from '../common/ReviewCard'
-import { CustommerReviews } from '../../lib/data/Reviews'
+import SectionHeading from './SectionHeading'
 
-const Reviews = () => {
+type HomeReview = {
+  id: number
+  name: string
+  rating: number
+  verified: boolean
+  review: string
+  product: string
+  slug: string
+}
+
+const Reviews = ({ reviews }: { reviews: HomeReview[] }) => {
   const sliderRef = useRef<HTMLDivElement>(null)
+  const scroll = (direction: 1 | -1) => sliderRef.current?.scrollBy({ left: direction * 360, behavior: 'smooth' })
 
-  const scrollLeft = () => {
-    sliderRef.current?.scrollBy({
-      left: -380,
-      behavior: 'smooth',
-    })
-  }
+  if (!reviews.length) return null
 
-  const scrollRight = () => {
-    sliderRef.current?.scrollBy({
-      left: 380,
-      behavior: 'smooth',
-    })
-  }
+  const arrow =
+    'flex h-10 w-10 items-center justify-center rounded-full border border-lavender-200 bg-white text-black transition hover:border-brand hover:bg-brand hover:text-white'
 
   return (
-    <section className="mx-auto max-w-310  py-12  lg:py-20">
-      {/* Header */}
-
-      <div className="mb-8 flex items-end justify-between gap-4">
-        <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-gray-500 sm:text-sm">
-            Testimonials
-          </p>
-
-          <h2 className="text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
-            OUR HAPPY
-            <br className="hidden sm:block" />
-            CUSTOMERS
-          </h2>
+    <section className="mx-auto max-w-310">
+      <div className="flex items-end justify-between gap-4">
+        <div className="flex-1">
+          <SectionHeading eyebrow="Customer love" title="What shoppers are saying" />
         </div>
-
-        {/* Navigation */}
-
-        <div className="hidden items-center gap-3 sm:flex">
-          <button
-            onClick={scrollLeft}
-            aria-label="Previous reviews"
-            className="
-              flex
-              h-11
-              w-11
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-gray-200
-              bg-white
-              text-xl
-              shadow-sm
-              transition-all
-              duration-300
-              hover:-translate-x-1
-              hover:bg-black
-              hover:text-white
-            "
-          >
-            ←
+        <div className="mb-8 flex gap-2">
+          <button type="button" onClick={() => scroll(-1)} aria-label="Previous reviews" className={arrow}>
+            <ArrowLeft size={16} />
           </button>
-
-          <button
-            onClick={scrollRight}
-            aria-label="Next reviews"
-            className="
-              flex
-              h-11
-              w-11
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-gray-200
-              bg-white
-              text-xl
-              shadow-sm
-              transition-all
-              duration-300
-              hover:translate-x-1
-              hover:bg-black
-              hover:text-white
-            "
-          >
-            →
+          <button type="button" onClick={() => scroll(1)} aria-label="Next reviews" className={arrow}>
+            <ArrowRight size={16} />
           </button>
         </div>
       </div>
 
-      {/* Reviews Slider */}
-
-      <div className="relative">
-        {/* Left Blur */}
-
-        {/* <div className="pointer-events-none absolute left-0 top-0 z-10 hidden h-full w-24 bg-gradient-to-r from-white to-transparent lg:block" /> */}
-
-        {/* Right Blur */}
-
-        {/* <div className="pointer-events-none absolute right-0 top-0 z-10 hidden h-full w-24 bg-gradient-to-l from-white to-transparent lg:block" /> */}
-
-        <div
-          ref={sliderRef}
-          className="
-            flex
-            gap-4
-            overflow-x-auto
-            scroll-smooth
-            pb-4
-            scrollbar-hide
-            sm:gap-3
-          "
-        >
-          {CustommerReviews.map((review) => (
-            <div
-              key={review.id}
-              className="
-                w-[80%]
-                shrink-0
-                sm:w-[400px]
-                lg:w-[400px]
-              "
-            >
-              <ReviewCard name={review.name} review={review.review} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Mobile Buttons */}
-
-      <div className="mt-8 flex justify-center gap-4 sm:hidden">
-        <button
-          onClick={scrollLeft}
-          className="
-            flex
-            h-11
-            w-11
-            items-center
-            justify-center
-            rounded-full
-            bg-black
-            text-lg
-            text-white
-          "
-        >
-          ←
-        </button>
-
-        <button
-          onClick={scrollRight}
-          className="
-            flex
-            h-11
-            w-11
-            items-center
-            justify-center
-            rounded-full
-            bg-black
-            text-lg
-            text-white
-          "
-        >
-          →
-        </button>
+      <div ref={sliderRef} className="flex gap-4 overflow-x-auto scroll-smooth pb-2 scrollbar-hide">
+        {reviews.map((review) => (
+          <div key={review.id} className="w-[82%] shrink-0 sm:w-[340px]">
+            <ReviewCard
+              name={review.name}
+              review={review.review}
+              rating={review.rating}
+              verified={review.verified}
+              product={review.product}
+              slug={review.slug}
+            />
+          </div>
+        ))}
       </div>
     </section>
   )

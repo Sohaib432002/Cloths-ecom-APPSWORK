@@ -56,7 +56,7 @@ export const OrderSummary = ({
           </span>
         </div>
       </div>
-      <div className="mt-6 rounded-2xl bg-gray-50 p-4">
+      <div className="mt-6 rounded-2xl bg-lavender-50 p-4">
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold">Total</span>
           <span className="text-2xl font-bold">{formatMoney(total)}</span>

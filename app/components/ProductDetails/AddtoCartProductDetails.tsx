@@ -42,7 +42,7 @@ export const ProductAddtoCartDetails = ({ product, ProductSpecifications }: Prop
 
   return (
     <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
-      <div className="flex h-12 w-full items-center justify-between rounded-full bg-gray-100 px-5 sm:w-40">
+      <div className="flex h-12 w-full items-center justify-between rounded-full bg-lavender-100 px-5 sm:w-40">
         <button
           type="button"
           aria-label="Decrease quantity"
@@ -65,7 +65,7 @@ export const ProductAddtoCartDetails = ({ product, ProductSpecifications }: Prop
         type="button"
         onClick={handleAddToCart}
         className={`flex h-12 w-full items-center justify-center gap-2 rounded-full text-sm font-semibold text-white sm:flex-1 ${
-          cartItem ? 'bg-emerald-700' : 'bg-black hover:bg-gray-800'
+          cartItem ? 'bg-emerald-700' : 'bg-brand hover:bg-brand-dark'
         }`}
       >
         {cartItem ? <Check size={16} /> : <ShoppingCart size={16} />}

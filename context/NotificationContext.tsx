@@ -51,7 +51,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     const welcome: AppNotification = {
       id: 'welcome',
       title: 'Your personal stylist is live',
-      body: 'Describe an occasion and get a complete outfit from the SHOP.CO catalog.',
+      body: 'Describe an occasion and get a complete outfit from the Véora catalog.',
       href: '/stylist',
       read: readIds.includes('welcome'),
       createdAt: new Date().toISOString(),

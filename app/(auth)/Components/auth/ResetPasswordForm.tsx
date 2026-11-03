@@ -47,7 +47,7 @@ export const ResetPasswordForm = () => {
           required
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+          className="w-full rounded-full bg-[#F4F0FF] px-5 py-4 outline-none"
         />
       </div>
       <div>
@@ -60,14 +60,14 @@ export const ResetPasswordForm = () => {
           required
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
-          className="w-full rounded-full bg-[#F0F0F0] px-5 py-4 outline-none"
+          className="w-full rounded-full bg-[#F4F0FF] px-5 py-4 outline-none"
         />
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button
         type="submit"
         disabled={loading || !token}
-        className="w-full rounded-full bg-black py-4 font-semibold text-white disabled:opacity-70"
+        className="w-full rounded-full bg-brand py-4 font-semibold text-white disabled:opacity-70"
       >
         {loading ? 'Updating...' : 'Reset Password'}
       </button>
