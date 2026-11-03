@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { FaWhatsapp } from 'react-icons/fa6'
+import { SITE, telLink, whatsappLink } from '@/lib/site'
 
 export const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -129,7 +131,7 @@ export const ContactUs = () => {
 
           md:grid-cols-2
 
-          lg:grid-cols-2
+          lg:grid-cols-3
           lg:gap-8
           "
         >
@@ -199,6 +201,26 @@ export const ContactUs = () => {
             </p>
           </div>
 
+          {/* Call & WhatsApp */}
+          <div className="rounded-3xl bg-white p-5 shadow-sm transition hover:shadow-xl sm:p-8">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-xl text-white sm:h-16 sm:w-16 sm:text-2xl">
+              📞
+            </div>
+            <h2 className="mt-6 text-xl font-bold sm:mt-8 sm:text-2xl">Call or WhatsApp</h2>
+            <p className="mt-3 text-sm text-gray-500 sm:mt-4 sm:text-base">
+              <a href={telLink} className="hover:text-brand">
+                {SITE.phoneDisplay}
+              </a>
+            </p>
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white"
+            >
+              <FaWhatsapp size={18} /> Chat on WhatsApp
+            </a>
+          </div>
           {/* Email */}
 
           <div

@@ -25,11 +25,33 @@ export default async function Page({ params }: Props) {
   const product = await getProductBySlug(ProductSlug)
   if (!product) notFound()
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    image: product.gallery,
+    sku: product.sku,
+    brand: { '@type': 'Brand', name: product.brand },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: product.price,
+      availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+    },
+    ...(product.reviews > 0
+      ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: product.rating, reviewCount: product.reviews } }
+      : {}),
+  }
+
   return (
-    <ProductDetailsParaent
-      product={product}
-      related={await getRelatedProducts(product)}
-      reviews={await getReviewsForProduct(product.id)}
-    />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+      <ProductDetailsParaent
+        product={product}
+        related={await getRelatedProducts(product)}
+        reviews={await getReviewsForProduct(product.id)}
+      />
+    </>
   )
 }

@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { FaFacebookF, FaInstagram, FaPinterestP, FaTiktok, FaXTwitter } from 'react-icons/fa6'
+import { ArrowRight, Mail, Phone } from 'lucide-react'
+import { FaFacebookF, FaInstagram, FaPinterestP, FaTiktok, FaWhatsapp, FaXTwitter } from 'react-icons/fa6'
+import { SITE, mailLink, telLink, whatsappLink } from '@/lib/site'
 import { apiFetch } from '@/lib/client/api'
 import Logo from './Logo'
 
@@ -32,6 +33,7 @@ const groups = [
       { href: '/help#returns', label: 'Returns & Exchanges' },
       { href: '/help#faq', label: 'FAQs' },
       { href: '/contact', label: 'Support' },
+      { href: '/track', label: 'Track Order' },
     ],
   },
 ]
@@ -64,7 +66,24 @@ const Footer = () => {
       <div className="mx-auto grid max-w-310 gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.6fr] lg:px-6">
         <div>
           <Logo />
-          <p className="mt-4 max-w-xs text-sm leading-6 text-gray-500">Fashion Today. Confidence Tomorrow.</p>
+          <p className="mt-4 max-w-xs text-sm leading-6 text-gray-500">{SITE.tagline}</p>
+          <ul className="mt-5 space-y-2.5 text-sm text-gray-600">
+            <li>
+              <a href={telLink} className="inline-flex items-center gap-2.5 hover:text-brand">
+                <Phone size={15} className="text-brand" /> {SITE.phoneDisplay}
+              </a>
+            </li>
+            <li>
+              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 hover:text-brand">
+                <FaWhatsapp size={16} className="text-[#25D366]" /> Chat on WhatsApp
+              </a>
+            </li>
+            <li>
+              <a href={mailLink} className="inline-flex items-center gap-2.5 break-all hover:text-brand">
+                <Mail size={15} className="text-brand" /> {SITE.email}
+              </a>
+            </li>
+          </ul>
         </div>
 
         {groups.map((group) => (

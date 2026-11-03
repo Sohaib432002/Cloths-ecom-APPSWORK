@@ -27,7 +27,7 @@ export const CheckoutParenet = () => {
     phone: '',
     address: '',
     city: '',
-    country: 'United States',
+    country: 'Pakistan',
     zipCode: '',
   })
   const [errors, setErrors] = useState<Record<string, string>>({})

@@ -74,7 +74,7 @@ export const checkoutSchema = z.object({
   phone: z.string().min(7, 'Enter a valid phone number.'),
   address: z.string().min(5, 'Enter your street address.'),
   city: z.string().min(2, 'City is required.'),
-  country: z.string().min(2).default('United States'),
+  country: z.string().min(2).default('Pakistan'),
   zipCode: z.string().min(3, 'Postal code is required.'),
   paymentMethod: z.enum(['cod', 'card', 'paypal']),
   couponCode: z.string().optional(),

@@ -10,7 +10,8 @@ import { OrdersProvider } from '@/context/OrdersContext'
 import { NotificationProvider } from '@/context/NotificationContext'
 import { AuthProvider } from '@/context/AuthContext'
 import { getCurrentUser } from '@/lib/auth/session'
-import { StylistLauncher } from './components/stylist/StylistChat'
+import SupportWidget from './components/common/SupportWidget'
+import TopBar from './components/common/TopBar'
 
 const jakarta = Plus_Jakarta_Sans({
   variable: '--font-jakarta',
@@ -48,12 +49,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <OrdersProvider>
               <NotificationProvider>
                 <WishlistProvider>
+                  <TopBar />
                   <Suspense fallback={null}>
                     <Navbar />
                   </Suspense>
                   <main id="main-content" className="px-4 lg:px-6">{children}</main>
                   <Footer />
-                  <StylistLauncher />
+                  <SupportWidget />
                 </WishlistProvider>
               </NotificationProvider>
             </OrdersProvider>

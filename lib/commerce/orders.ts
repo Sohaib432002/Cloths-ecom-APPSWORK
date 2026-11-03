@@ -1,7 +1,9 @@
 import { randomInt } from 'node:crypto'
+import type { InStatement } from '@libsql/client'
 import { getDb } from '@/lib/db/client'
 import { getOrderTotals, paymentLabel } from './pricing'
 import { validateCoupon } from './coupons'
+import { stripeEnabled } from '@/lib/payments/stripe'
 import type { AppliedCoupon, PaymentMethodId, SessionUser } from '@/types/product'
 
 export type CheckoutInput = {
@@ -33,8 +35,17 @@ function newOrderId() {
   return `ORD-${suffix}`
 }
 
+export const ORDER_STATUSES = ['Pending payment', 'Processing', 'Shipped', 'Delivered', 'Cancelled'] as const
+
 export async function createOrder(input: CheckoutInput, user: SessionUser | null) {
   const db = await getDb()
+
+  if (input.paymentMethod === 'paypal') {
+    throw new OrderError('PayPal is not available. Please choose another payment method.', 'PAYMENT')
+  }
+  if (input.paymentMethod === 'card' && !stripeEnabled()) {
+    throw new OrderError('Card payments are not available yet. Please choose Cash on Delivery.', 'PAYMENT')
+  }
 
   // merge duplicate lines of the same product so stock is checked against the total quantity
   const wanted = new Map<number, number>()
@@ -86,7 +97,8 @@ export async function createOrder(input: CheckoutInput, user: SessionUser | null
   const id = newOrderId()
   const createdAt = new Date().toISOString()
   const shippingLabel = totals.deliveryFee === 0 ? 'Free Shipping' : 'Standard Shipping'
-  const paymentStatus = input.paymentMethod === 'cod' ? 'Pending' : 'Paid'
+  const paymentStatus = input.paymentMethod === 'cod' ? 'Pending' : 'Awaiting payment'
+  const status = input.paymentMethod === 'cod' ? 'Processing' : 'Pending payment'
 
   try {
     await db.batch(
@@ -95,9 +107,9 @@ export async function createOrder(input: CheckoutInput, user: SessionUser | null
           sql: `INSERT INTO orders (id, user_id, email, status, payment_method, payment_status, shipping_label,
                   ship_name, ship_phone, ship_address, ship_city, ship_country, ship_zip, coupon_code,
                   subtotal, discount, delivery_fee, total, created_at)
-                VALUES (?, ?, ?, 'Processing', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           args: [
-            id, user?.id ?? null, input.email.trim().toLowerCase(), input.paymentMethod, paymentStatus, shippingLabel,
+            id, user?.id ?? null, input.email.trim().toLowerCase(), status, input.paymentMethod, paymentStatus, shippingLabel,
             `${input.firstName} ${input.lastName}`.trim(), input.phone, input.address, input.city, input.country,
             input.zipCode, coupon?.code ?? null, totals.subtotal, totals.discount, totals.deliveryFee, totals.total, createdAt,
           ],
@@ -162,12 +174,12 @@ function toOrder(row: Record<string, unknown>, items: Record<string, unknown>[])
   }
 }
 
-async function loadOrders(where: string, args: (string | number)[]) {
+async function loadOrders(where: string, args: (string | number)[], limit = 500) {
   const db = await getDb()
   const orders = await db.execute({
     sql: `SELECT o.*, c.label AS coupon_label, c.type AS coupon_type, c.value AS coupon_value
           FROM orders o LEFT JOIN coupons c ON c.code = o.coupon_code
-          ${where} ORDER BY o.created_at DESC`,
+          ${where} ORDER BY o.created_at DESC LIMIT ${limit}`,
     args,
   })
   if (!orders.rows.length) return []
@@ -197,3 +209,42 @@ export async function listOrdersForUser(userId: string) {
 }
 
 export type OrderRecord = Awaited<ReturnType<typeof getOrderById>>
+
+export async function markOrderPaid(id: string) {
+  const db = await getDb()
+  const result = await db.execute({
+    sql: "UPDATE orders SET payment_status = 'Paid', status = 'Processing' WHERE id = ? AND payment_status != 'Paid'",
+    args: [id],
+  })
+  return result.rowsAffected > 0
+}
+
+export async function updateOrderStatus(id: string, status: (typeof ORDER_STATUSES)[number]) {
+  const db = await getDb()
+  const current = await db.execute({ sql: 'SELECT status FROM orders WHERE id = ?', args: [id] })
+  if (!current.rows.length) return false
+
+  const statements: InStatement[] = [
+    {
+      sql: `UPDATE orders SET status = ?,
+              payment_status = CASE WHEN ? = 'Delivered' AND payment_method = 'cod' THEN 'Paid' ELSE payment_status END
+            WHERE id = ?`,
+      args: [status, status, id],
+    },
+  ]
+  if (status === 'Cancelled' && current.rows[0].status !== 'Cancelled') {
+    // put the reserved units back on the shelf
+    statements.push({
+      sql: `UPDATE products SET stock = stock + COALESCE(
+              (SELECT SUM(quantity) FROM order_items WHERE order_id = ? AND product_id = products.id), 0)
+            WHERE id IN (SELECT product_id FROM order_items WHERE order_id = ?)`,
+      args: [id, id],
+    })
+  }
+  await db.batch(statements, 'write')
+  return true
+}
+
+export async function listAllOrders(limit = 100) {
+  return loadOrders(`WHERE 1 = 1`, [], limit)
+}

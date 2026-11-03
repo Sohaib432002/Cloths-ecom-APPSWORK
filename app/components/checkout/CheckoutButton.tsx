@@ -62,11 +62,11 @@ export const CheckoutButton = ({
 
     setLoading(true)
     try {
-      const data = await apiFetch<{ order: Order }>('/api/orders', {
+      const data = await apiFetch<{ order: Order; checkoutUrl?: string }>('/api/orders', {
         method: 'POST',
         body: JSON.stringify({
           ...formData,
-          country: formData.country || 'United States',
+          country: formData.country || 'Pakistan',
           paymentMethod,
           couponCode: coupon?.code,
           // the server prices every line itself, so only ids and options are sent
@@ -79,6 +79,11 @@ export const CheckoutButton = ({
         }),
       })
       addOrder(data.order)
+      if (data.checkoutUrl) {
+        // card payment: the cart is cleared on the success page once Stripe confirms the charge
+        window.location.href = data.checkoutUrl
+        return
+      }
       clearCart()
       router.push(`/checkout/orderSuccess?orderId=${data.order.id}`)
     } catch (err) {
@@ -110,7 +115,7 @@ export const CheckoutButton = ({
             : 'bg-brand text-white hover:bg-brand-dark'
         }`}
       >
-        {loading ? 'Placing order...' : 'Place Order'}
+        {loading ? 'Please wait...' : paymentMethod === 'card' ? 'Pay securely' : 'Place Order'}
         {!loading && <FaArrowRight />}
       </button>
     </div>

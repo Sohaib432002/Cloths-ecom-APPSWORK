@@ -30,10 +30,18 @@ export function StylistChat({
   compact = false,
   productSlug,
   initialPrompt,
+  endpoint = '/api/stylist',
+  prompts = PROMPTS,
+  greeting = 'Tell me the occasion, weather, or vibe. I will build an outfit from live Véora pieces.',
+  placeholder = 'Black tie dinner, rainy commute, gym-to-brunch...',
 }: {
   compact?: boolean
   productSlug?: string
   initialPrompt?: string
+  endpoint?: string
+  prompts?: string[]
+  greeting?: string
+  placeholder?: string
 }) {
   const [input, setInput] = useState(initialPrompt || '')
   const [loading, setLoading] = useState(false)
@@ -41,8 +49,7 @@ export function StylistChat({
   const [messages, setMessages] = useState<ChatItem[]>([
     {
       role: 'assistant',
-      content:
-        'Tell me the occasion, weather, or vibe. I will build an outfit from live Véora pieces.',
+      content: greeting,
     },
   ])
   const endRef = useRef<HTMLDivElement>(null)
@@ -64,7 +71,7 @@ export function StylistChat({
         role: item.role,
         content: item.content,
       }))
-      const data = await apiFetch<StylistResponse>('/api/stylist', {
+      const data = await apiFetch<StylistResponse>(endpoint, {
         method: 'POST',
         body: JSON.stringify({ message, productSlug, history }),
       })
@@ -112,18 +119,22 @@ export function StylistChat({
             )}
           </div>
         ))}
-        {loading && <p className="text-sm text-gray-500">Styling your look...</p>}
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {loading && <p className="text-sm text-gray-500">Typing...</p>}
+        {error && (
+          <p role="alert" className="text-sm text-red-600">
+            {error}
+          </p>
+        )}
         <div ref={endRef} />
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {PROMPTS.map((prompt) => (
+      <div className={`mt-4 flex gap-2 ${compact ? "overflow-x-auto pb-1 scrollbar-hide" : "flex-wrap"}`}>
+        {prompts.map((prompt) => (
           <button
             key={prompt}
             type="button"
             onClick={() => send(prompt)}
-            className="rounded-full border px-3 py-1.5 text-xs hover:bg-lavender-50"
+            className="shrink-0 rounded-full border border-lavender-200 px-3 py-1.5 text-xs hover:bg-lavender-50"
           >
             {prompt}
           </button>
@@ -135,7 +146,7 @@ export function StylistChat({
           event.preventDefault()
           void send()
         }}
-        className="mt-4 flex items-center gap-2 rounded-full border bg-white px-3 py-2"
+        className="mt-4 flex items-center gap-2 rounded-full border border-lavender-200 bg-white px-3 py-2"
       >
         <Sparkles size={16} className="text-gray-500" />
         <label htmlFor="stylist-input" className="sr-only">
@@ -145,7 +156,7 @@ export function StylistChat({
           id="stylist-input"
           value={input}
           onChange={(event) => setInput(event.target.value)}
-          placeholder="Black tie dinner, rainy commute, gym-to-brunch..."
+          placeholder={placeholder}
           className="w-full bg-transparent text-sm outline-none"
         />
         <button

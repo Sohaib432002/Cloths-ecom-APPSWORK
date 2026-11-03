@@ -1,6 +1,8 @@
 import { getDb } from '@/lib/db/client'
 import { getClientIp, jsonError, jsonOk, logEvent, readJson } from '@/lib/http'
 import { rateLimit } from '@/lib/rate-limit'
+import { emailLayout, escapeHtml, sendEmail } from '@/lib/notify'
+import { SITE } from '@/lib/site'
 import { contactSchema } from '@/lib/validation'
 
 export async function POST(request: Request) {
@@ -21,6 +23,17 @@ export async function POST(request: Request) {
     args: [name, email, subject, message, new Date().toISOString()],
   })
   logEvent('contact.received', { email, subject })
+
+  await sendEmail({
+    to: SITE.email,
+    replyTo: email,
+    subject: `Website message: ${subject}`,
+    html: emailLayout(
+      subject,
+      `<p style="font-size:14px;line-height:22px"><strong>${escapeHtml(name)}</strong> (${escapeHtml(email)})</p>
+<p style="font-size:14px;line-height:22px;white-space:pre-wrap">${escapeHtml(message)}</p>`
+    ),
+  })
 
   return jsonOk({
     message: 'Thanks for writing in. A Véora specialist will reply within one business day.',
