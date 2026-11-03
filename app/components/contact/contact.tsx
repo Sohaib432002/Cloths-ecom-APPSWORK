@@ -129,7 +129,7 @@ export const ContactUs = () => {
 
           md:grid-cols-2
 
-          lg:grid-cols-3
+          lg:grid-cols-2
           lg:gap-8
           "
         >
@@ -193,63 +193,10 @@ export const ContactUs = () => {
               sm:leading-7
               "
             >
-              25 Business Avenue,
+              Online store,
               <br />
-              Lahore, Pakistan
+              serving customers worldwide
             </p>
-          </div>
-
-          {/* Call */}
-
-          <div
-            className="
-            rounded-3xl
-            bg-white
-            p-5
-
-            sm:p-8
-
-            shadow-sm
-            transition
-            hover:shadow-xl
-            "
-          >
-            <div
-              className="
-              flex
-              h-14
-              w-14
-              items-center
-              justify-center
-              rounded-full
-              bg-brand
-              text-xl
-              text-white
-
-              sm:h-16
-              sm:w-16
-              sm:text-2xl
-              "
-            >
-              📞
-            </div>
-
-            <h2
-              className="
-              mt-6
-              text-xl
-              font-bold
-
-              sm:text-2xl
-              sm:mt-8
-              "
-            >
-              Call Us
-            </h2>
-
-            <p className="mt-3 text-sm text-gray-500 sm:mt-4 sm:text-base">+92 300 1234567</p>
-
-            <p className="text-sm text-gray-500 sm:text-base">+92 321 9876543</p>
           </div>
 
           {/* Email */}
@@ -300,9 +247,9 @@ export const ContactUs = () => {
               Email
             </h2>
 
-            <p className="mt-3 text-sm text-gray-500 sm:mt-4 sm:text-base">support@veora.com</p>
+            <p className="mt-3 text-sm text-gray-500 sm:mt-4 sm:text-base">sohaibmaqsoodsohaibmaqsood@gmail.com</p>
 
-            <p className="text-sm text-gray-500 sm:text-base">contact@veora.com</p>
+            <p className="text-sm text-gray-500 sm:text-base">sohaibmaqsoodsohaibmaqsood@gmail.com</p>
           </div>
         </div>
       </section>
@@ -603,23 +550,17 @@ export const ContactUs = () => {
                     title: 'Office Address',
                     text: (
                       <>
-                        123 Business Avenue,
+                        Online store,
                         <br />
-                        London, United Kingdom
+                        serving customers worldwide
                       </>
                     ),
                   },
 
                   {
-                    icon: '📞',
-                    title: 'Phone Number',
-                    text: '+44 1234 567890',
-                  },
-
-                  {
                     icon: '✉️',
                     title: 'Email Address',
-                    text: 'support@veora.com',
+                    text: 'sohaibmaqsoodsohaibmaqsood@gmail.com',
                   },
 
                   {
@@ -836,13 +777,16 @@ export const ContactUs = () => {
                 </p>
 
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                  <button className="rounded-full bg-white px-8 py-3 font-semibold text-black">
-                    Start Live Chat
-                  </button>
+                  <a
+                    href="mailto:sohaibmaqsoodsohaibmaqsood@gmail.com"
+                    className="rounded-full bg-white px-8 py-3 text-center font-semibold text-black"
+                  >
+                    Email Support
+                  </a>
 
-                  <button className="rounded-full border border-white px-8 py-3">
-                    Call Support
-                  </button>
+                  <a href="/stylist" className="rounded-full border border-white px-8 py-3 text-center">
+                    Ask the AI Stylist
+                  </a>
                 </div>
               </div>
 

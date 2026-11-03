@@ -236,13 +236,13 @@ const TermsConditions = () => {
             <div>
               <p className="text-xs text-gray-400 sm:text-sm">Email</p>
 
-              <p className="text-sm font-semibold sm:text-base">support@veora.com</p>
+              <p className="text-sm font-semibold sm:text-base">sohaibmaqsoodsohaibmaqsood@gmail.com</p>
             </div>
 
             <div>
-              <p className="text-xs text-gray-400 sm:text-sm">Phone</p>
+              <p className="text-xs text-gray-400 sm:text-sm">Response time</p>
 
-              <p className="text-sm font-semibold sm:text-base">+1 (234) 567-890</p>
+              <p className="text-sm font-semibold sm:text-base">Reply by email within one business day</p>
             </div>
 
             <div>
