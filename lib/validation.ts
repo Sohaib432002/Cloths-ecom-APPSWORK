@@ -106,3 +106,14 @@ export const reviewSchema = z.object({
 export const wishlistSchema = z.object({
   productIds: z.array(z.number().int().positive()).max(200),
 })
+
+export const addressSchema = z.object({
+  label: z.string().trim().min(1, 'Give the address a name, like Home.').max(30),
+  fullName: z.string().trim().min(2, 'Enter the recipient name.').max(80),
+  phone: z.string().trim().min(7, 'Enter a valid phone number.').max(25),
+  address: z.string().trim().min(5, 'Enter the street address.').max(200),
+  city: z.string().trim().min(2, 'Enter the city.').max(60),
+  country: z.string().trim().min(2).max(60).default('Pakistan'),
+  zipCode: z.string().trim().min(3, 'Enter the postal code.').max(12),
+  isDefault: z.boolean().default(false),
+})

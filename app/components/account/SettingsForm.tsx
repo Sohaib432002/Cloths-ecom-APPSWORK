@@ -1,321 +1,71 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { apiFetch } from '@/lib/client/api'
+import { useAuth } from '@/context/AuthContext'
+
+const input = 'mt-1 h-12 w-full rounded-xl border border-lavender-200 bg-white px-4 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20'
 
 export const Settings = () => {
-  const [emailNotifications, setEmailNotifications] = useState(true)
-  const [smsNotifications, setSmsNotifications] = useState(false)
-  const [darkMode, setDarkMode] = useState(false)
-  const [language, setLanguage] = useState('English')
-  const [currency, setCurrency] = useState('USD')
+  const { user, logout } = useAuth()
+  const router = useRouter()
+  const [current, setCurrent] = useState('')
+  const [next, setNext] = useState('')
+  const [state, setState] = useState<{ ok: boolean; text: string } | null>(null)
+  const [saving, setSaving] = useState(false)
+
+  const changePassword = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setSaving(true)
+    setState(null)
+    try {
+      await apiFetch('/api/auth/me', { method: 'PATCH', body: JSON.stringify({ currentPassword: current, nextPassword: next }) })
+      setCurrent('')
+      setNext('')
+      setState({ ok: true, text: 'Your password has been changed.' })
+    } catch (err) {
+      setState({ ok: false, text: err instanceof Error ? err.message : 'Could not change the password.' })
+    } finally {
+      setSaving(false)
+    }
+  }
 
   return (
-    <div
-      className="
-      col-span-3
-      px-3
-      sm:px-5
-      py-3
-      sm:py-5
-      "
-    >
-      <h1
-        className="
-        text-2xl
-        sm:text-3xl
-        lg:text-4xl
-        font-bold
-        mb-5
-        sm:mb-8
-        "
-      >
+    <section aria-labelledby="settings-title" className="max-w-xl">
+      <h2 id="settings-title" className="text-2xl font-extrabold">
         Settings
-      </h1>
+      </h2>
+      <p className="mt-1 text-sm text-gray-500">Signed in as {user?.email}</p>
 
-      <div
-        className="
-        space-y-3
-        sm:space-y-5
-        "
+      <form onSubmit={changePassword} className="mt-6 space-y-4 rounded-3xl border border-lavender-200 bg-white p-6">
+        <h3 className="font-bold">Change password</h3>
+        <label className="block text-sm font-medium">
+          Current password
+          <input type="password" required autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} className={input} />
+        </label>
+        <label className="block text-sm font-medium">
+          New password
+          <input type="password" required minLength={8} autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} className={input} />
+          <span className="mt-1 block text-xs text-gray-500">At least 8 characters, with a capital letter and a number.</span>
+        </label>
+        {state && (
+          <p role="status" className={`text-sm ${state.ok ? 'text-emerald-700' : 'text-red-600'}`}>
+            {state.text}
+          </p>
+        )}
+        <button type="submit" disabled={saving} className="h-11 rounded-full bg-brand px-7 text-sm font-semibold text-white hover:bg-brand-dark disabled:opacity-60">
+          {saving ? 'Saving...' : 'Update password'}
+        </button>
+      </form>
+
+      <button
+        type="button"
+        onClick={() => logout().then(() => router.push('/'))}
+        className="mt-6 h-11 rounded-full border border-lavender-300 px-7 text-sm font-semibold hover:bg-lavender-50"
       >
-        {/* Appearance */}
-
-        <div
-          className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        "
-        >
-          <h2
-            className="
-          text-lg
-          sm:text-2xl
-          font-bold
-          mb-4
-          sm:mb-5
-          "
-          >
-            Appearance
-          </h2>
-
-          <div
-            className="
-          flex
-          items-center
-          justify-between
-          gap-3
-          "
-          >
-            <div>
-              <p
-                className="
-              text-sm
-              sm:text-base
-              font-semibold
-              "
-              >
-                Dark Mode
-              </p>
-
-              <p
-                className="
-              text-xs
-              sm:text-sm
-              text-gray-500
-              "
-              >
-                Enable dark theme for the website.
-              </p>
-            </div>
-
-            <input
-              type="checkbox"
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-              className="
-          h-4
-          w-4
-          sm:h-5
-          sm:w-5
-          "
-            />
-          </div>
-        </div>
-
-        {/* Notifications */}
-
-        <div
-          className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        "
-        >
-          <h2
-            className="
-          text-lg
-          sm:text-2xl
-          font-bold
-          mb-4
-          sm:mb-5
-          "
-          >
-            Notifications
-          </h2>
-
-          <div className="space-y-4 sm:space-y-5">
-            <div
-              className="
-            flex
-            items-center
-            justify-between
-            gap-3
-            "
-            >
-              <div>
-                <p className="text-sm sm:text-base font-semibold">Email Notifications</p>
-
-                <p className="text-xs sm:text-sm text-gray-500">
-                  Receive order and promotional emails.
-                </p>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={emailNotifications}
-                onChange={() => setEmailNotifications(!emailNotifications)}
-                className="
-            h-4
-            w-4
-            sm:h-5
-            sm:w-5
-            "
-              />
-            </div>
-
-            <div
-              className="
-            flex
-            items-center
-            justify-between
-            gap-3
-            "
-            >
-              <div>
-                <p className="text-sm sm:text-base font-semibold">SMS Notifications</p>
-
-                <p className="text-xs sm:text-sm text-gray-500">Receive updates on your phone.</p>
-              </div>
-
-              <input
-                type="checkbox"
-                checked={smsNotifications}
-                onChange={() => setSmsNotifications(!smsNotifications)}
-                className="
-            h-4
-            w-4
-            sm:h-5
-            sm:w-5
-            "
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Language */}
-
-        <div
-          className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        "
-        >
-          <h2
-            className="
-          text-lg
-          sm:text-2xl
-          font-bold
-          mb-4
-          sm:mb-5
-          "
-          >
-            Language
-          </h2>
-
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="
-        w-full
-        rounded-xl
-        border
-        p-3
-        sm:p-4
-        text-sm
-        sm:text-base
-        outline-none
-        "
-          >
-            <option>English</option>
-            <option>Urdu</option>
-            <option>Arabic</option>
-          </select>
-        </div>
-
-        {/* Currency */}
-
-        <div
-          className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        "
-        >
-          <h2
-            className="
-          text-lg
-          sm:text-2xl
-          font-bold
-          mb-4
-          sm:mb-5
-          "
-          >
-            Currency
-          </h2>
-
-          <select
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
-            className="
-        w-full
-        rounded-xl
-        border
-        p-3
-        sm:p-4
-        text-sm
-        sm:text-base
-        outline-none
-        "
-          >
-            <option>USD</option>
-            <option>PKR</option>
-            <option>EUR</option>
-            <option>GBP</option>
-          </select>
-        </div>
-
-        {/* Privacy */}
-
-        <div
-          className="
-        border
-        rounded-2xl
-        sm:rounded-3xl
-        p-4
-        sm:p-6
-        "
-        >
-          <h2
-            className="
-          text-lg
-          sm:text-2xl
-          font-bold
-          mb-4
-          sm:mb-5
-          "
-          >
-            Privacy
-          </h2>
-
-          <button
-            className="
-        w-full
-        rounded-full
-        border
-        py-3
-        sm:py-4
-        text-sm
-        sm:text-base
-        hover:bg-lavender-100
-        transition
-        "
-          >
-            Download My Data
-          </button>
-        </div>
-
-        
-      </div>
-    </div>
+        Sign out
+      </button>
+    </section>
   )
 }

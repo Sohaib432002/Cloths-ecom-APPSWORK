@@ -4,6 +4,7 @@ import { BillingForm } from './BillingForm'
 import { OrderSummary } from './OrderSummary'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import { apiFetch } from '@/lib/client/api'
 import type { PaymentMethodId } from '@/types/product'
 
 type FormData = {
@@ -41,6 +42,25 @@ export const CheckoutParenet = () => {
       email: prev.email || user.email,
       phone: prev.phone || user.phone || '',
     }))
+  }, [user])
+
+  // fill the delivery details from the shopper's default saved address
+  useEffect(() => {
+    if (!user) return
+    apiFetch<{ addresses: { fullName: string; phone: string; address: string; city: string; country: string; zipCode: string; isDefault: boolean }[] }>('/api/addresses')
+      .then(({ addresses }) => {
+        const saved = addresses.find((item) => item.isDefault) || addresses[0]
+        if (!saved) return
+        setFormData((prev) => ({
+          ...prev,
+          phone: prev.phone || saved.phone,
+          address: prev.address || saved.address,
+          city: prev.city || saved.city,
+          country: saved.country || prev.country,
+          zipCode: prev.zipCode || saved.zipCode,
+        }))
+      })
+      .catch(() => {})
   }, [user])
 
   return (

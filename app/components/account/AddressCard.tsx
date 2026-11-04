@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { MapPin, Plus, Trash2 } from 'lucide-react'
+import { apiFetch } from '@/lib/client/api'
 
 type Address = {
   id: number
+  label: string
   fullName: string
   phone: string
   address: string
@@ -13,634 +16,153 @@ type Address = {
   isDefault: boolean
 }
 
+const EMPTY = { label: 'Home', fullName: '', phone: '', address: '', city: '', country: 'Pakistan', zipCode: '', isDefault: false }
+const input = 'mt-1 h-11 w-full rounded-xl border border-lavender-200 bg-white px-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/20'
+
 export const Addresses = () => {
-  const [addresses, setAddresses] = useState<Address[]>([
-    {
-      id: 1,
-      fullName: 'Muhammad Sohaib',
-      phone: '+92 300 1234567',
-      address: 'Street 25, Gulberg III',
-      city: 'Lahore',
-      country: 'Pakistan',
-      zipCode: '54000',
-      isDefault: true,
-    },
-  ])
+  const [addresses, setAddresses] = useState<Address[]>([])
+  const [loaded, setLoaded] = useState(false)
+  const [form, setForm] = useState<typeof EMPTY | null>(null)
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingId, setEditingId] = useState<number | null>(null)
+  const load = useCallback(async () => {
+    const data = await apiFetch<{ addresses: Address[] }>('/api/addresses')
+    setAddresses(data.addresses)
+    setLoaded(true)
+  }, [])
 
-  const [formData, setFormData] = useState({
-    fullName: '',
-    phone: '',
-    address: '',
-    city: '',
-    country: '',
-    zipCode: '',
-    isDefault: false,
-  })
+  useEffect(() => {
+    void load().catch(() => setLoaded(true))
+  }, [load])
 
-  const [errors, setErrors] = useState({
-    fullName: '',
-    phone: '',
-    address: '',
-    city: '',
-    country: '',
-    zipCode: '',
-  })
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-
-    setErrors((prev) => ({
-      ...prev,
-      [name]: '',
-    }))
-  }
-
-  const validateForm = () => {
-    const newErrors = {
-      fullName: '',
-      phone: '',
-      address: '',
-      city: '',
-      country: '',
-      zipCode: '',
+  const save = async (event: React.FormEvent) => {
+    event.preventDefault()
+    if (!form) return
+    setSaving(true)
+    setError('')
+    try {
+      const data = await apiFetch<{ addresses: Address[] }>('/api/addresses', { method: 'POST', body: JSON.stringify(form) })
+      setAddresses(data.addresses)
+      setForm(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not save the address.')
+    } finally {
+      setSaving(false)
     }
-
-    let isValid = true
-
-    Object.keys(newErrors).forEach((field) => {
-      const key = field as keyof typeof newErrors
-
-      if (!formData[key].toString().trim()) {
-        newErrors[key] = 'Please fill this field.'
-        isValid = false
-      }
-    })
-
-    setErrors(newErrors)
-
-    return isValid
   }
 
-  const handleSaveAddress = () => {
-    if (!validateForm()) return
-
-    if (editingId !== null) {
-      setAddresses((prev) =>
-        prev.map((item) => {
-          if (formData.isDefault) {
-            return item.id === editingId ? { ...item, ...formData } : { ...item, isDefault: false }
-          }
-
-          return item.id === editingId ? { ...item, ...formData } : item
-        })
-      )
-    } else {
-      const newAddress: Address = {
-        id: Date.now(),
-        ...formData,
-      }
-
-      setAddresses((prev) =>
-        formData.isDefault
-          ? [
-              ...prev.map((item) => ({
-                ...item,
-                isDefault: false,
-              })),
-              newAddress,
-            ]
-          : [...prev, newAddress]
-      )
-    }
-
-    setEditingId(null)
-
-    setFormData({
-      fullName: '',
-      phone: '',
-      address: '',
-      city: '',
-      country: '',
-      zipCode: '',
-      isDefault: false,
-    })
-
-    setErrors({
-      fullName: '',
-      phone: '',
-      address: '',
-      city: '',
-      country: '',
-      zipCode: '',
-    })
-
-    setIsModalOpen(false)
+  const makeDefault = async (id: number) => {
+    const data = await apiFetch<{ addresses: Address[] }>('/api/addresses', { method: 'PATCH', body: JSON.stringify({ id }) })
+    setAddresses(data.addresses)
   }
 
-  const handleEdit = (id: number) => {
-    const selectedAddress = addresses.find((item) => item.id === id)
-
-    if (!selectedAddress) return
-
-    setEditingId(id)
-
-    setFormData({
-      fullName: selectedAddress.fullName,
-      phone: selectedAddress.phone,
-      address: selectedAddress.address,
-      city: selectedAddress.city,
-      country: selectedAddress.country,
-      zipCode: selectedAddress.zipCode,
-      isDefault: selectedAddress.isDefault,
-    })
-
-    setIsModalOpen(true)
+  const remove = async (id: number) => {
+    if (!window.confirm('Delete this address?')) return
+    const data = await apiFetch<{ addresses: Address[] }>(`/api/addresses?id=${id}`, { method: 'DELETE' })
+    setAddresses(data.addresses)
   }
 
-  const handleDel = (id: number) => {
-    setAddresses((prev) => prev.filter((item) => item.id !== id))
-  }
+  const field = (key: keyof typeof EMPTY, label: string, props: React.InputHTMLAttributes<HTMLInputElement> = {}) => (
+    <label className="text-sm font-medium">
+      {label}
+      <input
+        required
+        value={String(form?.[key] ?? '')}
+        onChange={(event) => setForm((prev) => (prev ? { ...prev, [key]: event.target.value } : prev))}
+        className={input}
+        {...props}
+      />
+    </label>
+  )
 
   return (
-    <div className="max-w-8xl col-span-3 py-5 sm:py-8 px-3 sm:px-5">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6 sm:mb-8">
-        <h1 className="text-xl sm:text-2xl lg:text-4xl font-bold">My Addresses</h1>
-
+    <section aria-labelledby="addresses-title">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 id="addresses-title" className="text-2xl font-extrabold">
+            Saved addresses
+          </h2>
+          <p className="mt-1 text-sm text-gray-500">Used to fill in checkout for you.</p>
+        </div>
         <button
-          onClick={() => {
-            setEditingId(null)
-
-            setFormData({
-              fullName: '',
-              phone: '',
-              address: '',
-              city: '',
-              country: '',
-              zipCode: '',
-              isDefault: false,
-            })
-
-            setIsModalOpen(true)
-          }}
-          className="
-          bg-brand text-white 
-          px-4 py-2 sm:px-6 sm:py-3
-          text-sm sm:text-base
-          rounded-full 
-          hover:bg-brand-dark transition
-          w-full sm:w-auto
-          "
+          type="button"
+          onClick={() => setForm({ ...EMPTY })}
+          className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
         >
-          + Add New Address
+          <Plus size={16} /> Add address
         </button>
       </div>
 
-      {/* Address Cards */}
-      {addresses.length !== 0 ? (
-        <div
-          className="
-          grid 
-          grid-cols-1 
-          sm:grid-cols-2 
-          gap-4 sm:gap-6
-          "
-        >
-          {addresses.map((item) => (
-            <div
-              key={item.id}
-              className="
-                border 
-                rounded-2xl sm:rounded-3xl
-                p-4 sm:p-6
-                hover:shadow-lg 
-                transition
-                "
-            >
-              <div className="flex justify-between items-start gap-3">
-                <div>
-                  <h2
-                    className="
-                    text-base 
-                    sm:text-xl 
-                    font-bold
-                    "
-                  >
-                    {item.fullName}
-                  </h2>
-
-                  {item.isDefault && (
-                    <span
-                      className="
-                      inline-block 
-                      mt-2
-                      bg-green-100
-                      text-green-700
-                      text-[10px] sm:text-xs
-                      px-2 sm:px-3
-                      py-1
-                      rounded-full
-                      "
-                    >
-                      Default Address
-                    </span>
-                  )}
-                </div>
-
-                <div
-                  className="
-                  flex 
-                  gap-2 sm:gap-4
-                  text-xs sm:text-base
-                  "
-                >
-                  <button
-                    onClick={() => handleEdit(item.id)}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => handleDel(item.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-              {/* Address Details */}
-              <div
-                className="
-                mt-4 sm:mt-6 
-                space-y-1 sm:space-y-2 
-                text-gray-600
-                text-sm sm:text-base
-                "
-              >
-                <p>
-                  <span className="font-semibold text-black">Phone:</span> {item.phone}
-                </p>
-
-                <p>
-                  <span className="font-semibold text-black">Address:</span> {item.address}
-                </p>
-
-                <p>
-                  <span className="font-semibold text-black">City:</span> {item.city}
-                </p>
-
-                <p>
-                  <span className="font-semibold text-black">Country:</span> {item.country}
-                </p>
-
-                <p>
-                  <span className="font-semibold text-black">ZIP Code:</span> {item.zipCode}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div
-          className="
-          text-center 
-          py-10 
-          text-gray-500
-          text-sm sm:text-base
-          "
-        >
-          No address yet
-        </div>
-      )}
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div
-          className="
-        fixed 
-        inset-0 
-        bg-brand/50 
-        flex 
-        items-center 
-        justify-center 
-        z-50 
-        p-3 sm:p-5
-        "
-        >
-          <div
-            className="
-          bg-white 
-          rounded-2xl sm:rounded-3xl
-          shadow-2xl 
-          w-full 
-          max-w-2xl 
-          max-h-[90vh]
-          overflow-y-auto
-          "
-          >
-            {/* Modal Header */}
-            <div
-              className="
-            flex 
-            justify-between 
-            items-center 
-            border-b 
-            px-4 sm:px-8
-            py-3
-            "
-            >
-              <h2
-                className="
-              text-lg sm:text-2xl
-              font-bold
-              "
-              >
-                {editingId ? 'Edit Address' : 'Add New Address'}
-              </h2>
-
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="
-                text-2xl sm:text-3xl
-                hover:text-red-500
-                "
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Body */}
-            <div
-              className="
-            p-4 sm:p-8
-            space-y-4 sm:space-y-6
-            "
-            >
-              {/* Name + Phone */}
-              <div
-                className="
-              grid 
-              grid-cols-1
-              sm:grid-cols-2
-              gap-3 sm:gap-5
-              "
-              >
-                <div>
-                  <label
-                    className="
-                  block 
-                  mb-1 sm:mb-2 
-                  text-sm sm:text-base
-                  font-medium
-                  "
-                  >
-                    Full Name
-                  </label>
-
-                  <input
-                    type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    placeholder="Muhammad Sohaib"
-                    className={`
-                    w-full 
-                    rounded-xl
-                    px-3 sm:px-4
-                    py-2
-                    text-sm sm:text-base
-                    outline-none 
-                    border
-                    ${
-                      errors.fullName
-                        ? 'border-red-500'
-                        : 'border-gray-300 focus:ring-2 focus:ring-brand'
-                    }
-                    `}
-                  />
-
-                  {errors.fullName && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.fullName}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    className="
-                  block 
-                  mb-1 sm:mb-2
-                  text-sm sm:text-base
-                  font-medium
-                  "
-                  >
-                    Phone Number
-                  </label>
-
-                  <input
-                    type="text"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="+92 300 1234567"
-                    className={`
-                    w-full 
-                    rounded-xl
-                    px-3 sm:px-4
-                    py-2
-                    text-sm sm:text-base
-                    outline-none 
-                    border
-                    ${
-                      errors.phone
-                        ? 'border-red-500'
-                        : 'border-gray-300 focus:ring-2 focus:ring-brand'
-                    }
-                    `}
-                  />
-
-                  {errors.phone && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.phone}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Address */}
-              <div>
-                <label
-                  className="
-                block 
-                mb-1
-                text-sm sm:text-base
-                font-medium
-                "
-                >
-                  Address
-                </label>
-
-                <textarea
-                  rows={3}
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  placeholder="Street, House Number..."
-                  className={`
-                  w-full 
-                  rounded-xl
-                  px-3 sm:px-4
-                  py-2
-                  text-sm sm:text-base
-                  resize-none
-                  outline-none
-                  border
-                  ${
-                    errors.address
-                      ? 'border-red-500'
-                      : 'border-gray-300 focus:ring-2 focus:ring-brand'
-                  }
-                  `}
-                />
-
-                {errors.address && (
-                  <p className="text-red-500 text-xs sm:text-sm mt-1">{errors.address}</p>
-                )}
-              </div>
-
-              {/* City Country Zip */}
-              <div
-                className="
-              grid 
-              grid-cols-1
-              sm:grid-cols-3
-              gap-3 sm:gap-5
-              "
-              >
-                {[
-                  {
-                    name: 'city',
-                    label: 'City',
-                    placeholder: 'Lahore',
-                  },
-                  {
-                    name: 'country',
-                    label: 'Country',
-                    placeholder: 'Pakistan',
-                  },
-                  {
-                    name: 'zipCode',
-                    label: 'ZIP Code',
-                    placeholder: '54000',
-                  },
-                ].map((field) => (
-                  <div key={field.name}>
-                    <label
-                      className="
-                    block
-                    mb-1
-                    text-sm sm:text-base
-                    font-medium
-                    "
-                    >
-                      {field.label}
-                    </label>
-
-                    <input
-                      type="text"
-                      name={field.name}
-                      value={String(formData[field.name as keyof typeof formData] ?? '')}
-                      onChange={handleChange}
-                      placeholder={field.placeholder}
-                      className="
-                      w-full
-                      rounded-xl
-                      px-3 sm:px-4
-                      py-2
-                      text-sm sm:text-base
-                      outline-none
-                      border
-                      border-gray-300
-                      focus:ring-2
-                      focus:ring-brand
-                      "
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Default Checkbox */}
-              <label
-                className="
-              flex 
-              items-center 
-              gap-2 sm:gap-3
-              text-sm sm:text-base
-              "
-              >
-                <input
-                  type="checkbox"
-                  name="isDefault"
-                  checked={formData.isDefault}
-                  onChange={handleChange}
-                  className="w-4 h-4 sm:w-5 sm:h-5"
-                />
-
-                <span>Make this my default address</span>
-              </label>
-            </div>
-
-            {/* Footer */}
-            <div
-              className="
-            border-t 
-            px-4 sm:px-8
-            py-3
-            flex
-            flex-col-reverse
-            sm:flex-row
-            justify-end
-            gap-3 sm:gap-4
-            "
-            >
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="
-                border
-                px-5 sm:px-6
-                py-2 sm:py-3
-                rounded-xl
-                text-sm sm:text-base
-                hover:bg-lavender-100
-                "
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={handleSaveAddress}
-                className="
-                bg-brand
-                text-white
-                px-6 sm:px-8
-                py-2
-                rounded-xl
-                text-sm sm:text-base
-                hover:bg-brand-dark
-                "
-              >
-                Save Address
-              </button>
-            </div>
+      {form && (
+        <form onSubmit={save} className="mt-6 grid gap-4 rounded-3xl border border-lavender-200 bg-white p-5 sm:grid-cols-2">
+          {field('label', 'Name (Home, Office...)', { maxLength: 30 })}
+          {field('fullName', 'Recipient name')}
+          {field('phone', 'Phone', { type: 'tel' })}
+          {field('city', 'City')}
+          <div className="sm:col-span-2">{field('address', 'Street address')}</div>
+          {field('country', 'Country')}
+          {field('zipCode', 'Postal code')}
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input
+              type="checkbox"
+              checked={form.isDefault}
+              onChange={(event) => setForm({ ...form, isDefault: event.target.checked })}
+              className="h-4 w-4 accent-brand"
+            />
+            Use as my default address
+          </label>
+          {error && (
+            <p role="alert" className="text-sm text-red-600 sm:col-span-2">
+              {error}
+            </p>
+          )}
+          <div className="flex gap-3 sm:col-span-2">
+            <button type="submit" disabled={saving} className="h-11 rounded-full bg-brand px-7 text-sm font-semibold text-white hover:bg-brand-dark disabled:opacity-60">
+              {saving ? 'Saving...' : 'Save address'}
+            </button>
+            <button type="button" onClick={() => setForm(null)} className="h-11 rounded-full border border-lavender-200 px-6 text-sm font-semibold">
+              Cancel
+            </button>
           </div>
+        </form>
+      )}
+
+      {loaded && addresses.length === 0 && !form && (
+        <div className="mt-8 flex flex-col items-center rounded-3xl border border-dashed border-lavender-300 py-14 text-center">
+          <MapPin size={36} className="text-brand-soft" />
+          <p className="mt-4 font-semibold">No saved addresses</p>
+          <p className="mt-1 text-sm text-gray-500">Add one to check out faster.</p>
         </div>
       )}
-    </div>
+
+      <ul className="mt-6 grid gap-4 md:grid-cols-2">
+        {addresses.map((item) => (
+          <li key={item.id} className="rounded-3xl border border-lavender-200 bg-white p-5">
+            <div className="flex items-center justify-between">
+              <p className="font-semibold">
+                {item.label}
+                {item.isDefault && <span className="ml-2 rounded-full bg-lavender-100 px-2.5 py-0.5 text-xs text-brand-dark">Default</span>}
+              </p>
+              <button type="button" aria-label={`Delete ${item.label}`} onClick={() => void remove(item.id)} className="text-gray-400 hover:text-red-600">
+                <Trash2 size={17} />
+              </button>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-gray-600">
+              {item.fullName}
+              <br />
+              {item.address}, {item.city} {item.zipCode}
+              <br />
+              {item.country} · {item.phone}
+            </p>
+            {!item.isDefault && (
+              <button type="button" onClick={() => void makeDefault(item.id)} className="mt-3 text-sm font-semibold text-brand hover:underline">
+                Make default
+              </button>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }

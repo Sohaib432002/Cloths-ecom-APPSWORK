@@ -32,10 +32,11 @@ export default function Navbar() {
   const [suggestions, setSuggestions] = useState<Product[]>([])
   const [shopOpen, setShopOpen] = useState(false)
   const searchInput = useRef<HTMLInputElement>(null)
+  const bellRef = useRef<HTMLDivElement>(null)
   const { cart } = useCart()
   const { wishlist } = useWishlist()
   const { user, logout } = useAuth()
-  const { isOpen, unreadCount, notifications, toggleNotifications, closeNotifications, markAllRead } =
+  const { isOpen, unreadCount, notifications, toggleNotifications, closeNotifications, markAllRead, markRead } =
     useNotification()
   const router = useRouter()
   const pathname = usePathname()
@@ -71,6 +72,21 @@ export default function Navbar() {
     closeNotifications()
     setSuggestions([])
   }, [pathname, searchParams, closeNotifications])
+
+  // close the notification panel on outside click or Escape
+  useEffect(() => {
+    if (!isOpen) return
+    const onClick = (event: MouseEvent) => {
+      if (!bellRef.current?.contains(event.target as Node)) closeNotifications()
+    }
+    const onKey = (event: KeyboardEvent) => event.key === 'Escape' && closeNotifications()
+    document.addEventListener('mousedown', onClick)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onClick)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [isOpen, closeNotifications])
 
   useEffect(() => {
     if (searchOpen) searchInput.current?.focus()
@@ -174,8 +190,14 @@ export default function Navbar() {
             {qty > 0 && <span className={badge}>{qty}</span>}
           </Link>
           {user && (
-            <div className="relative">
-              <button type="button" aria-label="Notifications" onClick={toggleNotifications} className={iconButton}>
+            <div className="relative" ref={bellRef}>
+              <button
+                type="button"
+                aria-label={`Notifications, ${unreadCount} unread`}
+                aria-expanded={isOpen}
+                onClick={toggleNotifications}
+                className={iconButton}
+              >
                 <Bell size={19} />
                 {unreadCount > 0 && <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-brand" />}
               </button>
@@ -193,13 +215,24 @@ export default function Navbar() {
                       <Link
                         key={item.id}
                         href={item.href}
-                        className={`block rounded-xl px-3 py-2 text-sm ${item.read ? 'bg-white' : 'bg-lavender-50'}`}
+                        onClick={() => {
+                          markRead(item.id)
+                          closeNotifications()
+                        }}
+                        className={`block rounded-xl px-3 py-2 text-sm hover:bg-lavender-100 ${item.read ? 'bg-white' : 'bg-lavender-50'}`}
                       >
                         <p className="font-medium">{item.title}</p>
                         <p className="text-xs text-gray-500">{item.body}</p>
                       </Link>
                     ))}
                   </div>
+                  <Link
+                    href="/notifications"
+                    onClick={closeNotifications}
+                    className="mt-3 block rounded-full border border-lavender-200 py-2 text-center text-xs font-semibold text-brand hover:bg-lavender-50"
+                  >
+                    View all notifications
+                  </Link>
                 </div>
               )}
             </div>

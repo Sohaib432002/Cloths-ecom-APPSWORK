@@ -145,6 +145,20 @@ export const SCHEMA = [
     PRIMARY KEY (user_id, product_id)
   )`,
 
+  `CREATE TABLE IF NOT EXISTS addresses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    label TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    address TEXT NOT NULL,
+    city TEXT NOT NULL,
+    country TEXT NOT NULL,
+    zip_code TEXT NOT NULL,
+    is_default INTEGER NOT NULL DEFAULT 0
+  )`,
+  `CREATE INDEX IF NOT EXISTS idx_addresses_user ON addresses(user_id)`,
+
   `CREATE TABLE IF NOT EXISTS settings (
     key TEXT PRIMARY KEY,
     value TEXT NOT NULL

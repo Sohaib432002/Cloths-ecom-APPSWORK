@@ -4,20 +4,22 @@ import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import { useOrders } from '@/context/OrdersContext'
 import { useWishlist } from '@/context/wishlistContext'
+import { useNotification } from '@/context/NotificationContext'
 import { formatMoney } from '@/lib/commerce/pricing'
 
 export const Dashboard = () => {
   const { user } = useAuth()
   const { orders } = useOrders()
   const { wishlist } = useWishlist()
+  const { unreadCount } = useNotification()
   const recent = orders.slice(0, 3)
 
   return (
     <div className="space-y-6">
       <div className="rounded-3xl bg-brand p-6 text-white sm:p-8">
         <h1 className="text-3xl font-bold">Welcome back</h1>
-        <p className="mt-2 text-gray-300">{user?.name || 'Véora member'}</p>
-        <p className="mt-4 text-sm text-gray-300">
+        <p className="mt-2 text-white/80">{user?.name || 'Véora member'}</p>
+        <p className="mt-4 text-sm text-white/80">
           Manage orders, saved pieces, and the looks your stylist recommended.
         </p>
       </div>
@@ -26,7 +28,7 @@ export const Dashboard = () => {
           { label: 'Total Orders', value: orders.length },
           { label: 'Wishlist', value: wishlist.length },
           { label: 'Processing', value: orders.filter((order) => order.status === 'Processing').length },
-          { label: 'Coupons', value: 4 },
+          { label: 'Unread notifications', value: unreadCount },
         ].map((stat) => (
           <div key={stat.label} className="rounded-3xl border p-6">
             <h2 className="text-3xl font-bold">{stat.value}</h2>
