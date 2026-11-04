@@ -29,7 +29,6 @@ export async function createCheckoutSession(input: {
 }) {
   const body = new URLSearchParams({
     mode: 'payment',
-    'payment_method_types[0]': 'card',
     'line_items[0][quantity]': '1',
     'line_items[0][price_data][currency]': 'usd',
     'line_items[0][price_data][unit_amount]': String(input.totalCents),

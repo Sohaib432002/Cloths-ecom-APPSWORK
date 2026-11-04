@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/lib/auth/session'
-import { createOrder, listOrdersForUser, OrderError } from '@/lib/commerce/orders'
+import { createOrder, listOrdersForUser, OrderError, updateOrderStatus } from '@/lib/commerce/orders'
 import { notifyOrderConfirmed } from '@/lib/commerce/order-notifications'
 import { getAppUrl } from '@/lib/env'
 import { getClientIp, jsonError, jsonOk, logEvent, readJson } from '@/lib/http'
@@ -29,14 +29,21 @@ export async function POST(request: Request) {
 
     if (order.paymentMethod === 'card') {
       // hand the shopper to Stripe's hosted page; notifications go out once the payment is confirmed
-      const session = await createCheckoutSession({
-        orderId: order.id,
-        email: order.email || parsed.data.email,
-        totalCents: Math.round(order.total * 100),
-        itemCount: order.items.reduce((sum, item) => sum + item.quantity, 0),
-        baseUrl: getAppUrl(),
-      })
-      return jsonOk({ order, checkoutUrl: session.url }, 201)
+      try {
+        const session = await createCheckoutSession({
+          orderId: order.id,
+          email: order.email || parsed.data.email,
+          totalCents: Math.round(order.total * 100),
+          itemCount: order.items.reduce((sum, item) => sum + item.quantity, 0),
+          baseUrl: getAppUrl(),
+        })
+        return jsonOk({ order, checkoutUrl: session.url }, 201)
+      } catch (error) {
+        // the payment page could not be created: release the reserved stock instead of leaving a dead order
+        await updateOrderStatus(order.id, 'Cancelled')
+        logEvent('payment.session_failed', { orderId: order.id, reason: error instanceof Error ? error.message : 'unknown' })
+        return jsonError('We could not start the card payment. Please try again or choose Cash on Delivery.', 502, 'PAYMENT')
+      }
     }
 
     await notifyOrderConfirmed(order)
