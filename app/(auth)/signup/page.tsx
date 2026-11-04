@@ -34,18 +34,6 @@ export default function SignupPage() {
           </Suspense>
           <SignupForm />
 
-          <div className="my-5 flex items-center gap-3 sm:my-6">
-            <div className="flex-1 border"></div>
-
-            <span className="text-xs text-gray-400 sm:text-sm">OR</span>
-
-            <div className="flex-1 border"></div>
-          </div>
-
-          <button className="w-full rounded-full border py-3 text-sm font-medium transition hover:bg-lavender-100 sm:py-4 sm:text-base">
-            Continue with Google
-          </button>
-
           <p className="mt-6 text-center text-sm text-gray-600 sm:mt-8 sm:text-base">
             Already have an account?{' '}
             <Link href="/login" className="font-semibold text-black hover:underline">
