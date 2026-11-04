@@ -34,7 +34,7 @@ export async function sendEmail(input: { to: string; subject: string; html: stri
     return false
   }
   try {
-    await getTransport().sendMail({
+    const info = await getTransport().sendMail({
       from: process.env.SMTP_FROM || `${SITE.name} <${process.env.SMTP_USER}>`,
       to: input.to,
       subject: input.subject,
@@ -42,6 +42,7 @@ export async function sendEmail(input: { to: string; subject: string; html: stri
       text: input.text,
       replyTo: input.replyTo,
     })
+    logEvent('email.sent', { to: input.to, subject: input.subject, accepted: info.accepted, rejected: info.rejected, response: info.response })
     return true
   } catch (error) {
     logEvent('email.failed', { to: input.to, reason: error instanceof Error ? error.message : 'unknown' })
