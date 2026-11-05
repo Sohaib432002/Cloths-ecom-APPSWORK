@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="Segoe UI, Arial, Helvetica, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f1ecff"/><stop offset="0.55" stop-color="#f9f7ff"/><stop offset="1" stop-color="#e4dcfb"/>
+    </linearGradient>
+    <linearGradient id="hd" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1a1348"/><stop offset="1" stop-color="#4a33a8"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c5cdc"/><stop offset="1" stop-color="#b07cf0"/>
+    </linearGradient>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#5a3fc0" flood-opacity="0.22"/>
+    </filter>
+    <marker id="ar" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+      <path d="M1,1 L10,6 L1,11 Z" fill="#7c5cdc"/>
+    </marker>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <circle cx="1780" cy="120" r="260" fill="#b9a5f2" opacity="0.25"/>
+  <circle cx="120" cy="1000" r="220" fill="#7c5cdc" opacity="0.10"/>
+
+  <!-- header -->
+  <rect x="40" y="30" width="1840" height="110" rx="28" fill="url(#hd)" filter="url(#sh)"/>
+  <circle cx="100" cy="85" r="32" fill="#fff"/>
+  <path d="M82 66 L100 108 L118 66 L108 66 L100 86 L92 66 Z" fill="#7c5cdc"/>
+  <text x="150" y="82" font-size="44" font-weight="800" fill="#fff">Véora · Project Map</text>
+  <text x="150" y="116" font-size="21" fill="#d3c7f7">Full-stack fashion e-commerce store · Next.js 16 + SQLite (Turso) · live at veora-store.vercel.app</text>
+  <rect x="1500" y="62" width="340" height="46" rx="23" fill="#fff" opacity="0.14"/>
+  <text x="1670" y="93" font-size="20" font-weight="700" fill="#fff" text-anchor="middle">Theme: lavender · purple · indigo</text>
+
+  <!-- column titles -->
+  <text x="60" y="190" font-size="22" font-weight="800" fill="#6847c8" letter-spacing="3">1 · WHAT THE SHOPPER SEES</text>
+  <text x="700" y="190" font-size="22" font-weight="800" fill="#6847c8" letter-spacing="3">2 · BACKEND (API ROUTES)</text>
+  <text x="1340" y="190" font-size="22" font-weight="800" fill="#6847c8" letter-spacing="3">3 · DATA &amp; SERVICES</text>
+
+  <!-- Column 1: pages -->
+  <rect x="40" y="205" width="600" height="560" rx="26" fill="#fff" filter="url(#sh)"/>
+  <rect x="40" y="205" width="600" height="64" rx="26" fill="url(#brand)"/>
+  <text x="70" y="247" font-size="26" font-weight="800" fill="#fff">Website pages (app/)</text>
+  <g font-size="21" fill="#1b1540">
+    <text x="70" y="312" font-weight="700">Home</text><text x="260" y="312" fill="#5b5678">3D hero, product ring, categories</text>
+    <text x="70" y="352" font-weight="700">Shop</text><text x="260" y="352" fill="#5b5678">search, filters, 1,000+ products</text>
+    <text x="70" y="392" font-weight="700">Product</text><text x="260" y="392" fill="#5b5678">photos, sizes, colours, reviews</text>
+    <text x="70" y="432" font-weight="700">Cart</text><text x="260" y="432" fill="#5b5678">coupons, free-shipping bar</text>
+    <text x="70" y="472" font-weight="700">Checkout</text><text x="260" y="472" fill="#5b5678">Cash on Delivery or card</text>
+    <text x="70" y="512" font-weight="700">Account</text><text x="260" y="512" fill="#5b5678">orders, wishlist, addresses, settings</text>
+    <text x="70" y="552" font-weight="700">Stylist</text><text x="260" y="552" fill="#5b5678">AI assistant + product cards</text>
+    <text x="70" y="592" font-weight="700">Track order</text><text x="260" y="592" fill="#5b5678">order number + email</text>
+    <text x="70" y="632" font-weight="700">Login / Sign up</text><text x="260" y="632" fill="#5b5678">email + Continue with Google</text>
+    <text x="70" y="672" font-weight="700">About · Help</text><text x="260" y="672" fill="#5b5678">Contact, policies, FAQ</text>
+  </g>
+  <rect x="70" y="700" width="540" height="44" rx="22" fill="#f1ecff"/>
+  <text x="340" y="729" font-size="19" font-weight="700" fill="#6847c8" text-anchor="middle">Always on: WhatsApp · Call · Chat widget · Notification bell</text>
+
+  <!-- Column 2: API -->
+  <rect x="680" y="205" width="600" height="560" rx="26" fill="#fff" filter="url(#sh)"/>
+  <rect x="680" y="205" width="600" height="64" rx="26" fill="#231a5c"/>
+  <text x="710" y="247" font-size="26" font-weight="800" fill="#fff">Server logic (app/api + lib/)</text>
+  <g font-size="21" fill="#1b1540">
+    <text x="710" y="312" font-weight="700">/api/auth</text><text x="885" y="312" fill="#5b5678">login, signup, Google, reset password</text>
+    <text x="710" y="352" font-weight="700">/api/orders</text><text x="885" y="352" fill="#5b5678">server-side prices + stock check</text>
+    <text x="710" y="392" font-weight="700">/api/payments</text><text x="885" y="392" fill="#5b5678">Stripe checkout + webhook</text>
+    <text x="710" y="432" font-weight="700">/api/assistant</text><text x="885" y="432" fill="#5b5678">AI chat: store facts + products</text>
+    <text x="710" y="472" font-weight="700">/api/products</text><text x="885" y="472" fill="#5b5678">catalog search and filters</text>
+    <text x="710" y="512" font-weight="700">/api/reviews</text><text x="885" y="512" fill="#5b5678">wishlist, addresses, coupons</text>
+    <text x="710" y="552" font-weight="700">/api/contact</text><text x="885" y="552" fill="#5b5678">messages → owner email</text>
+    <text x="710" y="592" font-weight="700">/api/admin/*</text><text x="885" y="592" fill="#5b5678">products, coupons, orders, upload</text>
+  </g>
+  <rect x="710" y="620" width="540" height="124" rx="18" fill="#faf8ff" stroke="#d3c7f7"/>
+  <text x="730" y="650" font-size="19" font-weight="800" fill="#6847c8">Safety built in</text>
+  <text x="730" y="680" font-size="18" fill="#5b5678">Passwords hashed (bcrypt) · login cookie (JWT)</text>
+  <text x="730" y="706" font-size="18" fill="#5b5678">Input checked (Zod) · rate limits · security headers</text>
+  <text x="730" y="732" font-size="18" fill="#5b5678">Card details never touch our server (Stripe page)</text>
+
+  <!-- Column 3: services -->
+  <rect x="1320" y="205" width="560" height="560" rx="26" fill="#fff" filter="url(#sh)"/>
+  <rect x="1320" y="205" width="560" height="64" rx="26" fill="url(#brand)"/>
+  <text x="1350" y="247" font-size="26" font-weight="800" fill="#fff">Database and outside services</text>
+  <g font-size="21">
+    <rect x="1350" y="292" width="500" height="64" rx="16" fill="#f1ecff"/>
+    <text x="1372" y="320" font-weight="800" fill="#1b1540">Turso (SQLite) database</text>
+    <text x="1372" y="344" font-size="17" fill="#5b5678">users, products, orders, reviews, coupons, photos</text>
+    <rect x="1350" y="368" width="500" height="64" rx="16" fill="#f1ecff"/>
+    <text x="1372" y="396" font-weight="800" fill="#1b1540">Stripe · card payments</text>
+    <text x="1372" y="420" font-size="17" fill="#5b5678">working in TEST mode, live keys still to add</text>
+    <rect x="1350" y="444" width="500" height="64" rx="16" fill="#f1ecff"/>
+    <text x="1372" y="472" font-weight="800" fill="#1b1540">Gmail SMTP · emails</text>
+    <text x="1372" y="496" font-size="17" fill="#5b5678">order confirmations, contact form, password reset</text>
+    <rect x="1350" y="520" width="500" height="64" rx="16" fill="#f1ecff"/>
+    <text x="1372" y="548" font-weight="800" fill="#1b1540">Google sign-in (OAuth)</text>
+    <text x="1372" y="572" font-size="17" fill="#5b5678">“Continue with Google” is live</text>
+    <rect x="1350" y="596" width="500" height="64" rx="16" fill="#f1ecff"/>
+    <text x="1372" y="624" font-weight="800" fill="#1b1540">AI model · Claude or Hugging Face</text>
+    <text x="1372" y="648" font-size="17" fill="#c0392b">key needs fixing (“invalid x-api-key”)</text>
+    <rect x="1350" y="672" width="500" height="64" rx="16" fill="#fff4e5" stroke="#f0c27a"/>
+    <text x="1372" y="700" font-weight="800" fill="#1b1540">SMS (Twilio or local provider)</text>
+    <text x="1372" y="724" font-size="17" fill="#a0650a">code ready, not connected yet</text>
+  </g>
+
+  <!-- arrows -->
+  <path d="M640 485 L680 485" stroke="#7c5cdc" stroke-width="5" marker-end="url(#ar)"/>
+  <path d="M1280 485 L1320 485" stroke="#7c5cdc" stroke-width="5" marker-end="url(#ar)"/>
+
+  <!-- admin strip -->
+  <rect x="40" y="790" width="1840" height="96" rx="26" fill="#231a5c" filter="url(#sh)"/>
+  <text x="70" y="832" font-size="24" font-weight="800" fill="#fff">Owner admin panel  /admin</text>
+  <text x="70" y="866" font-size="19" fill="#d3c7f7">Only the owner email can open it. Manage everything without touching code:</text>
+  <g font-size="20" font-weight="700" fill="#231a5c">
+    <rect x="800" y="812" width="170" height="44" rx="22" fill="#e4dcfb"/><text x="885" y="841" text-anchor="middle">Orders</text>
+    <rect x="990" y="812" width="190" height="44" rx="22" fill="#e4dcfb"/><text x="1085" y="841" text-anchor="middle">Add products</text>
+    <rect x="1200" y="812" width="170" height="44" rx="22" fill="#e4dcfb"/><text x="1285" y="841" text-anchor="middle">Coupons</text>
+    <rect x="1390" y="812" width="210" height="44" rx="22" fill="#e4dcfb"/><text x="1495" y="841" text-anchor="middle">Announcements</text>
+    <rect x="1620" y="812" width="230" height="44" rx="22" fill="#e4dcfb"/><text x="1735" y="841" text-anchor="middle">Hide sample products</text>
+  </g>
+
+  <!-- bottom row -->
+  <rect x="40" y="910" width="600" height="130" rx="26" fill="#fff" filter="url(#sh)"/>
+  <text x="66" y="946" font-size="20" font-weight="800" fill="#6847c8" letter-spacing="2">DESIGN COLOURS</text>
+  <g>
+    <rect x="66" y="962" width="64" height="64" rx="16" fill="#7c5cdc"/><text x="98" y="1040" font-size="14" text-anchor="middle" fill="#5b5678">#7c5cdc</text>
+    <rect x="146" y="962" width="64" height="64" rx="16" fill="#b9a5f2"/><text x="178" y="1040" font-size="14" text-anchor="middle" fill="#5b5678">#b9a5f2</text>
+    <rect x="226" y="962" width="64" height="64" rx="16" fill="#e4dcfb"/><text x="258" y="1040" font-size="14" text-anchor="middle" fill="#5b5678">#e4dcfb</text>
+    <rect x="306" y="962" width="64" height="64" rx="16" fill="#f1ecff" stroke="#d3c7f7"/><text x="338" y="1040" font-size="14" text-anchor="middle" fill="#5b5678">#f1ecff</text>
+    <rect x="386" y="962" width="64" height="64" rx="16" fill="#231a5c"/><text x="418" y="1040" font-size="14" text-anchor="middle" fill="#5b5678">#231a5c</text>
+    <rect x="466" y="962" width="64" height="64" rx="16" fill="#1b1540"/><text x="498" y="1040" font-size="14" text-anchor="middle" fill="#5b5678">#1b1540</text>
+  </g>
+  <text x="552" y="990" font-size="15" fill="#5b5678">Plus Jakarta</text>
+  <text x="552" y="1012" font-size="15" fill="#5b5678">Soft shapes</text>
+  <text x="552" y="1034" font-size="15" fill="#5b5678">+ 3D tilt</text>
+
+  <rect x="680" y="910" width="600" height="130" rx="26" fill="#fff" filter="url(#sh)"/>
+  <text x="706" y="946" font-size="20" font-weight="800" fill="#6847c8" letter-spacing="2">BUILT WITH</text>
+  <g font-size="19" font-weight="700" fill="#231a5c">
+    <rect x="706" y="962" width="130" height="40" rx="20" fill="#f1ecff"/><text x="771" y="988" text-anchor="middle">Next.js 16</text>
+    <rect x="848" y="962" width="110" height="40" rx="20" fill="#f1ecff"/><text x="903" y="988" text-anchor="middle">React 19</text>
+    <rect x="970" y="962" width="140" height="40" rx="20" fill="#f1ecff"/><text x="1040" y="988" text-anchor="middle">TypeScript</text>
+    <rect x="1122" y="962" width="130" height="40" rx="20" fill="#f1ecff"/><text x="1187" y="988" text-anchor="middle">Tailwind 4</text>
+    <rect x="706" y="1010" width="120" height="40" rx="20" fill="#f1ecff" opacity="0"/>
+  </g>
+  <text x="706" y="1032" font-size="17" fill="#5b5678">SQLite (Turso) · Stripe · Vercel hosting · GitHub</text>
+
+  <rect x="1320" y="910" width="560" height="130" rx="26" fill="#fff" filter="url(#sh)"/>
+  <text x="1346" y="946" font-size="20" font-weight="800" fill="#6847c8" letter-spacing="2">STILL TO DO</text>
+  <g font-size="17" fill="#1b1540">
+    <text x="1346" y="974">• Fix AI key · connect SMS · Stripe live mode</text>
+    <text x="1346" y="998">• Add real products and photos, hide the samples</text>
+    <text x="1346" y="1022">• Write real policies · connect a domain · rotate secrets</text>
+  </g>
+</svg>
