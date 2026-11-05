@@ -277,3 +277,113 @@ body {
   animation-timing-function: linear;
   animation-fill-mode: forwards;
 }
+
+/* ---------- 3D home page ---------- */
+.hero-scene {
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+}
+.hero-scene > * {
+  transform-style: preserve-3d;
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(1.2deg); }
+}
+.float-a { animation: float-y 6s ease-in-out infinite; }
+.float-b { animation: float-y 7s ease-in-out -2s infinite; }
+.float-c { animation: float-y 5.5s ease-in-out -1s infinite; }
+
+@keyframes orbit-spin {
+  from { transform: rotateX(68deg) rotateZ(0deg); }
+  to { transform: rotateX(68deg) rotateZ(360deg); }
+}
+@keyframes orbit-spin-rev {
+  from { transform: rotateX(68deg) rotateY(18deg) rotateZ(360deg); }
+  to { transform: rotateX(68deg) rotateY(18deg) rotateZ(0deg); }
+}
+.orbit-ring { animation: orbit-spin 24s linear infinite; }
+.orbit-ring-rev { animation: orbit-spin-rev 18s linear infinite; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; scale: 0.8; }
+  50% { opacity: 1; scale: 1.15; }
+}
+.twinkle { animation: twinkle 3.2s ease-in-out infinite; }
+
+.cube-wrap {
+  --cube: 62px;
+  --cube-half: 31px;
+  width: var(--cube);
+  height: var(--cube);
+  perspective: 500px;
+}
+@media (min-width: 640px) {
+  .cube-wrap { --cube: 84px; --cube-half: 42px; }
+}
+.cube {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: cube-spin 14s linear infinite;
+}
+@keyframes cube-spin {
+  from { transform: rotateX(-16deg) rotateY(0deg); }
+  to { transform: rotateX(-16deg) rotateY(360deg); }
+}
+.cube-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 3px solid #fff;
+  background: #e4dcfb;
+  backface-visibility: hidden;
+  box-shadow: 0 10px 24px -10px rgba(60, 36, 150, 0.6);
+}
+
+.showcase-stage {
+  --w: 150px;
+}
+@media (min-width: 640px) {
+  .showcase-stage { --w: 190px; }
+}
+@media (min-width: 1024px) {
+  .showcase-stage { --w: 210px; }
+}
+.showcase-card {
+  backface-visibility: hidden;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+.tilt-glare {
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgba(255, 255, 255, 0.45), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.tilt-card:hover .tilt-glare {
+  opacity: 1;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal[data-in='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-a, .float-b, .float-c, .orbit-ring, .orbit-ring-rev, .twinkle, .cube { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hero-scene, .tilt-card { transition: none; }
+}

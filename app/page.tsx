@@ -9,6 +9,10 @@ import ProductRail from './components/home/ProductRail'
 import Reviews from './components/home/Reviews'
 import SectionHeading from './components/home/SectionHeading'
 import CollectionPreview from './components/home/CollectionPreview'
+import Hero3D from './components/home/Hero3D'
+import Showcase3D from './components/home/Showcase3D'
+import Tilt from './components/home/Tilt'
+import Reveal from './components/home/Reveal'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,7 +60,7 @@ export default async function Home() {
               <h1 className="mt-4 text-[40px] font-extrabold leading-[1.05] sm:text-5xl lg:text-[56px]">
                 Modern Fashion
                 <br />
-                For <span className="text-brand">Every You</span>
+                For <span className="bg-gradient-to-r from-brand to-[#b07cf0] bg-clip-text text-transparent">Every You</span>
               </h1>
               <p className="mt-5 max-w-md text-[15px] leading-7 text-gray-600">
                 Discover the latest trends in clothing, accessories and more. Premium quality, effortless style, all
@@ -86,43 +90,12 @@ export default async function Home() {
               </ul>
             </div>
 
-            <div className="relative mx-auto flex w-full max-w-md justify-center lg:max-w-none lg:self-end">
-              <div className="absolute bottom-0 right-4 h-[88%] w-[88%] rounded-full bg-brand/20" aria-hidden="true" />
-              <div className="relative h-[420px] w-full max-w-[320px] overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-lavender-200 sm:h-[480px] sm:max-w-[360px] lg:h-[520px]">
-                <Image
-                  src={MARKETING_IMAGES.hero}
-                  alt="Model wearing the Véora autumn edit"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 360px, 400px"
-                  className="object-cover"
-                />
-              </div>
-              <p
-                className="hand-note absolute right-0 top-2 hidden rotate-[-8deg] text-[28px] leading-7 text-brand sm:block lg:right-2"
-                aria-hidden="true"
-              >
-                Trendy Looks
-                <br />
-                Better You
-                <span className="ml-1 text-lg">♡</span>
-              </p>
-              {featuredBest && (
-                <Link
-                  href={`/ProductDetails/${featuredBest.slug}`}
-                  className="absolute -left-1 bottom-8 hidden items-center gap-3 rounded-2xl bg-white p-2 pr-4 shadow-[0_14px_30px_-12px_rgba(98,72,196,0.45)] sm:flex lg:-left-6"
-                >
-                  <span className="relative h-14 w-14 overflow-hidden rounded-xl bg-lavender-100">
-                    <Image src={featuredBest.image} alt="" fill sizes="56px" className="object-cover" />
-                  </span>
-                  <span className="max-w-[130px] text-xs leading-4">
-                    <span className="block font-semibold">Best seller</span>
-                    <span className="line-clamp-1 text-gray-500">{featuredBest.title}</span>
-                    <span className="font-semibold text-brand">${featuredBest.price.toFixed(2)}</span>
-                  </span>
-                </Link>
-              )}
-            </div>
+            <Hero3D
+              heroImage={MARKETING_IMAGES.hero}
+              best={featuredBest ? { slug: featuredBest.slug, title: featuredBest.title, image: featuredBest.image, price: featuredBest.price } : undefined}
+              floating={bestSellers[1] ? { slug: bestSellers[1].slug, title: bestSellers[1].title, image: bestSellers[1].image, price: bestSellers[1].price } : undefined}
+              cube={newArrivals.slice(0, 4).map((item) => item.image)}
+            />
           </div>
         </div>
       </section>
@@ -136,12 +109,13 @@ export default async function Home() {
         />
         <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {categoryCards.map((card) => (
+            <Tilt key={card.name} className="rounded-2xl">
             <Link
-              key={card.name}
               href={card.href}
-              className="group overflow-hidden rounded-2xl bg-lavender-100 p-2.5 transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_34px_-14px_rgba(98,72,196,0.4)]"
+              className="group block h-full overflow-hidden rounded-2xl bg-lavender-100 p-2.5 shadow-[0_10px_30px_-18px_rgba(98,72,196,0.5)] transition duration-300 hover:shadow-[0_30px_50px_-20px_rgba(98,72,196,0.55)]"
+              style={{ transformStyle: 'preserve-3d' }}
             >
-              <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-lavender-200">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-lavender-200" style={{ transform: 'translateZ(26px)' }}>
                 {card.image && (
                   <Image
                     src={card.image}
@@ -152,16 +126,37 @@ export default async function Home() {
                   />
                 )}
               </div>
-              <div className="px-1.5 pb-1 pt-3">
+              <div className="px-1.5 pb-1 pt-3" style={{ transform: 'translateZ(14px)' }}>
                 <p className="text-[15px] font-semibold">{card.name}</p>
                 <p className="mt-0.5 flex items-center gap-1 text-xs text-brand">
                   Shop Now <ArrowRight size={12} className="transition group-hover:translate-x-0.5" />
                 </p>
               </div>
             </Link>
+            </Tilt>
           ))}
         </div>
       </section>
+
+      <Reveal>
+        <section className="mx-auto max-w-310" aria-labelledby="showcase-heading">
+          <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-b from-indigo-deeper via-indigo-deep to-[#3a2a8a] px-4 py-12 text-white sm:px-10 sm:py-16">
+            <div className="pointer-events-none absolute left-1/2 top-1/3 h-80 w-80 -translate-x-1/2 rounded-full bg-brand/40 blur-3xl" />
+            <div className="relative text-center">
+              <p className="eyebrow !text-brand-soft">Spin the collection</p>
+              <h2 id="showcase-heading" className="mt-3 text-3xl font-extrabold sm:text-4xl">
+                See the new season <span className="text-brand-soft">from every angle</span>
+              </h2>
+              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-white/65">
+                Drag the ring or use the arrows. Tap a piece to see it up close.
+              </p>
+            </div>
+            <div className="relative mt-4">
+              <Showcase3D items={lookbook} />
+            </div>
+          </div>
+        </section>
+      </Reveal>
 
       <ProductRail
         id="best-sellers"
