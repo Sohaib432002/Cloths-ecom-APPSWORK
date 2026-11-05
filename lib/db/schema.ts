@@ -50,7 +50,8 @@ export const SCHEMA = [
     is_new INTEGER NOT NULL DEFAULT 0,
     is_featured INTEGER NOT NULL DEFAULT 0,
     is_bestseller INTEGER NOT NULL DEFAULT 0,
-    is_active INTEGER NOT NULL DEFAULT 1
+    is_active INTEGER NOT NULL DEFAULT 1,
+    is_demo INTEGER NOT NULL DEFAULT 0
   )`,
   `CREATE INDEX IF NOT EXISTS idx_products_category ON products(category)`,
   `CREATE INDEX IF NOT EXISTS idx_products_type ON products(type)`,

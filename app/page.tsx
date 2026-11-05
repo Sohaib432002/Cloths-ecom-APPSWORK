@@ -138,6 +138,7 @@ export default async function Home() {
         </div>
       </section>
 
+      {lookbook.length >= 3 && (
       <Reveal>
         <section className="mx-auto max-w-310" aria-labelledby="showcase-heading">
           <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-b from-indigo-deeper via-indigo-deep to-[#3a2a8a] px-4 py-12 text-white sm:px-10 sm:py-16">
@@ -157,6 +158,7 @@ export default async function Home() {
           </div>
         </section>
       </Reveal>
+      )}
 
       <ProductRail
         id="best-sellers"

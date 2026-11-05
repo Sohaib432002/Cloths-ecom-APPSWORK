@@ -3,7 +3,7 @@ import { getCatalog, searchCatalog, toCard } from '@/lib/catalog'
 import { listCoupons } from '@/lib/commerce/coupons'
 import { getOrderById } from '@/lib/commerce/orders'
 import { DELIVERY_FEE, FREE_SHIPPING_THRESHOLD } from '@/lib/commerce/pricing'
-import { getHuggingFaceConfig } from '@/lib/env'
+import { getAnthropicConfig, getHuggingFaceConfig } from '@/lib/env'
 import { logEvent } from '@/lib/http'
 import { stripeEnabled } from '@/lib/payments/stripe'
 import { SITE } from '@/lib/site'
@@ -42,6 +42,8 @@ function knowledge(coupons: { code: string; description: string }[]) {
       : 'There are no active coupon codes right now.',
     contact: `You can reach a real person by WhatsApp or phone on ${SITE.phoneDisplay}, or by email at ${SITE.email}.`,
     account: 'Use Sign in at the top of the page. New here? Create an account to save your wishlist and see your orders. Forgot your password? Use the reset link on the sign-in page.',
+    about: `Véora is an online fashion store for women, men, kids, footwear and accessories. You can browse the Shop, see New Arrivals, build a look with the Stylist, save pieces to your wishlist, track an order, and pay by Cash on Delivery${stripeEnabled() ? ' or card' : ''}. Questions? WhatsApp or call ${SITE.phoneDisplay}.`,
+    sizing: 'Each product page lists the sizes and colours that are in stock. If you are between sizes or unsure, message us on WhatsApp with the product name and we will help you choose.',
     track: 'Open Track order from the footer, or send me your order number (like ORD-ABC123) together with the email you ordered with and I will check it for you.',
   }
 }
@@ -81,19 +83,38 @@ async function findProducts(text: string) {
 }
 
 async function llmRewrite(system: string, history: Turn[], message: string) {
+  const turns = [...history.slice(-6), { role: 'user' as const, content: message }]
+  const anthropic = getAnthropicConfig()
+  if (anthropic.key) {
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'x-api-key': anthropic.key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+        body: JSON.stringify({ model: anthropic.model, max_tokens: 400, temperature: 0.4, system, messages: turns }),
+        signal: AbortSignal.timeout(20_000),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data?.error?.message || `status ${response.status}`)
+      const text = data.content?.find((part: { type: string }) => part.type === 'text')?.text?.trim()
+      if (text) return { text: text as string, model: anthropic.model }
+    } catch (error) {
+      logEvent('assistant.llm_fallback', { provider: 'anthropic', reason: error instanceof Error ? error.message : 'unknown' })
+    }
+  }
   const { token, model } = getHuggingFaceConfig()
   if (!token) return null
   try {
     const client = new InferenceClient(token)
     const response = await client.chatCompletion({
       model,
-      messages: [{ role: 'system', content: system }, ...history.slice(-6), { role: 'user', content: message }],
-      max_tokens: 260,
-      temperature: 0.3,
+      messages: [{ role: 'system', content: system }, ...turns],
+      max_tokens: 360,
+      temperature: 0.4,
     })
-    return response.choices[0]?.message?.content?.trim() || null
+    const text = response.choices[0]?.message?.content?.trim()
+    return text ? { text, model } : null
   } catch (error) {
-    logEvent('assistant.llm_fallback', { reason: error instanceof Error ? error.message : 'unknown' })
+    logEvent('assistant.llm_fallback', { provider: 'huggingface', reason: error instanceof Error ? error.message : 'unknown' })
     return null
   }
 }
@@ -123,6 +144,10 @@ export async function runAssistant(input: { message: string; history?: Turn[] },
     }
   } else if (has(text, ['hello', 'hi ', 'hey', 'salam', 'assalam']) && text.length < 25) {
     reply = 'Hello, welcome to Véora! I can help you find products, check an order, or answer questions about delivery, returns, payment and offers. What are you looking for?'
+  } else if (has(text, ['about you', 'about véora', 'about veora', 'who are you', 'what is this', 'what do you sell', 'what can you do', 'website', 'this site'])) {
+    reply = facts.about
+  } else if (has(text, ['size', 'sizing', 'fit ', 'size chart'])) {
+    reply = facts.sizing
   } else if (has(text, ['ship', 'deliver', 'delivery', 'dispatch', 'how long'])) {
     reply = facts.shipping
   } else if (has(text, ['return', 'exchange', 'refund', 'wrong size', "doesn't fit", 'does not fit'])) {
@@ -157,16 +182,19 @@ export async function runAssistant(input: { message: string; history?: Turn[] },
     }
   }
 
-  // With an API token the same facts are phrased conversationally; without one the rule-based answer is used.
-  const system = `You are the shopping assistant of Véora, a fashion store. Answer in the customer's language, in at most 70 words, warm and professional.
-Use ONLY these facts; never invent prices, policies, stock or order details. If you do not know, offer WhatsApp ${SITE.phoneDisplay}.
-Draft answer: ${reply}
+  // With an AI key the assistant answers in its own words, using the draft and the store facts as its source of truth;
+  // without one the rule-based answer above is sent as it is.
+  const system = `You are the AI assistant of Véora, an online fashion store. Reply in the customer's language (English, Urdu or Roman Urdu), warm, clear and professional, in at most 110 words.
+You can: explain how the website works, answer questions about delivery, returns, payment, offers and orders, help with sizing and styling, and recommend products.
+Rules: use ONLY the store facts below for anything about prices, policies, stock, discounts or orders; never invent them. Never claim to be human. If you do not know, send the customer to WhatsApp ${SITE.phoneDisplay}. For questions that have nothing to do with the store or fashion, politely say you can only help with Véora and fashion.
+Product cards are shown under your message by the website, so do not list links or prices yourself; refer to them as "the pieces below".
+Suggested draft answer: ${reply}
 Store facts: ${JSON.stringify(facts)}
 Products shown to the customer: ${products.map((p) => `${p.title} ($${p.price})`).join('; ') || 'none'}`
   const polished = await llmRewrite(system, input.history || [], raw)
   if (polished) {
-    reply = polished
-    provider = getHuggingFaceConfig().model
+    reply = polished.text
+    provider = polished.model
   }
 
   return { reply, products, provider }

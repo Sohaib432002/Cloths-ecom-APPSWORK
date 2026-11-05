@@ -54,9 +54,13 @@ export function StylistChat({
   ])
   const endRef = useRef<HTMLDivElement>(null)
 
+  const listRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, loading])
+    // scroll only the message list, never the whole page
+    const list = listRef.current
+    if (compact && list) list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' })
+  }, [messages, loading, compact])
 
   const send = async (text = input) => {
     const message = text.trim()
@@ -88,7 +92,7 @@ export function StylistChat({
 
   return (
     <div className={compact ? 'flex h-full flex-col' : 'mx-auto w-full max-w-3xl'}>
-      <div className={`${compact ? 'flex-1 overflow-y-auto pr-1' : ''} space-y-4`}>
+      <div ref={listRef} className={`${compact ? 'min-h-0 flex-1 overflow-y-auto pr-1' : ''} space-y-4`}>
         {messages.map((item, index) => (
           <div key={`${item.role}-${index}`} className={item.role === 'user' ? 'text-right' : ''}>
             <div
@@ -119,7 +123,13 @@ export function StylistChat({
             )}
           </div>
         ))}
-        {loading && <p className="text-sm text-gray-500">Typing...</p>}
+        {loading && (
+          <div className="inline-flex gap-1 rounded-2xl bg-lavender-100 px-4 py-3" aria-label="Typing">
+            {[0, 1, 2].map((dot) => (
+              <span key={dot} className="h-2 w-2 animate-bounce rounded-full bg-brand" style={{ animationDelay: `${dot * 0.15}s` }} />
+            ))}
+          </div>
+        )}
         {error && (
           <p role="alert" className="text-sm text-red-600">
             {error}
@@ -196,7 +206,7 @@ export function StylistLauncher() {
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <p className="text-lg font-bold">Personal Stylist</p>
-                <p className="text-xs text-gray-500">Powered by Llama 3.1 on Hugging Face</p>
+                <p className="text-xs text-gray-500">Outfit ideas and store help</p>
               </div>
               <button type="button" aria-label="Close stylist" onClick={() => setOpen(false)}>
                 <X />

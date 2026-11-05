@@ -11,7 +11,7 @@ Véora is a fashion storefront for women, men, accessories and footwear, built a
 - Accounts: signup, login, logout, profile and password change, password reset and email verification links
 - Order history per account (guests keep the orders they placed in the browser)
 - Newsletter and contact forms stored in the database, with rate limiting
-- AI personal stylist (Hugging Face Llama 3.1 when `HF_TOKEN` is set, catalog matching otherwise)
+- AI personal stylist (Claude when `ANTHROPIC_API_KEY` is set, Hugging Face Llama when `HF_TOKEN` is set, store-facts answers otherwise)
 - Responsive layout for desktop, tablet and mobile
 
 ## Stack

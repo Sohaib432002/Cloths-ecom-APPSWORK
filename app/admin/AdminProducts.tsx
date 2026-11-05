@@ -169,6 +169,26 @@ export function AdminProducts() {
     }
   }
 
+  const [demo, setDemo] = useState<{ demo: number; demoVisible: number; real: number } | null>(null)
+  const loadDemo = useCallback(() => {
+    apiFetch<{ demo: number; demoVisible: number; real: number }>('/api/admin/products/demo').then(setDemo).catch(() => {})
+  }, [])
+  useEffect(loadDemo, [loadDemo])
+
+  const setDemoVisible = async (visible: boolean) => {
+    const text = visible
+      ? 'Show the sample products in the store again?'
+      : 'Hide all sample products from the store? You can show them again any time. Your own products stay visible.'
+    if (!window.confirm(text)) return
+    try {
+      setDemo(await apiFetch('/api/admin/products/demo', { method: 'POST', body: JSON.stringify({ visible }) }))
+      note(true, visible ? 'Sample products are visible again.' : 'Sample products are hidden. Only your own products show in the store.')
+      await load(query)
+    } catch (err) {
+      note(false, err instanceof Error ? err.message : 'Could not update.')
+    }
+  }
+
   const toggle = async (row: Row) => {
     await apiFetch(`/api/admin/products/${row.id}`, { method: 'PATCH', body: JSON.stringify({ active: !row.active }) })
     await load(query)
@@ -176,6 +196,21 @@ export function AdminProducts() {
 
   return (
     <div>
+      {demo && demo.demo > 0 && (
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-lavender-200 bg-lavender-50 px-4 py-3 text-sm">
+          <p className="min-w-0 flex-1 text-gray-700">
+            <span className="font-semibold text-black">{demo.demoVisible.toLocaleString('en-US')} sample products</span> are{' '}
+            {demo.demoVisible ? 'showing' : 'hidden'}. You have {demo.real} of your own. Add your real products with “Add product”, then hide the samples.
+          </p>
+          <button
+            type="button"
+            onClick={() => setDemoVisible(demo.demoVisible === 0)}
+            className="h-10 shrink-0 rounded-full border border-brand px-5 font-semibold text-brand hover:bg-white"
+          >
+            {demo.demoVisible === 0 ? 'Show sample products' : 'Hide all sample products'}
+          </button>
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-3">
         <label className="relative min-w-0 flex-1 sm:max-w-sm">
           <span className="sr-only">Search products</span>

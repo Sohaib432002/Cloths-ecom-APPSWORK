@@ -16,6 +16,13 @@ export function getHuggingFaceConfig() {
   }
 }
 
+export function getAnthropicConfig() {
+  return {
+    key: process.env.ANTHROPIC_API_KEY || '',
+    model: process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5',
+  }
+}
+
 export function getAppUrl() {
   if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`

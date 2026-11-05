@@ -48,6 +48,12 @@ async function init() {
     await client.execute('ALTER TABLE products ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1')
   }
 
+  if (!columns.rows.some((row) => row.name === 'is_demo')) {
+    await client.execute('ALTER TABLE products ADD COLUMN is_demo INTEGER NOT NULL DEFAULT 0')
+    // everything that exists before this column is the sample catalog the store shipped with
+    await client.execute('UPDATE products SET is_demo = 1')
+  }
+
   const current = await client.execute({ sql: "SELECT value FROM meta WHERE key = 'schema_version'" })
   if (!current.rows.length) {
     await client.execute({

@@ -249,8 +249,8 @@ function productStatements(product: ProductRow): InStatement[] {
   const statements: InStatement[] = [
     {
       sql: `INSERT INTO products (id, slug, sku, title, category, type, style, brand, description, price, old_price,
-              discount, stock, rating, review_count, arrival_date, is_new, is_featured)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+              discount, stock, rating, review_count, arrival_date, is_new, is_featured, is_demo)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`,
       args: [
         product.id ?? null, product.slug, product.sku, product.title, product.category, product.type, product.style,
         BRAND, product.description, product.price, product.oldPrice, product.discount, product.stock, product.rating,
