@@ -146,7 +146,7 @@ export async function runAssistant(input: { message: string; history?: Turn[] },
     reply = 'Hello, welcome to Véora! I can help you find products, check an order, or answer questions about delivery, returns, payment and offers. What are you looking for?'
   } else if (has(text, ['about you', 'about véora', 'about veora', 'who are you', 'what is this', 'what do you sell', 'what can you do', 'website', 'this site'])) {
     reply = facts.about
-  } else if (has(text, ['size', 'sizing', 'fit ', 'size chart'])) {
+  } else if (/(sizes?|sizing|fit|fits|size chart)/.test(text)) {
     reply = facts.sizing
   } else if (has(text, ['ship', 'deliver', 'delivery', 'dispatch', 'how long'])) {
     reply = facts.shipping
