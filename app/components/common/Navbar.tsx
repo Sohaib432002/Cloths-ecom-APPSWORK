@@ -107,6 +107,7 @@ export default function Navbar() {
     'absolute right-0.5 top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-semibold text-white'
 
   return (
+    <>
     <header className="sticky top-0 z-50 border-b border-lavender-200/60 bg-white/90 backdrop-blur-md">
       <a
         href="#main-content"
@@ -308,6 +309,8 @@ export default function Navbar() {
         </div>
       )}
 
+    </header>
+
       {menuOpen && (
         <div className="fixed inset-0 z-50 bg-indigo-deeper/40 lg:hidden" onClick={() => setMenuOpen(false)}>
           <div
@@ -362,10 +365,18 @@ export default function Navbar() {
                   Sign in
                 </Link>
               )}
+              {!user && (
+                <Link
+                  href="/signup"
+                  className="rounded-full border border-brand px-4 py-3 text-center font-semibold text-brand"
+                >
+                  Create account
+                </Link>
+              )}
             </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   )
 }

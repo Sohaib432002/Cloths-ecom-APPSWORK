@@ -24,6 +24,9 @@ export default function SupportWidget() {
 
   useEffect(() => setOpen(false), [pathname])
 
+  // the form pages keep their buttons clear of the floating help buttons
+  if (['/login', '/signup', '/forgot-password', '/reset-password', '/verify-email'].includes(pathname)) return null
+
   const action =
     'flex flex-1 items-center justify-center gap-2 rounded-full border border-lavender-200 px-3 py-2 text-xs font-semibold transition hover:bg-lavender-50'
 
@@ -35,7 +38,7 @@ export default function SupportWidget() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat with us on WhatsApp"
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_10px_24px_-8px_rgba(37,211,102,0.8)] transition hover:scale-105"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] sm:h-14 sm:w-14 text-white shadow-[0_10px_24px_-8px_rgba(37,211,102,0.8)] transition hover:scale-105"
         >
           <FaWhatsapp size={30} />
         </a>
@@ -44,7 +47,7 @@ export default function SupportWidget() {
           onClick={() => setOpen((value) => !value)}
           aria-expanded={open}
           aria-label={open ? 'Close assistant' : 'Open assistant'}
-          className="flex h-14 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold text-white shadow-[0_10px_24px_-8px_rgba(124,92,220,0.8)] transition hover:bg-brand-dark"
+          className="flex h-12 items-center gap-2 rounded-full bg-brand px-4 sm:h-14 sm:px-5 text-sm font-semibold text-white shadow-[0_10px_24px_-8px_rgba(124,92,220,0.8)] transition hover:bg-brand-dark"
         >
           {open ? <X size={20} /> : <MessageCircle size={20} />}
           <span className="hidden sm:inline">{open ? 'Close' : 'Chat with us'}</span>

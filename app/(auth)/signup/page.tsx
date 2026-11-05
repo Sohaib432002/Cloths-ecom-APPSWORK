@@ -8,7 +8,7 @@ export default function SignupPage() {
     <section className="min-h-screen max-w-310 m-auto   py-8 ">
       <div className="mx-auto grid  overflow-hidden rounded-xl bg-white shadow-xl lg:grid-cols-2 lg:rounded-3xl">
         {/* Left Side */}
-        <div className="bg-brand px-6 py-10 text-white sm:px-8 sm:py-12 lg:px-12 lg:py-16">
+        <div className="hidden bg-brand px-6 py-10 text-white sm:px-8 sm:py-12 lg:block lg:px-12 lg:py-16">
           <h1 className="text-2xl font-extrabold sm:text-3xl lg:text-5xl">Véora</h1>
 
           <h2 className="mt-6 text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">
@@ -23,6 +23,11 @@ export default function SignupPage() {
 
         {/* Right Side */}
         <div className="px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+          <div className="mb-6 lg:hidden">
+            <Link href="/" className="text-3xl font-black">
+              Véora
+            </Link>
+          </div>
           <h2 className="text-3xl font-bold sm:text-4xl">Sign Up</h2>
 
           <p className="mt-2 mb-6 text-sm text-gray-500 sm:mb-8 sm:text-base">

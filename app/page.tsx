@@ -50,8 +50,8 @@ export default async function Home() {
       <section className="mx-auto max-w-310 pt-4 lg:pt-6">
         <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-lavender-100 via-lavender-50 to-white">
           <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-brand-soft/30 blur-3xl" />
-          <div className="relative grid items-center gap-10 px-6 py-10 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:px-14 lg:py-0">
-            <div className="lg:py-16">
+          <div className="relative grid grid-cols-1 items-center gap-10 px-6 py-10 sm:px-10 lg:grid-cols-[1.05fr_0.95fr] lg:px-14 lg:py-0">
+            <div className="min-w-0 lg:py-16">
               <p className="eyebrow">Style meets comfort</p>
               <h1 className="mt-4 text-[40px] font-extrabold leading-[1.05] sm:text-5xl lg:text-[56px]">
                 Modern Fashion
@@ -88,7 +88,7 @@ export default async function Home() {
 
             <div className="relative mx-auto flex w-full max-w-md justify-center lg:max-w-none lg:self-end">
               <div className="absolute bottom-0 right-4 h-[88%] w-[88%] rounded-full bg-brand/20" aria-hidden="true" />
-              <div className="relative h-[420px] w-[320px] overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-lavender-200 sm:h-[480px] sm:w-[360px] lg:h-[520px]">
+              <div className="relative h-[420px] w-full max-w-[320px] overflow-hidden rounded-t-[160px] rounded-b-[28px] bg-lavender-200 sm:h-[480px] sm:max-w-[360px] lg:h-[520px]">
                 <Image
                   src={MARKETING_IMAGES.hero}
                   alt="Model wearing the Véora autumn edit"
